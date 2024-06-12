@@ -10,9 +10,14 @@ class LoginCubit extends Cubit<LoginState> {
   
   static LoginCubit get(BuildContext context) => BlocProvider.of(context);
 
+  // Text Controllers
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
+  // Form Key
+  var formKey = GlobalKey<FormState>();
+  
+  // Change Password Obscurity
   var obscured = true;
 
   void changeObscurity() {

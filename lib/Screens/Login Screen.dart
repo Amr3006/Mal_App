@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, unused_import
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,107 +35,117 @@ class LoginScreen extends StatelessWidget {
               builder: (context, state) {
                 var cubit = LoginCubit.get(context);
                 return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AssetsPaths.login_text,
-                        width: 200,
-                      ),
-                      Gaps.medium_Gap,
-                      AuthenticationTextFormField(
-                          controller: cubit.emailController,
-                          TextInputType: TextInputType.emailAddress,
-                          hint: "E-Mail"),
-                      AuthenticationTextFormField(
-                          controller: cubit.passwordController,
-                          TextInputType: TextInputType.visiblePassword,
-                          hint: "Password",
-                          prefix_icon: FontAwesomeIcons.eye,
-                          prefix_function: () {
-                            cubit.changeObscurity();
-                          },
-                          obscured: cubit.obscured),
-                      Gaps.large_Gap,
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
+                  child: Form(
+                    key: cubit.formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Gaps.medium_Gap,
+                        NeuText(text: "LOGIN", fontSize: 60, color: font_color),
+                        Gaps.medium_Gap,
+                        AuthenticationTextFormField(
+                            context: context,
+                            controller: cubit.emailController,
+                            TextInputType: TextInputType.emailAddress,
+                            validator_message: "Please enter your e-mail",
+                            hint: "E-Mail"),
+                        AuthenticationTextFormField(
+                            context: context,
+                            validator_message: "Please enter your password",
+                            controller: cubit.passwordController,
+                            TextInputType: TextInputType.visiblePassword,
+                            hint: "Password",
+                            prefix_icon: FontAwesomeIcons.eye,
+                            prefix_function: () {
+                              cubit.changeObscurity();
+                            },
+                            obscured: cubit.obscured),
+                        Gaps.large_Gap,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 2,
+                                width: 120,
+                                color: Colors.grey,
+                              ),
+                              Gaps.small_Gap,
+                              Text(
+                                "or",
+                                style: TextStyle(
+                                    color: Colors.grey[800], fontSize: 18),
+                              ),
+                              Gaps.small_Gap,
+                              Container(
+                                height: 2,
+                                width: 120,
+                                color: Colors.grey,
+                              )
+                            ],
+                          ),
+                        ),
+                        Gaps.large_Gap,
+                        NeuTextButton(
+                            enableAnimation: true,
+                            buttonColor: Colors.blue,
+                            buttonWidth: 300.w,
+                            text: Text(
+                              "Login with Facebook",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18.sp, color: Colors.white),
+                            )),
+                        Gaps.medium_Gap,
+                        NeuTextButton(
+                            enableAnimation: true,
+                            buttonColor: Colors.white,
+                            buttonWidth: 300.w,
+                            text: Text(
+                              "Login with Google",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18.sp, color: Colors.black),
+                            )),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              height: 2,
-                              width: 120,
-                              color: Colors.grey,
-                            ),
-                            Gaps.small_Gap,
-                            Text(
-                              "or",
-                              style: TextStyle(
-                                  color: Colors.grey[800], fontSize: 18),
-                            ),
-                            Gaps.small_Gap,
-                            Container(
-                              height: 2,
-                              width: 120,
-                              color: Colors.grey,
-                            )
+                            Text("Don't have an account?"),
+                            TextButton(
+                                onPressed: () {
+                                  AppNavigator.push(
+                                      AppRoutes.signUpScreen, context);
+                                },
+                                style: ButtonStyle(
+                                    overlayColor: WidgetStateProperty.all(
+                                        font_color.withAlpha(35)),
+                                    splashFactory: InkSparkle.splashFactory),
+                                child: Text(
+                                  "Create one",
+                                  style: TextStyle(color: font_color),
+                                )),
                           ],
                         ),
-                      ),
-                      Gaps.large_Gap,
-                      NeuTextButton(
+                        Gaps.large_Gap,
+                        Gaps.large_Gap,
+                        NeuTextButton(
+                          onPressed: () {
+                            if (cubit.formKey.currentState!.validate()) {
+                              
+                            }
+                          },
+                          buttonWidth: 200.w,
+                          buttonHeight: 60.sp,
                           enableAnimation: true,
-                          buttonColor: Colors.blue,
-                          buttonWidth: 300.w,
                           text: Text(
-                            "Login with Facebook",
-                            style: GoogleFonts.roboto(
-                                fontSize: 18.sp, color: Colors.white),
-                          )),
-                      Gaps.medium_Gap,
-                      NeuTextButton(
-                          enableAnimation: true,
-                          buttonColor: Colors.white,
-                          buttonWidth: 300.w,
-                          text: Text(
-                            "Login with Google",
-                            style: GoogleFonts.roboto(
-                                fontSize: 18.sp, color: Colors.black),
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Don't have an account?"),
-                          TextButton(
-                              onPressed: () {
-                                AppNavigator.push(AppRoutes.signUpScreen, context);
-                              },
-                              style: ButtonStyle(
-                                  overlayColor: WidgetStateProperty.all(
-                                      font_color.withAlpha(35)),
-                                  splashFactory: InkSparkle.splashFactory),
-                              child: Text(
-                                "Create one",
-                                style: TextStyle(color: font_color),
-                              )),
-                        ],
-                      ),
-                      Gaps.large_Gap,
-                      Gaps.large_Gap,
-                      NeuTextButton(
-                        onPressed: () {
-                        },
-                        buttonWidth: 200.w,
-                        buttonHeight: 60.sp,
-                        enableAnimation: true,
-                        text: Text(
-                          "LOGIN",
-                          style: GoogleFonts.kavoon(color: Colors.white,fontSize: 30.sp),
+                            "LOGIN",
+                            style: GoogleFonts.kavoon(
+                                color: Colors.white, fontSize: 30.sp),
+                          ),
+                          buttonColor: button_color,
                         ),
-                        buttonColor: button_color,
-                      ),
-                      Gaps.large_Gap
-                    ],
+                        Gaps.large_Gap
+                      ],
+                    ),
                   ),
                 );
               },
