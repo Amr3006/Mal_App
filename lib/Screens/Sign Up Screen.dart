@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,8 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Sign%20Up%20Cubit/sign_up_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
-import 'package:mal_app/Shared/Core/App%20Navigator.dart';
-import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Widgets/Authentication.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
