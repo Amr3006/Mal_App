@@ -25,7 +25,21 @@ class SignUpScreen extends StatelessWidget {
           height: screen_height,
           color: background_color,
           child: SafeArea(
-            child: BlocBuilder<SignUpCubit, SignUpState>(
+            child: BlocConsumer<SignUpCubit, SignUpState>(
+              listener: (context, state) {
+                if (state is FailedSignUpWithEmailAndPasswordState) {
+                  if (state.error == "invalid-email") {
+                    snackMessage(context: context, text: "Invalid Email");
+                  } else if (state.error == "weak-password") {
+                    snackMessage(context: context, text: "Weak Password");
+                  } else if (state.error == "email-already-in-use") {
+                    snackMessage(context: context, text: "This Email Exists");
+                  }
+                }
+                if (state is FailedCreateUserWithEmailAndPasswordState) {
+                  print(state.error);
+                }
+              },
               builder: (context, state) {
                 var cubit = SignUpCubit.get(context);
                 return Form(
@@ -71,7 +85,9 @@ class SignUpScreen extends StatelessWidget {
                         Gaps.large_Gap,
                         NeuTextButton(
                           onPressed: () {
-                            if (cubit.formKey.currentState!.validate()) {}
+                            if (cubit.formKey.currentState!.validate()) {
+                              cubit.createUser();
+                            }
                           },
                           buttonWidth: 200.w,
                           buttonHeight: 60.sp,

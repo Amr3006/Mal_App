@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, unused_import
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,11 +25,21 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(),
       child: Scaffold(
         body: Container(
-          width: screen_width,
           height: screen_height,
           color: background_color,
           child: SafeArea(
-            child: BlocBuilder<LoginCubit, LoginState>(
+            child: BlocConsumer<LoginCubit, LoginState>(
+              listener: (context, state) {
+                if (state is FailedLoginWithEmailAndPasswordState) {
+                  if (state.error == 'user-not-found' || state.error == 'invalid-credential') {
+                    snackMessage(context: context, text: "No user found for that email.");
+                  } else if (state.error == 'wrong-password') {
+                    snackMessage(context: context, text: "Wrong Password");
+                  } else if (state.error == 'invalid-email') {
+                    snackMessage(context: context, text: "Invalid E-mail");
+                  }
+                }
+              },
               builder: (context, state) {
                 var cubit = LoginCubit.get(context);
                 return SingleChildScrollView(
@@ -98,6 +106,7 @@ class LoginScreen extends StatelessWidget {
                             )),
                         Gaps.medium_Gap,
                         NeuTextButton(
+                            onPressed: () {},
                             enableAnimation: true,
                             buttonColor: Colors.white,
                             buttonWidth: 300.w,
@@ -130,7 +139,7 @@ class LoginScreen extends StatelessWidget {
                         NeuTextButton(
                           onPressed: () {
                             if (cubit.formKey.currentState!.validate()) {
-                              
+                              cubit.loginWithEmailAndPassword();
                             }
                           },
                           buttonWidth: 200.w,

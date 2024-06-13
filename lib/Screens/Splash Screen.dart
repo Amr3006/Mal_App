@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mal_app/Screens/Login%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> changeScreen(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
-    AppNavigator.push(const LoginScreen(),context);
+    AppNavigator.pushReplacement(AppRoutes.loginScreen,context);
   }
 
   @override

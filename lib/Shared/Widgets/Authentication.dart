@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,29 +46,29 @@ Widget AuthenticationTextFormField(
         Transform.translate(
           offset: Offset(6, 4),
           child: Padding(
-            padding: EdgeInsetsDirectional.only(start: 7, end: 12),
+            padding: EdgeInsetsDirectional.only(start: 7.w, end: 12.w),
             child: TextFormField(
-                obscureText: obscured,
-                controller: controller,
-                validator: (value) {
-                  if (value!.isEmpty && validate) {
-                    return validator_message;
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType,
-                style: TextStyle(fontSize: 18.sp, color: Colors.black),
-                cursorColor: font_color,
-                decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(prefix_icon),
-                      onPressed: prefix_function,
-                    ),
-                    hintText: hint,
-                    border: InputBorder.none),
-              ),
+              obscureText: obscured,
+              controller: controller,
+              validator: (value) {
+                if (value!.isEmpty && validate) {
+                  return validator_message;
+                }
+                return null;
+              },
+              keyboardType: TextInputType,
+              style: TextStyle(fontSize: 18.sp, color: Colors.black),
+              cursorColor: font_color,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(prefix_icon),
+                    onPressed: prefix_function,
+                  ),
+                  hintText: hint,
+                  border: InputBorder.none),
+            ),
           ),
-          )
+        )
       ],
     ),
   );
@@ -97,3 +99,12 @@ Widget NeuText(
     ],
   );
 }
+
+void snackMessage(
+        {required BuildContext context,
+        required String text,
+        bool showCloseIcon = true}) =>
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+      showCloseIcon: showCloseIcon,
+    ));
