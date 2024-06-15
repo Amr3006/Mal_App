@@ -7,7 +7,6 @@ class TopAnimeService {
   late ApiHelper _apiHelper;
 
   TopAnimeService() {
-    ApiHelper.init();
     _apiHelper = ApiHelper();
   }
 
