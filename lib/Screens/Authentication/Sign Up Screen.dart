@@ -14,7 +14,7 @@ import 'package:mal_app/Shared/Widgets/NeuText.dart';
 import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../Shared/Design/Colors.dart';
+import '../../Shared/Design/Colors.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

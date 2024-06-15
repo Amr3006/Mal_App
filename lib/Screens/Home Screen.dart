@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mal_app/Business%20Logic/Anime%20Cubit/anime_cubit.dart';
 import 'package:mal_app/Business%20Logic/Navigation%20Bar%20Cubit/navigation_bar_cubit.dart';
 import 'package:mal_app/Business%20Logic/User%20Cubit/user_cubit.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 
@@ -18,12 +20,14 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => UserCubit()..getUser()),
+        BlocProvider(create: (context) => AnimeCubit()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
         builder: (context, state) {
           var cubit = NavigationBarCubit.get(context);
           return Scaffold(
+            body: AppRoutes.animeScreen,
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -38,7 +42,8 @@ class HomeScreen extends StatelessWidget {
               centerTitle: true,
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+              },
               elevation: 10,
               backgroundColor: navigation_bar_buttons_color,
               shape: CircleBorder(),

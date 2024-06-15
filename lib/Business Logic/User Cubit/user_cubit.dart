@@ -1,12 +1,8 @@
-import 'dart:convert';
-
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
-import 'package:meta/meta.dart';
 
 part 'user_state.dart';
 
