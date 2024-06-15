@@ -7,13 +7,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Login%20Cubit/login_cubit.dart';
+import 'package:mal_app/Business%20Logic/Sign%20Up%20Cubit/sign_up_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
-import 'package:mal_app/Shared/Widgets/Authentication.dart';
+import 'package:mal_app/Shared/Widgets/AuthenticationFormField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mal_app/Shared/Widgets/NeuText.dart';
+import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -38,6 +41,8 @@ class LoginScreen extends StatelessWidget {
                   } else if (state.error == 'invalid-email') {
                     snackMessage(context: context, text: "Invalid E-mail");
                   }
+                } else if (state is SuccessLoginWithEmailAndPasswordState) {
+                  AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
                 }
               },
               builder: (context, state) {

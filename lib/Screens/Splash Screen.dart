@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> changeScreen(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
-    AppNavigator.pushReplacement(AppRoutes.loginScreen,context);
+    AppNavigator.pushReplacement(firstScreen(),context);
   }
 
   @override

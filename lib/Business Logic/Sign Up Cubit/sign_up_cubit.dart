@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
+import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
+import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'sign_up_state.dart';
 
@@ -44,10 +46,20 @@ class SignUpCubit extends Cubit<SignUpState> {
       .collection("Users")
       .doc(user.uid)
       .set(userModel.toJson());
+      bool saved = await saveuId(user);
+      if (!saved) {
+        throw "uId not Saved" ;
+      }
       emit(SuccessCreateUserWithEmailAndPasswordState());
     } catch (e) {
       emit(FailedCreateUserWithEmailAndPasswordState(e.toString()));
     }
+  }
+
+  // Save uId
+  Future<bool> saveuId(User user) async {
+    uId = user.uid;
+    return await CacheHelper.saveData("uId", user.uid);
   }
 
   // Sign Up with email and password

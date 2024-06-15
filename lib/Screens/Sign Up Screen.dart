@@ -7,7 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Sign%20Up%20Cubit/sign_up_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
-import 'package:mal_app/Shared/Widgets/Authentication.dart';
+import 'package:mal_app/Shared/Core/App%20Navigator.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
+import 'package:mal_app/Shared/Widgets/AuthenticationFormField.dart';
+import 'package:mal_app/Shared/Widgets/NeuText.dart';
+import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 import '../Shared/Design/Colors.dart';
@@ -35,9 +39,11 @@ class SignUpScreen extends StatelessWidget {
                   } else if (state.error == "email-already-in-use") {
                     snackMessage(context: context, text: "This Email Exists");
                   }
-                }
-                if (state is FailedCreateUserWithEmailAndPasswordState) {
+                } else if (state is FailedCreateUserWithEmailAndPasswordState) {
                   print(state.error);
+                } else if (state is SuccessCreateUserWithEmailAndPasswordState) {
+                  AppNavigator.pop(context);
+                  AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
                 }
               },
               builder: (context, state) {

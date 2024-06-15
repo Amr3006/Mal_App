@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
@@ -70,37 +71,4 @@ Widget AuthenticationTextFormField(
   );
 }
 
-Widget NeuText(
-    {required String text, required double fontSize, required Color color}) {
-  return Stack(
-    alignment: Alignment.center,
-    children: [
-      Text(
-        text,
-        style: GoogleFonts.kavoon(
-            shadows: [Shadow(offset: Offset(3, 3), color: Colors.black)],
-            letterSpacing: 3,
-            fontSize: fontSize.sp,
-            color: color),
-      ),
-      Text(
-        text,
-        style: GoogleFonts.kavoon(
-            letterSpacing: 3,
-            fontSize: fontSize.sp,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 3),
-      ),
-    ],
-  );
-}
 
-void snackMessage(
-        {required BuildContext context,
-        required String text,
-        bool showCloseIcon = true}) =>
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-      showCloseIcon: showCloseIcon,
-    ));
