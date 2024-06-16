@@ -1,14 +1,18 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mal_app/Business%20Logic/Anime%20Cubit/anime_cubit.dart';
 import 'package:mal_app/Business%20Logic/Navigation%20Bar%20Cubit/navigation_bar_cubit.dart';
 import 'package:mal_app/Business%20Logic/User%20Cubit/user_cubit.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
+import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 
@@ -20,14 +24,17 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => UserCubit()..getUser()),
-        BlocProvider(create: (context) => AnimeCubit()),
+        BlocProvider(create: (context) => AnimeCubit()..getTopAnimes()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
         builder: (context, state) {
           var cubit = NavigationBarCubit.get(context);
           return Scaffold(
-            body: AppRoutes.animeScreen,
+            body: ConditionalBuilder(
+              condition: false, 
+              builder: (context) => AppRoutes.animeScreen, 
+              fallback: (context) => Center(child: LottieBuilder.asset(AssetsPaths.downloading_animation, width: 120.w),)),
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
