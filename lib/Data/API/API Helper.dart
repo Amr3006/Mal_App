@@ -14,8 +14,9 @@ class ApiHelper {
     );}
 
   Future<Response> get(
-    String path
+    String path,
+    {Map<String,dynamic>? queryParamters}
   ) async {
-    return await _dio.get(path);
+    return await _dio.get(path, queryParameters: queryParamters);
   }
 }
