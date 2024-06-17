@@ -19,6 +19,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   // Validator
   final formKey = GlobalKey<FormState>();
 
@@ -31,7 +34,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   // Create User in FireStore
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> createUser() async {
       final user = await signUpWithEmailAndPassword();
       final userModel = UserModel(
@@ -51,6 +53,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         throw "uId not Saved" ;
       }
       emit(SuccessCreateUserWithEmailAndPasswordState());
+      dispose();
     } catch (e) {
       emit(FailedCreateUserWithEmailAndPasswordState(e.toString()));
     }
@@ -63,7 +66,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   // Sign Up with email and password
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<User?> signUpWithEmailAndPassword() async {
     try {
     emit(LoadingSignUpWithEmailAndPasswordState());
@@ -74,5 +76,12 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(FailedSignUpWithEmailAndPasswordState(e.code));
     }
     return null;
+  }
+
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
   }
 }

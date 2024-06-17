@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class Gaps{
+  static final tiny_Gap = Gap(4.r);
   static final small_Gap = Gap(10.r);
   static final medium_Gap = Gap(16.r);
   static final large_Gap = Gap(24.r);

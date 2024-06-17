@@ -11,6 +11,8 @@ class LoginCubit extends Cubit<LoginState> {
 
   static LoginCubit get(BuildContext context) => BlocProvider.of(context);
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   // Text Controllers
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -27,7 +29,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   // Sign in with e-mail and password
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<void> loginWithEmailAndPassword() async {
     emit(LoadingLoginWithEmailAndPasswordState());
     try {
@@ -38,6 +39,7 @@ class LoginCubit extends Cubit<LoginState> {
         throw "uId not saved";
       }
       emit(SuccessLoginWithEmailAndPasswordState());
+      dispose();
     } on FirebaseAuthException catch (e) {
       emit(FailedLoginWithEmailAndPasswordState(e.code));
     }
@@ -47,5 +49,10 @@ class LoginCubit extends Cubit<LoginState> {
   Future<bool> saveuId(User user) async {
     uId = user.uid;
     return await CacheHelper.saveData("uId", user.uid);
+  }
+
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
   }
 }

@@ -11,3 +11,10 @@ final class FailedTopAnimeState extends AnimeState {
   final String error;
   FailedTopAnimeState(this.error);
 }
+
+final class LoadingSeasonAnimeState extends AnimeState {}
+final class SuccessSeasonAnimeState extends AnimeState {}
+final class FailedSeasonAnimeState extends AnimeState {
+  final String error;
+  FailedSeasonAnimeState(this.error);
+}

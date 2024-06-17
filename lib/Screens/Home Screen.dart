@@ -24,17 +24,26 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => UserCubit()..getUser()),
-        BlocProvider(create: (context) => AnimeCubit()..getTopAnimes()),
+        BlocProvider(create: (context) => AnimeCubit()..getTopAnimes()..getSeasonAnimes()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
         builder: (context, state) {
           var cubit = NavigationBarCubit.get(context);
           return Scaffold(
-            body: ConditionalBuilder(
-              condition: false, 
-              builder: (context) => AppRoutes.animeScreen, 
-              fallback: (context) => Center(child: LottieBuilder.asset(AssetsPaths.downloading_animation, width: 120.w),)),
+            body: BlocBuilder<AnimeCubit, AnimeState>(
+              builder: (context, state) {
+                  var cubit = AnimeCubit.get(context);
+                return ConditionalBuilder(
+                    condition: cubit.topAnimes.isNotEmpty && cubit.seasonAnimes.isNotEmpty,
+                    builder: (context) => AppRoutes.animeScreen,
+                    fallback: (context) => Center(
+                          child: LottieBuilder.asset(
+                              AssetsPaths.downloading_animation,
+                              width: 80.w),
+                        ));
+              },
+            ),
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -49,8 +58,7 @@ class HomeScreen extends StatelessWidget {
               centerTitle: true,
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               elevation: 10,
               backgroundColor: navigation_bar_buttons_color,
               shape: CircleBorder(),
