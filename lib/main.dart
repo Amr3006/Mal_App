@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Business%20Logic/Bloc%20Observer.dart';
@@ -13,6 +14,7 @@ void main() async {
   ApiHelper.init();
   Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await CacheHelper.inti();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
