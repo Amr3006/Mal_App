@@ -39,7 +39,6 @@ class LoginCubit extends Cubit<LoginState> {
         throw "uId not saved";
       }
       emit(SuccessLoginWithEmailAndPasswordState());
-      dispose();
     } on FirebaseAuthException catch (e) {
       emit(FailedLoginWithEmailAndPasswordState(e.code));
     }
@@ -49,10 +48,5 @@ class LoginCubit extends Cubit<LoginState> {
   Future<bool> saveuId(User user) async {
     uId = user.uid;
     return await CacheHelper.saveData("uId", user.uid);
-  }
-
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
   }
 }

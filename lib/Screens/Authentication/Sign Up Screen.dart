@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, avoid_print
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Widgets/AuthenticationFormField.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
+import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
@@ -50,63 +52,67 @@ class SignUpScreen extends StatelessWidget {
                 var cubit = SignUpCubit.get(context);
                 return Form(
                   key: cubit.formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Gaps.medium_Gap,
-                        NeuText(
-                            text: "SIGN UP", fontSize: 60, color: button_color),
-                        Gaps.medium_Gap,
-                        AuthenticationTextFormField(
-                            context: context,
-                            controller: cubit.nameController,
-                            TextInputType: TextInputType.text,
-                            validator_message: "Please enter your name",
-                            hint: "Name"),
-                        AuthenticationTextFormField(
-                            context: context,
-                            controller: cubit.phoneController,
-                            TextInputType: TextInputType.phone,
-                            validator_message: "Please enter your phone",
-                            hint: "Phone"),
-                        AuthenticationTextFormField(
-                            context: context,
-                            controller: cubit.emailController,
-                            TextInputType: TextInputType.emailAddress,
-                            validator_message: "Please enter an e-mail",
-                            hint: "E-Mail"),
-                        AuthenticationTextFormField(
-                            context: context,
-                            controller: cubit.passwordController,
-                            TextInputType: TextInputType.visiblePassword,
-                            validator_message: "Please enter a password",
-                            hint: "Password",
-                            prefix_icon: FontAwesomeIcons.eye,
-                            prefix_function: () {
-                              cubit.changeObscurity();
+                  child: ConditionalBuilder(
+                    condition: state is! LoadingCreateUserWithEmailAndPasswordState || state is! LoadingSignUpWithEmailAndPasswordState,
+                    fallback: (context) => AppProgressIndicator(),
+                    builder: (context) => SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Gaps.medium_Gap,
+                          NeuText(
+                              text: "SIGN UP", fontSize: 60, color: button_color),
+                          Gaps.medium_Gap,
+                          AuthenticationTextFormField(
+                              context: context,
+                              controller: cubit.nameController,
+                              TextInputType: TextInputType.text,
+                              validator_message: "Please enter your name",
+                              hint: "Name"),
+                          AuthenticationTextFormField(
+                              context: context,
+                              controller: cubit.phoneController,
+                              TextInputType: TextInputType.phone,
+                              validator_message: "Please enter your phone",
+                              hint: "Phone"),
+                          AuthenticationTextFormField(
+                              context: context,
+                              controller: cubit.emailController,
+                              TextInputType: TextInputType.emailAddress,
+                              validator_message: "Please enter an e-mail",
+                              hint: "E-Mail"),
+                          AuthenticationTextFormField(
+                              context: context,
+                              controller: cubit.passwordController,
+                              TextInputType: TextInputType.visiblePassword,
+                              validator_message: "Please enter a password",
+                              hint: "Password",
+                              prefix_icon: FontAwesomeIcons.eye,
+                              prefix_function: () {
+                                cubit.changeObscurity();
+                              },
+                              obscured: cubit.obscured),
+                          Gaps.large_Gap,
+                          Gaps.large_Gap,
+                          NeuTextButton(
+                            onPressed: () {
+                              if (cubit.formKey.currentState!.validate()) {
+                                cubit.createUser();
+                              }
                             },
-                            obscured: cubit.obscured),
-                        Gaps.large_Gap,
-                        Gaps.large_Gap,
-                        NeuTextButton(
-                          onPressed: () {
-                            if (cubit.formKey.currentState!.validate()) {
-                              cubit.createUser();
-                            }
-                          },
-                          buttonWidth: 200.w,
-                          buttonHeight: 60.sp,
-                          enableAnimation: true,
-                          text: Text(
-                            "SIGN UP",
-                            style: GoogleFonts.kavoon(
-                                color: Colors.white, fontSize: 30.sp),
+                            buttonWidth: 200.w,
+                            buttonHeight: 60.sp,
+                            enableAnimation: true,
+                            text: Text(
+                              "SIGN UP",
+                              style: GoogleFonts.kavoon(
+                                  color: Colors.white, fontSize: 30.sp),
+                            ),
+                            buttonColor: font_color,
                           ),
-                          buttonColor: font_color,
-                        ),
-                        Gaps.large_Gap
-                      ],
+                          Gaps.large_Gap
+                        ],
+                      ),
                     ),
                   ),
                 );

@@ -53,7 +53,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         throw "uId not Saved" ;
       }
       emit(SuccessCreateUserWithEmailAndPasswordState());
-      dispose();
     } catch (e) {
       emit(FailedCreateUserWithEmailAndPasswordState(e.toString()));
     }
@@ -76,12 +75,5 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(FailedSignUpWithEmailAndPasswordState(e.code));
     }
     return null;
-  }
-
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    nameController.dispose();
-    phoneController.dispose();
   }
 }

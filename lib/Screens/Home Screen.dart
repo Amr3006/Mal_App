@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors
+// ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -15,6 +15,7 @@ import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
+import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -37,11 +38,7 @@ class HomeScreen extends StatelessWidget {
                 return ConditionalBuilder(
                     condition: cubit.topAnimes.isNotEmpty && cubit.seasonAnimes.isNotEmpty,
                     builder: (context) => AppRoutes.animeScreen,
-                    fallback: (context) => Center(
-                          child: LottieBuilder.asset(
-                              AssetsPaths.downloading_animation,
-                              width: 80.w),
-                        ));
+                    fallback: (context) => AppProgressIndicator());
               },
             ),
             backgroundColor: Colors.white,
