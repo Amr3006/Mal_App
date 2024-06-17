@@ -16,9 +16,8 @@ class AnimeCubit extends Cubit<AnimeState> {
   final TopAnimeRepo _topAnimeRepo = TopAnimeRepo();
   final SeasonAnimeRepo _seasonAnimeRepo = SeasonAnimeRepo();
 
-
   // Top Animes
-  List<AnimeModel> topAnimes = [];
+  final List<AnimeModel> topAnimes = [];
   void getTopAnimes() async {
     emit(LoadingTopAnimeState());
     try {
@@ -31,7 +30,7 @@ class AnimeCubit extends Cubit<AnimeState> {
   }
 
   // Currenct Animes
-  List<AnimeModel> seasonAnimes = [];
+  final List<AnimeModel> seasonAnimes = [];
   void getSeasonAnimes() async {
     emit(LoadingSeasonAnimeState());
     try {

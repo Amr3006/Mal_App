@@ -30,15 +30,17 @@ class HomeScreen extends StatelessWidget {
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
         builder: (context, state) {
-          var cubit = NavigationBarCubit.get(context);
           return Scaffold(
             body: BlocBuilder<AnimeCubit, AnimeState>(
               builder: (context, state) {
-                  var cubit = AnimeCubit.get(context);
+                  final List<bool> conditions = [
+                    AnimeCubit.get(context).topAnimes.isEmpty,
+                    AnimeCubit.get(context).seasonAnimes.isEmpty
+                  ];
                 return ConditionalBuilder(
-                    condition: cubit.topAnimes.isNotEmpty && cubit.seasonAnimes.isNotEmpty,
-                    builder: (context) => AppRoutes.animeScreen,
-                    fallback: (context) => AppProgressIndicator());
+                    condition: conditions.contains(true),
+                    builder: (context) => AppProgressIndicator(),
+                    fallback: (context) => AppRoutes.animeScreen);
               },
             ),
             backgroundColor: Colors.white,
@@ -67,17 +69,17 @@ class HomeScreen extends StatelessWidget {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-                itemCount: cubit.icons.length,
+                itemCount: NavigationBarCubit.get(context).icons.length,
                 tabBuilder: (index, isActive) {
                   return Icon(
-                    cubit.icons[index],
+                    NavigationBarCubit.get(context).icons[index],
                     size: isActive ? 25.w : 20.w,
                     color: isActive
                         ? navigation_bar_buttons_color
                         : Colors.grey[300],
                   );
                 },
-                activeIndex: cubit.current_index,
+                activeIndex: NavigationBarCubit.get(context).current_index,
                 gapLocation: GapLocation.center,
                 notchSmoothness: NotchSmoothness.defaultEdge,
                 backgroundColor: navigation_bar_color,
@@ -88,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.black.withOpacity(0.3)),
                 rightCornerRadius: 12,
                 onTap: (index) {
-                  cubit.changePage(index);
+                  NavigationBarCubit.get(context).changePage(index);
                 }),
           );
         },
