@@ -10,8 +10,8 @@ class SeasonAnimeService {
     _apiHelper = ApiHelper();
   }
 
-  Future<Map<String,dynamic>> get() async {
-    final respone = await _apiHelper.get(_endPoint);
+  Future<Map<String,dynamic>> get(int page) async {
+    final respone = await _apiHelper.get(_endPoint, queryParamters: {"page" : page});
     return jsonDecode(respone.toString());
   }
 }

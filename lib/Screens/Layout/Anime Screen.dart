@@ -15,6 +15,7 @@ import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
+import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 class AnimeScreen extends StatelessWidget {
@@ -28,6 +29,7 @@ class AnimeScreen extends StatelessWidget {
         return Container(
           width: screen_width,
           child: SingleChildScrollView(
+            controller: cubit.scrollController,
             child: Column(
               children: [
                 HomeTitle("Top Animes"),
@@ -70,9 +72,11 @@ class AnimeScreen extends StatelessWidget {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) => seasonAnimeListBuilder(cubit.seasonAnimes[index]),
-                  itemCount: 12,
+                  itemCount: cubit.seasonAnimes.length,
                   ),
-                  Gaps.large_Gap
+                  if (cubit.seasonAnimes.isNotEmpty && state is LoadingSeasonAnimeState)
+                  AppProgressIndicator(size: 40),
+                  Gaps.huge_Gap
               ],
             ),
           ),

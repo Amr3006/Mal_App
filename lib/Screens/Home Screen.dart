@@ -25,7 +25,11 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => UserCubit()..getUser()),
-        BlocProvider(create: (context) => AnimeCubit()..getTopAnimes()..getSeasonAnimes()),
+        BlocProvider(
+            create: (context) => AnimeCubit()
+              ..getTopAnimes()
+              ..getSeasonAnimes()
+              ..scrollListenerInit()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
@@ -33,10 +37,10 @@ class HomeScreen extends StatelessWidget {
           return Scaffold(
             body: BlocBuilder<AnimeCubit, AnimeState>(
               builder: (context, state) {
-                  final List<bool> conditions = [
-                    AnimeCubit.get(context).topAnimes.isEmpty,
-                    AnimeCubit.get(context).seasonAnimes.isEmpty
-                  ];
+                final List<bool> conditions = [
+                  AnimeCubit.get(context).topAnimes.isEmpty,
+                  AnimeCubit.get(context).seasonAnimes.isEmpty
+                ];
                 return ConditionalBuilder(
                     condition: conditions.contains(true),
                     builder: (context) => AppProgressIndicator(),
@@ -45,10 +49,8 @@ class HomeScreen extends StatelessWidget {
             ),
             backgroundColor: Colors.white,
             appBar: AppBar(
+              surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(30))),
               title: NeuText(
                   text: "MAL",
                   fontSize: 35,
@@ -62,7 +64,7 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: navigation_bar_buttons_color,
               shape: CircleBorder(),
               child: Icon(
-                FontAwesomeIcons.gear,
+                FontAwesomeIcons.magnifyingGlass,
                 color: navigation_bar_color,
               ),
             ),

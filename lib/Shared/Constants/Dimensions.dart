@@ -9,6 +9,7 @@ class Gaps{
   static final small_Gap = Gap(10.r);
   static final medium_Gap = Gap(16.r);
   static final large_Gap = Gap(24.r);
+  static final huge_Gap = Gap(30.r);
 }
 
 class Pads{

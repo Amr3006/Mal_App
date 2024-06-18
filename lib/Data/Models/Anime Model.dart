@@ -61,7 +61,7 @@ class AnimeModel {
     status = json['status'];
     duration = json['duration'];
     rating = json['rating'];
-    score = json['score'];
+    score = json['score']==null ? null : json["score"].toDouble();
     scoredBy = json['scored_by'];
     rank = json['rank'];
     popularity = json['popularity'];
