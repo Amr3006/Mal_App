@@ -5,14 +5,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
-import 'package:mal_app/Business%20Logic/Anime%20Cubit/anime_cubit.dart';
+import 'package:mal_app/Business%20Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Business%20Logic/Navigation%20Bar%20Cubit/navigation_bar_cubit.dart';
 import 'package:mal_app/Business%20Logic/User%20Cubit/user_cubit.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
-import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
@@ -26,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => UserCubit()..getUser()),
         BlocProvider(
-            create: (context) => AnimeCubit()
+            create: (context) => FeedCubit()
               ..getTopAnimes()
               ..getSeasonAnimes()
               ..scrollListenerInit()),
@@ -35,11 +32,11 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
         builder: (context, state) {
           return Scaffold(
-            body: BlocBuilder<AnimeCubit, AnimeState>(
+            body: BlocBuilder<FeedCubit, FeedState>(
               builder: (context, state) {
                 final List<bool> conditions = [
-                  AnimeCubit.get(context).topAnimes.isEmpty,
-                  AnimeCubit.get(context).seasonAnimes.isEmpty
+                  FeedCubit.get(context).topAnimes.isEmpty,
+                  FeedCubit.get(context).seasonAnimes.isEmpty
                 ];
                 return ConditionalBuilder(
                     condition: conditions.contains(true),

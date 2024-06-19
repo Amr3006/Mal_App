@@ -1,18 +1,21 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_field, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Repositories/season_anime_repository.dart';
-import 'package:mal_app/Data/Repositories/top_anime_repositore.dart';
+import 'package:mal_app/Data/Repositories/top_anime_repository.dart';
+import 'package:mal_app/Data/Repositories/top_character_repository.dart';
 
-part 'anime_state.dart';
+part 'feed_state.dart';
 
-class AnimeCubit extends Cubit<AnimeState> {
-  AnimeCubit() : super(AnimeInitial());
+// TODO: Remove the prints
 
-  static AnimeCubit get(BuildContext context) => BlocProvider.of(context);
+class FeedCubit extends Cubit<FeedState> {
+  FeedCubit() : super(FeedInitial());
+
+  static FeedCubit get(BuildContext context) => BlocProvider.of(context);
 
   var scrollController = ScrollController();
 
@@ -35,6 +38,7 @@ class AnimeCubit extends Cubit<AnimeState> {
   // Repositories
   final TopAnimeRepo _topAnimeRepo = TopAnimeRepo();
   final SeasonAnimeRepo _seasonAnimeRepo = SeasonAnimeRepo();
+  final TopCharacterRepo _topCharacterRepo = TopCharacterRepo();
 
   // Top Animes
   final List<AnimeModel> topAnimes = [];
@@ -56,7 +60,7 @@ class AnimeCubit extends Cubit<AnimeState> {
   void getSeasonAnimes() async {
     emit(LoadingSeasonAnimeState());
     try {
-      var _temp = await _seasonAnimeRepo.get(page);
+      var _temp = await _seasonAnimeRepo.getData(page);
       seasonAnimes.addAll(_temp);
       page++;
       emit(SuccessSeasonAnimeState());

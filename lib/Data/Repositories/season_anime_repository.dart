@@ -10,11 +10,11 @@ class SeasonAnimeRepo {
 
   bool _nextPage = false;
 
-  Future<List<AnimeModel>> get(int page) async {
-    final response = await _seasonAnimeService.get(page);
+  Future<List<AnimeModel>> getData(int page) async {
+    final json = await _seasonAnimeService.get(page);
     final List<AnimeModel> data = [];
-    final List<dynamic> list = response["data"];
-    _nextPage = response["pagination"]["has_next_page"];
+    final List<dynamic> list = json["data"];
+    _nextPage = json["pagination"]["has_next_page"];
     for (var element in list) {
       data.add(AnimeModel.fromJson(element));
     }
