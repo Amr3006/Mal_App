@@ -18,3 +18,10 @@ final class FailedSeasonAnimeState extends FeedState {
   final String error;
   FailedSeasonAnimeState(this.error);
 }
+
+final class LoadingPopularCharactersState extends FeedState {}
+final class SuccessPopularCharactersState extends FeedState {}
+final class FailedPopularCharactersState extends FeedState {
+  final String error;
+  FailedPopularCharactersState(this.error);
+}

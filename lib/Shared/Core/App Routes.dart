@@ -6,7 +6,7 @@ import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Screens/Home%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Login%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Sign%20Up%20Screen.dart';
-import 'package:mal_app/Screens/Layout/Anime%20Feed%20Screen.dart';
+import 'package:mal_app/Screens/Layout/Feed%20Screen.dart';
 import 'package:mal_app/Screens/Splash%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 

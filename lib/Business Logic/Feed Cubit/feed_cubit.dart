@@ -1,9 +1,12 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, unused_field, avoid_print
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
+import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Repositories/season_anime_repository.dart';
 import 'package:mal_app/Data/Repositories/top_anime_repository.dart';
 import 'package:mal_app/Data/Repositories/top_character_repository.dart';
@@ -13,11 +16,12 @@ part 'feed_state.dart';
 // TODO: Remove the prints
 
 class FeedCubit extends Cubit<FeedState> {
-  FeedCubit() : super(FeedInitial());
+  FeedCubit() : super(FeedInitial()); 
 
   static FeedCubit get(BuildContext context) => BlocProvider.of(context);
 
   var scrollController = ScrollController();
+
 
   // Initialize Scroll Listener
   void scrollListenerInit() {
@@ -54,6 +58,20 @@ class FeedCubit extends Cubit<FeedState> {
     }
   }
 
+  // Popular Characters
+  final List<CharacterModel> popularCharcters = [];
+  void getPopularCharacters() async {
+    emit(LoadingPopularCharactersState());
+    try {
+      final _temp = await _topCharacterRepo.get();
+      popularCharcters.addAll(_temp);
+      emit(SuccessPopularCharactersState());
+    } catch (e) {
+      emit(FailedPopularCharactersState(e.toString()));
+      print(e.toString());
+    }
+  }
+
   // Currenct Animes
   int page = 1;
   final List<AnimeModel> seasonAnimes = [];
@@ -70,3 +88,5 @@ class FeedCubit extends Cubit<FeedState> {
     }
   }
 }
+
+

@@ -11,7 +11,7 @@ class TopCharacterRepo {
   Future<List<CharacterModel>> get() async {
     final json = await _topCharacterService.get();
     final List<CharacterModel> data = [];
-    final List<Map<String,dynamic>> list = json["data"];
+    final List<dynamic> list = json["data"];
     for (var element in list) {
       data.add(CharacterModel.fromJson(element));
     }

@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
             create: (context) => FeedCubit()
               ..getTopAnimes()
               ..getSeasonAnimes()
+              ..getPopularCharacters()
               ..scrollListenerInit()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
@@ -36,7 +37,8 @@ class HomeScreen extends StatelessWidget {
               builder: (context, state) {
                 final List<bool> conditions = [
                   FeedCubit.get(context).topAnimes.isEmpty,
-                  FeedCubit.get(context).seasonAnimes.isEmpty
+                  FeedCubit.get(context).seasonAnimes.isEmpty,
+                  FeedCubit.get(context).popularCharcters.isEmpty
                 ];
                 return ConditionalBuilder(
                     condition: conditions.contains(true),

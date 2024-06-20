@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -40,11 +39,7 @@ class AnimeScreen extends StatelessWidget {
                         height: 250.h,
                         decoration: BoxDecoration(
                           border: Border.all(width: 3),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset(3,3)
-                            )
-                          ],
+                          boxShadow: [BoxShadow(offset: Offset(3, 3))],
                           color: background_color,
                           borderRadius: BorderRadiusDirectional.horizontal(
                               start: Radius.circular(12)),
@@ -52,7 +47,8 @@ class AnimeScreen extends StatelessWidget {
                         child: ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => topAnimeListBuilder(cubit.topAnimes[index]),
+                          itemBuilder: (context, index) =>
+                              horizontalListBuilder(cubit.topAnimes[index]),
                           separatorBuilder: (context, index) => Gaps.medium_Gap,
                           itemCount: cubit.topAnimes.length,
                           scrollDirection: Axis.horizontal,
@@ -77,11 +73,7 @@ class AnimeScreen extends StatelessWidget {
                           height: 250.h,
                           decoration: BoxDecoration(
                             border: Border.all(width: 3),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(3,3)
-                              )
-                            ],
+                            boxShadow: [BoxShadow(offset: Offset(3, 3))],
                             color: background_color,
                             borderRadius: BorderRadiusDirectional.horizontal(
                                 start: Radius.circular(12)),
@@ -89,9 +81,11 @@ class AnimeScreen extends StatelessWidget {
                           child: ListView.separated(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => topAnimeListBuilder(cubit.topAnimes[index]),
-                            separatorBuilder: (context, index) => Gaps.medium_Gap,
-                            itemCount: cubit.topAnimes.length,
+                            itemBuilder: (context, index) =>
+                                horizontalListBuilder(cubit.popularCharcters[index]),
+                            separatorBuilder: (context, index) =>
+                                Gaps.medium_Gap,
+                            itemCount: cubit.popularCharcters.length,
                             scrollDirection: Axis.horizontal,
                           ),
                         ),
@@ -105,12 +99,14 @@ class AnimeScreen extends StatelessWidget {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemBuilder: (context, index) => seasonAnimeListBuilder(cubit.seasonAnimes[index]),
+                  itemBuilder: (context, index) =>
+                      seasonAnimeListBuilder(cubit.seasonAnimes[index]),
                   itemCount: cubit.seasonAnimes.length,
-                  ),
-                  if (cubit.seasonAnimes.isNotEmpty && state is LoadingSeasonAnimeState)
+                ),
+                if (cubit.seasonAnimes.isNotEmpty &&
+                    state is LoadingSeasonAnimeState)
                   AppProgressIndicator(size: 40),
-                  Gaps.huge_Gap
+                Gaps.huge_Gap
               ],
             ),
           ),
@@ -121,76 +117,88 @@ class AnimeScreen extends StatelessWidget {
 
   Widget seasonAnimeListBuilder(AnimeModel model) {
     return InkWell(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: Padding(
-                padding: Pads.medium_Padding,
-                child: NeuCard(
-                  borderRadius: BorderRadius.circular(4),
-                  cardHeight: 140.r,
-                  cardColor: Colors.white,
-                  child: Padding(
-                    padding: Pads.small_Padding,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 100.w,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          foregroundDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(width: 2),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            image: DecorationImage(image: NetworkImage(model.image!), fit: BoxFit.cover)
-                          ),
-                        ),
-                        Gaps.medium_Gap,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Gaps.tiny_Gap,
-                              Text(model.titles![0].title!, 
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.firaSans(
-                                fontSize: 18.sp,
-                              ),),
-                              Gaps.tiny_Gap,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text("${model.score ?? "Unk."}", style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold
-                                  ),),
-                                  Gaps.tiny_Gap,
-                                  RatingBarIndicator(itemBuilder: (context, index) {
-                                    return Icon(Icons.star, color: navigation_bar_color, );
-                                  },
-                                  itemCount: 5,
-                                  itemSize: 18,
-                                  itemPadding: EdgeInsets.symmetric(horizontal: 0.5),
-                                  rating: (model.score ?? 0)/2,
-                                  ),
-                                ],
-                              ),
-                              Text("Episodes : ${model.episodes ?? "Unkown"}", style: TextStyle(fontSize: 14.sp),)
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+        padding: Pads.medium_Padding,
+        child: NeuCard(
+          borderRadius: BorderRadius.circular(4),
+          cardHeight: 140.r,
+          cardColor: Colors.white,
+          child: Padding(
+            padding: Pads.small_Padding,
+            child: Row(
+              children: [
+                Container(
+                  width: 100.w,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  foregroundDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(width: 2),
                   ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      image: DecorationImage(
+                          image: NetworkImage(model.image!),
+                          fit: BoxFit.cover)),
                 ),
-              ),
+                Gaps.medium_Gap,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Gaps.tiny_Gap,
+                      Text(
+                        model.titles![0].title!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.firaSans(
+                          fontSize: 18.sp,
+                        ),
+                      ),
+                      Gaps.tiny_Gap,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${model.score ?? "Unk."}",
+                            style: TextStyle(
+                                fontSize: 16.sp, fontWeight: FontWeight.bold),
+                          ),
+                          Gaps.tiny_Gap,
+                          RatingBarIndicator(
+                            itemBuilder: (context, index) {
+                              return Icon(
+                                Icons.star,
+                                color: navigation_bar_color,
+                              );
+                            },
+                            itemCount: 5,
+                            itemSize: 18,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 0.5),
+                            rating: (model.score ?? 0) / 2,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        "Episodes : ${model.episodes ?? "Unkown"}",
+                        style: TextStyle(fontSize: 14.sp),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-
-  Widget topAnimeListBuilder(AnimeModel model ) {
+  Widget horizontalListBuilder(final model) {
+    bool isAnimeModel = false;
+    if (model is AnimeModel) {
+      isAnimeModel = true;
+    }
     return InkWell(
       onTap: () {},
       child: Directionality(
@@ -226,7 +234,7 @@ class AnimeScreen extends StatelessWidget {
                   child: Text(
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    "${model.titles![0].title}",
+                    "${isAnimeModel ?  model.titles![0].title : model.name}",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
