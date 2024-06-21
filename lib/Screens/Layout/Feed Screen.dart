@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
@@ -116,78 +117,79 @@ class AnimeScreen extends StatelessWidget {
   }
 
   Widget seasonAnimeListBuilder(AnimeModel model) {
-    return InkWell(
-      onTap: () {},
-      child: Padding(
-        padding: Pads.medium_Padding,
-        child: NeuCard(
-          borderRadius: BorderRadius.circular(4),
-          cardHeight: 140.r,
-          cardColor: Colors.white,
-          child: Padding(
-            padding: Pads.small_Padding,
-            child: Row(
-              children: [
-                Container(
-                  width: 100.w,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(width: 2),
-                  ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      image: DecorationImage(
-                          image: NetworkImage(model.image!),
-                          fit: BoxFit.cover)),
+    return Padding(
+      padding: Pads.medium_Padding,
+      child: NeuTextButton(
+        onPressed: () {
+          
+        },
+        borderRadius: BorderRadius.circular(4),
+        buttonHeight: 140.r,
+        enableAnimation: true,
+        buttonColor: Colors.white,
+        text: Padding(
+          padding: Pads.small_Padding,
+          child: Row(
+            children: [
+              Container(
+                width: 100.w,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(width: 2),
                 ),
-                Gaps.medium_Gap,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Gaps.tiny_Gap,
-                      Text(
-                        model.titles![0].title!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.firaSans(
-                          fontSize: 18.sp,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    image: DecorationImage(
+                        image: NetworkImage(model.image!),
+                        fit: BoxFit.cover)),
+              ),
+              Gaps.medium_Gap,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gaps.tiny_Gap,
+                    Text(
+                      model.titles![0].title!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.firaSans(
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    Gaps.tiny_Gap,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${model.score ?? "Unk."}",
+                          style: TextStyle(
+                              fontSize: 16.sp, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      Gaps.tiny_Gap,
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${model.score ?? "Unk."}",
-                            style: TextStyle(
-                                fontSize: 16.sp, fontWeight: FontWeight.bold),
-                          ),
-                          Gaps.tiny_Gap,
-                          RatingBarIndicator(
-                            itemBuilder: (context, index) {
-                              return Icon(
-                                Icons.star,
-                                color: navigation_bar_color,
-                              );
-                            },
-                            itemCount: 5,
-                            itemSize: 18,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 0.5),
-                            rating: (model.score ?? 0) / 2,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "Episodes : ${model.episodes ?? "Unkown"}",
-                        style: TextStyle(fontSize: 14.sp),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                        Gaps.tiny_Gap,
+                        RatingBarIndicator(
+                          itemBuilder: (context, index) {
+                            return Icon(
+                              Icons.star,
+                              color: navigation_bar_color,
+                            );
+                          },
+                          itemCount: 5,
+                          itemSize: 18,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 0.5),
+                          rating: (model.score ?? 0) / 2,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "Episodes : ${model.episodes ?? "Unkown"}",
+                      style: TextStyle(fontSize: 14.sp),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
