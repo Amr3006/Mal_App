@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// ignore: unused_import
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Feed%20Cubit/feed_cubit.dart';
@@ -121,13 +122,13 @@ class AnimeScreen extends StatelessWidget {
       padding: Pads.medium_Padding,
       child: NeuTextButton(
         onPressed: () {
-          
+
         },
         borderRadius: BorderRadius.circular(4),
         buttonHeight: 140.r,
         enableAnimation: true,
         buttonColor: Colors.white,
-        text: Padding(
+        child: Padding(
           padding: Pads.small_Padding,
           child: Row(
             children: [
@@ -201,48 +202,49 @@ class AnimeScreen extends StatelessWidget {
     if (model is AnimeModel) {
       isAnimeModel = true;
     }
-    return InkWell(
-      onTap: () {},
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: NeuCard(
-          cardColor: Colors.white,
-          shadowColor: background_shadow_color,
-          cardWidth: 180.w,
-          borderRadius: BorderRadius.circular(10),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Container(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                        image: NetworkImage("${model.image}"),
-                        fit: BoxFit.cover)),
-              ),
-              Container(
-                height: 40.h,
-                width: 180.w,
-                padding: EdgeInsetsDirectional.only(start: 10),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Colors.black,
-                  Colors.black.withOpacity(0.7),
-                  Colors.transparent,
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                child: Align(
-                  alignment: AlignmentDirectional.bottomStart,
-                  child: Text(
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    "${isAnimeModel ?  model.titles![0].title : model.name}",
-                    style: TextStyle(color: Colors.white),
-                  ),
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: NeuTextButton(
+        onPressed: () {
+          
+        },
+        enableAnimation: true,
+        buttonColor: Colors.white,
+        shadowColor: background_shadow_color,
+        buttonWidth: 180.w,
+        borderRadius: BorderRadius.circular(10),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Container(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                      image: NetworkImage("${model.image}"),
+                      fit: BoxFit.cover)),
+            ),
+            Container(
+              height: 50.h,
+              width: 180.w,
+              padding: EdgeInsetsDirectional.only(start: 10),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.black,
+                Colors.black.withOpacity(0.7),
+                Colors.transparent,
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+              child: Align(
+                alignment: AlignmentDirectional.bottomStart,
+                child: Text(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  "${isAnimeModel ?  model.titles![0].title : model.name}",
+                  style: TextStyle(color: Colors.white),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

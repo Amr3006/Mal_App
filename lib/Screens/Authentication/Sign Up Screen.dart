@@ -44,8 +44,7 @@ class SignUpScreen extends StatelessWidget {
                 } else if (state is FailedCreateUserWithEmailAndPasswordState) {
                   print(state.error);
                 } else if (state is SuccessCreateUserWithEmailAndPasswordState) {
-                  AppNavigator.pop(context);
-                  AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
+                  AppNavigator.pushAndRemoveUntil(AppRoutes.homeScreen, context);
                 }
               },
               builder: (context, state) {
@@ -103,12 +102,12 @@ class SignUpScreen extends StatelessWidget {
                             buttonWidth: 200.w,
                             buttonHeight: 60.sp,
                             enableAnimation: true,
-                            text: Text(
+                            buttonColor: font_color,
+                            child: Text(
                               "SIGN UP",
                               style: GoogleFonts.kavoon(
                                   color: Colors.white, fontSize: 30.sp),
                             ),
-                            buttonColor: font_color,
                           ),
                           Gaps.large_Gap
                         ],

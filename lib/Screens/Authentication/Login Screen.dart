@@ -109,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                               enableAnimation: true,
                               buttonColor: Colors.blue,
                               buttonWidth: 300.w,
-                              text: Text(
+                              child: Text(
                                 "Login with Facebook",
                                 style: GoogleFonts.roboto(
                                     fontSize: 18.sp, color: Colors.white),
@@ -120,7 +120,7 @@ class LoginScreen extends StatelessWidget {
                               enableAnimation: true,
                               buttonColor: Colors.white,
                               buttonWidth: 300.w,
-                              text: Text(
+                              child: Text(
                                 "Login with Google",
                                 style: GoogleFonts.roboto(
                                     fontSize: 18.sp, color: Colors.black),
@@ -155,12 +155,12 @@ class LoginScreen extends StatelessWidget {
                             buttonWidth: 200.w,
                             buttonHeight: 60.sp,
                             enableAnimation: true,
-                            text: Text(
+                            buttonColor: button_color,
+                            child: Text(
                               "LOGIN",
                               style: GoogleFonts.kavoon(
                                   color: Colors.white, fontSize: 30.sp),
                             ),
-                            buttonColor: button_color,
                           ),
                           Gaps.large_Gap
                         ],

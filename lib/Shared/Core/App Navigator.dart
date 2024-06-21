@@ -12,6 +12,10 @@ class AppNavigator {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => screen));
   }
 
+  static void pushAndRemoveUntil(Widget screen, BuildContext context) {
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (contex) => screen), (route) => false);
+  }
+
   static void pop(BuildContext context) {
     Navigator.pop(context);
   }
