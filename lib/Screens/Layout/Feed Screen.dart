@@ -10,14 +10,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
+import 'package:mal_app/Shared/Core/App%20Navigator.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-class AnimeScreen extends StatelessWidget {
-  const AnimeScreen.AnimeFeedScreen({super.key});
+class FeedScreen extends StatelessWidget {
+  const FeedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class AnimeScreen extends StatelessWidget {
                           clipBehavior: Clip.none,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) =>
-                              horizontalListBuilder(cubit.topAnimes[index]),
+                              horizontalListBuilder(cubit.topAnimes[index], context),
                           separatorBuilder: (context, index) => Gaps.medium_Gap,
                           itemCount: cubit.topAnimes.length,
                           scrollDirection: Axis.horizontal,
@@ -87,7 +89,7 @@ class AnimeScreen extends StatelessWidget {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) =>
-                                horizontalListBuilder(cubit.popularCharcters[index]),
+                                horizontalListBuilder(cubit.popularCharcters[index], context),
                             separatorBuilder: (context, index) =>
                                 Gaps.medium_Gap,
                             itemCount: cubit.popularCharcters.length,
@@ -105,7 +107,7 @@ class AnimeScreen extends StatelessWidget {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) =>
-                      seasonAnimeListBuilder(cubit.seasonAnimes[index]),
+                      seasonAnimeListBuilder(cubit.seasonAnimes[index], context),
                   itemCount: cubit.seasonAnimes.length,
                 ),
                 if (cubit.seasonAnimes.isNotEmpty &&
@@ -120,12 +122,12 @@ class AnimeScreen extends StatelessWidget {
     );
   }
 
-  Widget seasonAnimeListBuilder(AnimeModel model) {
+  Widget seasonAnimeListBuilder(AnimeModel model, BuildContext context) {
     return Padding(
       padding: Pads.medium_Padding,
       child: AppNeuButton(
         onPress: () {
-          
+          AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
         },
         height: 140.r,
         borderRadius: BorderRadius.circular(4),
@@ -199,7 +201,7 @@ class AnimeScreen extends StatelessWidget {
     );
   }
 
-  Widget horizontalListBuilder(final model) {
+  Widget horizontalListBuilder(final model, BuildContext context) {
     bool isAnimeModel = false;
     if (model is AnimeModel) {
       isAnimeModel = true;
@@ -208,7 +210,9 @@ class AnimeScreen extends StatelessWidget {
       textDirection: TextDirection.ltr,
       child: AppNeuButton(
         onPress: () {
-
+          if (isAnimeModel) {
+            AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
+          }
         },
         backgroundColor: Colors.white,
         shadowColor: background_shadow_color,

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 class AnimeModel {
-  int? malId;
+  late int malId;
   String? url;
   String? image;
   bool? approved;
@@ -24,7 +24,7 @@ class AnimeModel {
   List<Genre>? demographics;
 
   AnimeModel(
-      {this.malId,
+      {required this.malId,
       this.url,
       this.image,
       this.approved,

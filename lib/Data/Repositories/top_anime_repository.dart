@@ -8,13 +8,18 @@ class TopAnimeRepo {
     _service=TopAnimeService();
   }
 
-  Future<List<AnimeModel>> get() async {
+  final List<AnimeModel> _data = [];
+
+  Future<void> get() async {
+    _data.clear();
     final json = await _service.get();
-    final List<AnimeModel> data=[];
     final List<dynamic> list = json["data"];
     for (var element in list) {
-      data.add(AnimeModel.fromJson(element));
+      _data.add(AnimeModel.fromJson(element));
     }
-    return data;
+  }
+
+  List<AnimeModel> returnData() {
+   return _data; 
   }
 }

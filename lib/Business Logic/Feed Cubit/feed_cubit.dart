@@ -31,7 +31,7 @@ class FeedCubit extends Cubit<FeedState> {
 
   // Scroll Listener
   void scrollListener() {
-    if (!_seasonAnimeRepo.getPagination()) {
+    if (!_seasonAnimeRepo.returnPagination()) {
       return;
     }
     if (scrollController.position.extentAfter.h < 500.h &&
@@ -50,7 +50,8 @@ class FeedCubit extends Cubit<FeedState> {
   void getTopAnimes() async {
     emit(LoadingTopAnimeState());
     try {
-      final _temp = await _topAnimeRepo.get();
+      await _topAnimeRepo.get();
+      final _temp = _topAnimeRepo.returnData();
       topAnimes.addAll(_temp);
       emit(SuccessTopAnimeState());
     } catch (e) {
@@ -64,7 +65,8 @@ class FeedCubit extends Cubit<FeedState> {
   void getPopularCharacters() async {
     emit(LoadingPopularCharactersState());
     try {
-      final _temp = await _topCharacterRepo.get();
+      await _topCharacterRepo.get();
+      final _temp = _topCharacterRepo.returnData();
       popularCharcters.addAll(_temp);
       emit(SuccessPopularCharactersState());
     } catch (e) {
@@ -79,7 +81,8 @@ class FeedCubit extends Cubit<FeedState> {
   void getSeasonAnimes() async {
     emit(LoadingSeasonAnimeState());
     try {
-      var _temp = await _seasonAnimeRepo.getData(page);
+      await _seasonAnimeRepo.get(page);
+      var _temp = _seasonAnimeRepo.returnData();
       seasonAnimes.addAll(_temp);
       page++;
       emit(SuccessSeasonAnimeState());

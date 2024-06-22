@@ -9,19 +9,23 @@ class SeasonAnimeRepo {
   }
 
   bool _nextPage = false;
+  final List<AnimeModel> _data = [];
 
-  Future<List<AnimeModel>> getData(int page) async {
+  Future<void> get(int page) async {
+    _data.clear();
     final json = await _seasonAnimeService.get(page);
-    final List<AnimeModel> data = [];
     final List<dynamic> list = json["data"];
     _nextPage = json["pagination"]["has_next_page"];
     for (var element in list) {
-      data.add(AnimeModel.fromJson(element));
+      _data.add(AnimeModel.fromJson(element));
     }
-    return data;
   }
 
-  bool getPagination() {
+  List<AnimeModel> returnData() {
+    return _data;
+  }
+
+  bool returnPagination() {
     return _nextPage;
   }
 

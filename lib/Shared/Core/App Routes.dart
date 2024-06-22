@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
+import 'package:mal_app/Screens/Detailed%20Anime%20Screen.dart';
 import 'package:mal_app/Screens/Home%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Login%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Sign%20Up%20Screen.dart';
@@ -15,7 +17,8 @@ class AppRoutes {
   static const loginScreen = LoginScreen();
   static const signUpScreen = SignUpScreen();
   static const homeScreen = HomeScreen();
-  static const animeScreen = AnimeScreen.AnimeFeedScreen();
+  static const animeScreen = FeedScreen();
+  static detailedAnimeScreen(AnimeModel model)=> DetailedAnimeScreen(model: model);
 }
 
 Widget firstScreen() {
