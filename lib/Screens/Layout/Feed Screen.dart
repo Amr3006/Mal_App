@@ -12,6 +12,7 @@ import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
+import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
@@ -37,6 +38,7 @@ class AnimeScreen extends StatelessWidget {
                     children: [
                       Gaps.large_Gap,
                       Container(
+                        clipBehavior: Clip.none,
                         padding: Pads.medium_Padding,
                         height: 250.h,
                         decoration: BoxDecoration(
@@ -48,6 +50,7 @@ class AnimeScreen extends StatelessWidget {
                         ),
                         child: ListView.separated(
                           shrinkWrap: true,
+                          clipBehavior: Clip.none,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) =>
                               horizontalListBuilder(cubit.topAnimes[index]),
@@ -120,14 +123,13 @@ class AnimeScreen extends StatelessWidget {
   Widget seasonAnimeListBuilder(AnimeModel model) {
     return Padding(
       padding: Pads.medium_Padding,
-      child: NeuTextButton(
-        onPressed: () {
-
+      child: AppNeuButton(
+        onPress: () {
+          
         },
+        height: 140.r,
         borderRadius: BorderRadius.circular(4),
-        buttonHeight: 140.r,
-        enableAnimation: true,
-        buttonColor: Colors.white,
+        backgroundColor: Colors.white,
         child: Padding(
           padding: Pads.small_Padding,
           child: Row(
@@ -204,14 +206,13 @@ class AnimeScreen extends StatelessWidget {
     }
     return Directionality(
       textDirection: TextDirection.ltr,
-      child: NeuTextButton(
-        onPressed: () {
-          
+      child: AppNeuButton(
+        onPress: () {
+
         },
-        enableAnimation: true,
-        buttonColor: Colors.white,
+        backgroundColor: Colors.white,
         shadowColor: background_shadow_color,
-        buttonWidth: 180.w,
+        width: 180.w,
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           alignment: Alignment.bottomLeft,
