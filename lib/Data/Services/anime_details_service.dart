@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// ignore: unused_import
 import 'package:dio/dio.dart';
 import 'package:mal_app/Data/API/API%20Helper.dart';
 

@@ -1,11 +1,14 @@
 // ignore_for_file: file_names
 
+import 'package:mal_app/Data/Models/Genre%20Model.dart';
+import 'package:mal_app/Data/Models/Title%20Model.dart';
+
 class AnimeModel {
   late int malId;
   String? url;
   String? image;
   bool? approved;
-  List<Titles>? titles;
+  List<TitleModel>? titles;
   int? episodes;
   String? status;
   String? duration;
@@ -19,9 +22,9 @@ class AnimeModel {
   String? synopsis;
   String? season;
   int? year;
-  List<Genre>? genres;
-  List<Genre>? explicitGenres;
-  List<Genre>? demographics;
+  List<GenreModel>? genres;
+  List<GenreModel>? explicitGenres;
+  List<GenreModel>? demographics;
 
   AnimeModel(
       {required this.malId,
@@ -52,9 +55,9 @@ class AnimeModel {
     image = json["images"]["jpg"]["image_url"];
     approved = json['approved'];
     if (json['titles'] != null) {
-      titles = <Titles>[];
+      titles = <TitleModel>[];
       json['titles'].forEach((v) {
-        titles!.add(Titles.fromJson(v));
+        titles!.add(TitleModel.fromJson(v));
       });
     }
     episodes = json['episodes'];
@@ -71,21 +74,21 @@ class AnimeModel {
     season = json['season'];
     year = json['year'];
     if (json['genres'] != null) {
-      genres = <Genre>[];
+      genres = <GenreModel>[];
       json['genres'].forEach((v) {
-        genres!.add(Genre.fromJson(v));
+        genres!.add(GenreModel.fromJson(v));
       });
     }
     if (json['explicit_genres'] != null) {
-      explicitGenres = <Genre>[];
+      explicitGenres = <GenreModel>[];
       json['explicit_genres'].forEach((v) {
-        explicitGenres!.add(Genre.fromJson(v));
+        explicitGenres!.add(GenreModel.fromJson(v));
       });
     }
     if (json['demographics'] != null) {
-      demographics = <Genre>[];
+      demographics = <GenreModel>[];
       json['demographics'].forEach((v) {
-        demographics!.add(Genre.fromJson(v));
+        demographics!.add(GenreModel.fromJson(v));
       });
     }
   }
@@ -126,46 +129,4 @@ class AnimeModel {
   }
 }
 
-class Titles {
-  String? type;
-  String? title;
 
-  Titles({this.type, this.title});
-
-  Titles.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    title = json['title'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['type'] = type;
-    data['title'] = title;
-    return data;
-  }
-}
-
-class Genre {
-  int? malId;
-  String? type;
-  String? name;
-  String? url;
-
-  Genre({this.malId, this.type, this.name, this.url});
-
-  Genre.fromJson(Map<String, dynamic> json) {
-    malId = json['mal_id'];
-    type = json['type'];
-    name = json['name'];
-    url = json['url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['mal_id'] = malId;
-    data['type'] = type;
-    data['name'] = name;
-    data['url'] = url;
-    return data;
-  }
-}

@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Services/top_character_service.dart';

@@ -16,6 +16,7 @@ import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
+// ignore: unused_import
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 class FeedScreen extends StatelessWidget {
@@ -136,18 +137,21 @@ class FeedScreen extends StatelessWidget {
           padding: Pads.small_Padding,
           child: Row(
             children: [
-              Container(
-                width: 100.w,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                foregroundDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(width: 2),
-                ),
-                decoration: BoxDecoration(
+              Hero(
+                tag: "gibberish",
+                child: Container(
+                  width: 100.w,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  foregroundDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    image: DecorationImage(
-                        image: NetworkImage(model.image!),
-                        fit: BoxFit.cover)),
+                    border: Border.all(width: 2),
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      image: DecorationImage(
+                          image: NetworkImage(model.image!),
+                          fit: BoxFit.cover)),
+                ),
               ),
               Gaps.medium_Gap,
               Expanded(
@@ -221,13 +225,16 @@ class FeedScreen extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            Container(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                      image: NetworkImage("${model.image}"),
-                      fit: BoxFit.cover)),
+            Hero(
+              tag: "gibberish",
+              child: Container(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                        image: NetworkImage("${model.image}"),
+                        fit: BoxFit.cover)),
+              ),
             ),
             Container(
               height: 50.h,

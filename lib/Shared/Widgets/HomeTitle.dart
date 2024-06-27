@@ -6,7 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 
 Widget HomeTitle(
-  String text
+  String text,
+  {double fontSize = 25}
 ) {
     return Row(
               children: [
@@ -15,7 +16,7 @@ Widget HomeTitle(
                   padding: Pads.small_Padding,
                   child: Text(text,
                   style:GoogleFonts.montserrat(
-                    fontSize: 25.sp,
+                    fontSize: fontSize.sp,
                     fontWeight: FontWeight.w500
                   )),
                 ),
