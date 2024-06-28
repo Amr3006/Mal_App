@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// ignore: unused_import
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Business%20Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
@@ -16,8 +14,6 @@ import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
-// ignore: unused_import
-import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
@@ -125,7 +121,7 @@ class FeedScreen extends StatelessWidget {
 
   Widget seasonAnimeListBuilder(AnimeModel model, BuildContext context) {
     return Padding(
-      padding: Pads.medium_Padding,
+      padding: EdgeInsets.only(left: 16.r, right: 16.r, bottom: 16.r),
       child: AppNeuButton(
         onPress: () {
           AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);

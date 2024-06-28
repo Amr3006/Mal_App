@@ -14,6 +14,7 @@ class AnimeModel {
   String? duration;
   String? rating;
   double? score;
+  String? type;
   int? scoredBy;
   int? rank;
   int? popularity;
@@ -21,6 +22,7 @@ class AnimeModel {
   int? favorites;
   String? synopsis;
   String? season;
+  String? background;
   int? year;
   List<GenreModel>? genres;
   List<GenreModel>? explicitGenres;
@@ -37,9 +39,11 @@ class AnimeModel {
       this.duration,
       this.rating,
       this.score,
+      this.background,
       this.scoredBy,
       this.rank,
       this.popularity,
+      this.type,
       this.members,
       this.favorites,
       this.synopsis,
@@ -61,7 +65,9 @@ class AnimeModel {
       });
     }
     episodes = json['episodes'];
+    background = json['background'];
     status = json['status'];
+    type = json['type'];
     duration = json['duration'];
     rating = json['rating'];
     score = json['score']==null ? null : json["score"].toDouble();
@@ -103,8 +109,10 @@ class AnimeModel {
       data['titles'] = titles!.map((v) => v.toJson()).toList();
     }
     data['episodes'] = episodes;
+    data['background'] = background;
     data['status'] = status;
     data['duration'] = duration;
+    data['type'] = type;
     data['rating'] = rating;
     data['score'] = score;
     data['scored_by'] = scoredBy;

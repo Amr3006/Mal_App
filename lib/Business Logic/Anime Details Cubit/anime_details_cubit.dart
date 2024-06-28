@@ -21,8 +21,8 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
   // Save Data to Repo
   void getData(int id) async {
     emit(LoadingDataState());
-    _repo = DetailedAnimeRepo(id);
     try {
+    _repo = DetailedAnimeRepo(id);
     await Future.wait([_repo.getCharacters(), _repo.getEpisodes()]);
     setData();
     emit(SuccessDataState());

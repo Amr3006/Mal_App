@@ -74,6 +74,7 @@ class _AppNeuButtonState extends State<AppNeuButton> {
         height: height,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 65),
+          alignment: Alignment.center,
           height: height,
           width: width,
           margin: margin,
