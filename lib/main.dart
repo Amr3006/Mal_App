@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mal_app/Business%20Logic/Bloc%20Observer.dart';
+import 'package:mal_app/Logic/Bloc%20Observer.dart';
 import 'package:mal_app/Data/API/API%20Helper.dart';
 import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';

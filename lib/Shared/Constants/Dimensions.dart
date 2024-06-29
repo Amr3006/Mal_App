@@ -19,6 +19,6 @@ class Pads{
 }
 
 // Screen Dimenstions
-late double screen_height;
-late double screen_width;
+late final double screen_height;
+late final double screen_width;
 
