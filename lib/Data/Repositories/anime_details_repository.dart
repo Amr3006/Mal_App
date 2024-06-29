@@ -3,19 +3,19 @@ import 'package:mal_app/Data/Models/Episode%20Model.dart';
 import 'package:mal_app/Data/Services/anime_details_service.dart';
 
 class DetailedAnimeRepo {
-  late final DetailedAnimeService _animeDetailsService;
+  late final DetailedAnimeService _service;
   final int id;
 
   final List<EpisodeModel> _episodesList = [];
   final List<CharacterModel> _charactersList = [];
 
   DetailedAnimeRepo(this.id) {
-    _animeDetailsService = DetailedAnimeService(id);
+    _service = DetailedAnimeService(id);
   }
 
   Future<void> getCharacters() async {
     _charactersList.clear();
-    final json = await _animeDetailsService.getCharacters();
+    final json = await _service.getCharacters();
     final List<dynamic> list = json["data"];
     for (var element in list) {
       _charactersList.add(CharacterModel.fromJson(element["character"]));
@@ -24,7 +24,7 @@ class DetailedAnimeRepo {
 
   Future<void> getEpisodes() async {
     _episodesList.clear();
-    final json = await _animeDetailsService.getEpisodes();
+    final json = await _service.getEpisodes();
     final List<dynamic> list = json["data"];
     for (var element in list) {
       _episodesList.add(EpisodeModel.fromJson(element)); 

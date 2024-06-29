@@ -53,13 +53,13 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
         imageWidth = null;
         imageHeight = screen_height;
         setState(() {});
-        await Future.delayed(Duration(milliseconds: 150));
+        await Future.delayed(const Duration(milliseconds: 150));
         opacity = 0.9;
         setState(() {});
       } else {
         opacity = 1;
         setState(() {});
-        await Future.delayed(Duration(milliseconds: 150));
+        await Future.delayed(const Duration(milliseconds: 150));
         imageHeight = null;
         imageWidth = screen_width;
         setState(() {});
