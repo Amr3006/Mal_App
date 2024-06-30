@@ -21,13 +21,12 @@ class AppRoutes {
   static const animeScreen = FeedScreen();
   static webScreen(url) => WebScreen(url);
   static detailedAnimeScreen(AnimeModel model)=> DetailedAnimeScreen(model: model);
+  static Widget firstScreen() {
+    String? temp_uId = CacheHelper.getData("uId");
+    if (temp_uId==null) {
+      return AppRoutes.loginScreen;
+    }
+    uId = temp_uId;
+    return AppRoutes.homeScreen;
+    }
 }
-
-Widget firstScreen() {
-  String? temp_uId = CacheHelper.getData("uId");
-  if (temp_uId==null) {
-    return AppRoutes.loginScreen;
-  }
-  uId = temp_uId;
-  return AppRoutes.homeScreen;
-  }

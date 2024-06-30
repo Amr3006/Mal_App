@@ -69,7 +69,7 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DetailedCharacterCubit(),
+      create: (context) => DetailedCharacterCubit()..getCharacter(model.malId),
       child: BlocBuilder<DetailedCharacterCubit, DetailedCharacterState>(
         builder: (context, state) {
           DetailedCharacterCubit cubit = DetailedCharacterCubit.get(context);
