@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
+import 'package:mal_app/Data/Models/Detailed%20Character%20Model.dart';
 import 'package:mal_app/Logic/Charcter%20Details%20Cubit/detailed_character_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
-import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/DetailsText.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
@@ -77,6 +79,25 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: navigation_bar_color,
+              title: Text(
+                "${model.name}",
+                style: GoogleFonts.nunito(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              actions: [
+                Tooltip(
+                  message: "More Info.",
+                  child: IconButton(
+                      onPressed: () {
+                        AppNavigator.push(
+                            AppRoutes.webScreen(model.url), context);
+                      },
+                      icon: const Icon(
+                        Icons.info_outline,
+                        color: Colors.white,
+                      )),
+                )
+              ],
               leading: IconButton(
                 onPressed: () {
                   AppNavigator.pop(context);
@@ -87,79 +108,137 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
                 ),
               ),
             ),
-            body: Stack(
-              children: [
-                Hero(
-                  tag: "gibberish345",
-                  child: Image.network(
-                    "${model.image}",
-                    width: imageWidth,
-                    height: imageHeight,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.medium,
-                  ),
-                ),
-                SingleChildScrollView(
-                  controller: controller,
-                  child: Column(
+            body: ConditionalBuilder(
+                condition: cubit.detailedModel != null,
+                fallback: (context) => AppProgressIndicator(),
+                builder: (context) {
+                  DetailedCharacterModel detailedModel = cubit.detailedModel!;
+                  return Stack(
                     children: [
-                      Opacity(
-                          opacity: 0,
-                          child: Image.network(
-                            "${model.image}",
-                            width: screen_width,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.none,
-                          )),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(opacity),
-                            borderRadius: BorderRadius.circular(edge)),
-                        width: screen_width,
-                        padding: Pads.medium_Padding,
+                      Image.network(
+                        "${model.image}",
+                        width: imageWidth,
+                        height: imageHeight,
+                        fit: BoxFit.cover,
+                        filterQuality: FilterQuality.medium,
+                      ),
+                      SingleChildScrollView(
+                        controller: controller,
                         child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Gaps.medium_Gap,
+                          children: [
+                            Opacity(
+                                opacity: 0,
+                                child: Image.network(
+                                  "${model.image}",
+                                  width: screen_width,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.none,
+                                )),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 100),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(opacity),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(edge))),
+                              width: screen_width,
+                              padding: Pads.medium_Padding,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AnimatedContainer(
+                                      padding: const EdgeInsets.all(12),
+                                      duration:
+                                          const Duration(milliseconds: 100),
+                                      height: 70.h,
+                                      decoration: BoxDecoration(
+                                          color: navigation_bar_color,
+                                          borderRadius:
+                                              BorderRadius.circular(edge)),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "FAVOURITES",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 22.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: AnimatedContainer(
+                                              alignment: Alignment.center,
+                                              height: 70.h,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          edge)),
+                                              duration: const Duration(
+                                                  milliseconds: 100),
+                                              child: Text(
+                                                "#${detailedModel.favorites != null
+                                                    ? NumberFormat('#,##0').format(detailedModel.favorites)
+                                                    : "Unk."}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 24.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        navigation_bar_color),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Gaps.medium_Gap,
+                                    // Nicknames Section
+                                    HomeTitle("Nicknames", fontSize: 20),
+                                    HSeperator(),
+                                    Gaps.small_Gap,
+                                    Wrap(
+                                      children: [
+                                        if (detailedModel.nicknames != null &&
+                                            detailedModel.nicknames!.isNotEmpty)
+                                          for (int i = 0;
+                                              i <
+                                                  detailedModel
+                                                      .nicknames!.length;
+                                              i++)
+                                            DetailsText(
+                                              "",
+                                              "${detailedModel.nicknames![i]}${i == detailedModel.nicknames!.length - 1 ? "" : " - "}",
+                                              leading: false,
+                                            )
+                                        else
+                                          DetailsText("", "None",
+                                              leading: false)
+                                      ],
+                                    ),
 
-                              // Information Section
-                              HomeTitle("Information", fontSize: 20),
-                              HSeperator(),
-                              Gaps.small_Gap,
-                              // Alternative Titles Section
-                              HomeTitle("Alternative Titles", fontSize: 20),
-                              HSeperator(),
-
-                              // Genres Section
-                              HomeTitle("Genres", fontSize: 20),
-                              HSeperator(),
-
-                              // Synopsis Section
-                              HomeTitle("Synopsis", fontSize: 20),
-                              HSeperator(),
-                              Gaps.small_Gap,
-                              DetailsText("", "${model}", leading: false),
-                              Gaps.medium_Gap,
-
-                              // Background Section
-                              HomeTitle("Background", fontSize: 20),
-                              HSeperator(),
-                              Gaps.small_Gap,
-                              DetailsText("Background", "${model}",
-                                  leading: false),
-                              Gaps.medium_Gap,
-                            ]),
+                                    // About Section
+                                    HomeTitle("About", fontSize: 20),
+                                    HSeperator(),
+                                    Gaps.small_Gap,
+                                    DetailsText(
+                                        "", detailedModel.about ?? "Unk.",
+                                        leading: false),
+                                    Gaps.medium_Gap,
+                                  ]),
+                            )
+                          ],
+                        ),
                       )
                     ],
-                  ),
-                )
-              ],
-            ),
+                  );
+                }),
           );
         },
       ),
     );
-    ;
   }
 }

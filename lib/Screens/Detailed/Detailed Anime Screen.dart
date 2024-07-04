@@ -77,8 +77,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
         builder: (context, state) {
           DetailedAnimeCubit cubit = DetailedAnimeCubit.get(context);
           List<bool> conditions = [
-            cubit.episodes.isEmpty,
-            cubit.characters.isEmpty
+            cubit.gotEpisodes,
+            cubit.gotCharacters
           ];
           return Scaffold(
             backgroundColor: Colors.white,
@@ -91,7 +91,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                         AppNavigator.push(
                             AppRoutes.webScreen(model.url), context);
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.info_outline,
                         color: Colors.white,
                       )),
@@ -115,15 +115,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
             ),
             body: Stack(
               children: [
-                Hero(
-                  tag: "gibberish",
-                  child: Image.network(
-                    "${model.image}",
-                    width: imageWidth,
-                    height: imageHeight,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.medium,
-                  ),
+                Image.network(
+                  "${model.image}",
+                  width: imageWidth,
+                  height: imageHeight,
+                  fit: BoxFit.cover,
+                  filterQuality: FilterQuality.medium,
                 ),
                 SingleChildScrollView(
                   controller: controller,
@@ -141,7 +138,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                         duration: const Duration(milliseconds: 100),
                         decoration: BoxDecoration(
                             color: Colors.white.withOpacity(opacity),
-                            borderRadius: BorderRadius.circular(edge)),
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(edge))),
                         width: screen_width,
                         padding: Pads.medium_Padding,
                         child: Column(
@@ -295,9 +292,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Alternative Titles", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            for (int i = 1; i < model.titles!.length; i++)
-                              DetailsText("${model.titles?[i].type}",
-                                  "${model.titles?[i].title}"),
+                            if (model.titles!=null && model.titles!.isNotEmpty)
+                              for (int i = 1; i < model.titles!.length; i++)
+                                DetailsText("${model.titles?[i].type}",
+                                    "${model.titles?[i].title}")
+                            else 
+                              DetailsText("", "None", leading: false),
                             Gaps.medium_Gap,
 
                             // Genres Section
@@ -306,9 +306,14 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             Gaps.small_Gap,
                             Wrap(
                               children: [
-                                for (int i = 0; i < model.genres!.length; i++)
+                                if (model.genres != null && model.genres!.isNotEmpty)
+                                  for (int i = 0; i < model.genres!.length; i++)
+                                    DetailsText("",
+                                        "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
+                                        leading: false)
+                                else
                                   DetailsText("",
-                                      "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
+                                      "Unk.",
                                       leading: false)
                               ],
                             ),
@@ -318,7 +323,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Synopsis", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("", "${model.synopsis}",
+                            DetailsText("", model.synopsis ?? "No Synopsis to display yet",
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -326,12 +331,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Background", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("Background", "${model.background}",
+                            DetailsText("Background", model.background ?? "No background to display yet",
                                 leading: false),
                             Gaps.medium_Gap,
 
                             ConditionalBuilder(
-                                condition: conditions.contains(true),
+                                condition: conditions.contains(false),
                                 builder: (context) => AppProgressIndicator(),
                                 fallback: (context) => Column(
                                       children: [
@@ -359,22 +364,28 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                         HomeTitle("Episodes", fontSize: 20),
                                         HSeperator(),
                                         Gaps.small_Gap,
-                                        ListTile(
-                                            title: Transform.translate(
-                                                offset: Offset(-12, 0),
-                                                child: Text("Name")),
-                                            trailing: Text("Score")),
-                                        ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemCount: cubit.episodes.length,
-                                            itemBuilder: (context, index) =>
-                                                EpisodesListBuilder(
-                                                    cubit.episodes[index])),
+                                        if (cubit.episodes.isNotEmpty)
+                                          Column(
+                                            children: [
+                                              ListTile(
+                                                  title: Transform.translate(
+                                                      offset: Offset(-12, 0),
+                                                      child: Text("Name")),
+                                                  trailing: Text("Score")),
+                                              ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemCount: cubit.episodes.length,
+                                                  itemBuilder: (context, index) =>
+                                                      EpisodesListBuilder(
+                                                          cubit.episodes[index])),
+                                            ],
+                                          )
+                                        else 
+                                          DetailsText('', "There is no episodes to display yet",leading: false)
                                       ],
                                     )),
-                            Gaps.small_Gap,
                           ],
                         ),
                       )
@@ -403,7 +414,9 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
 
   Widget CharactersListBuilder(CharacterModel model) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
+      },
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [

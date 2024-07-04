@@ -8,7 +8,7 @@ Widget DetailsText(String dataName, String data, {bool leading = true}) {
       if (leading)
       TextSpan(
           text: "$dataName: ",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
-      TextSpan(text: data, style: TextStyle(fontSize: 16.sp)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp)),
+      TextSpan(text: data, style: TextStyle(fontSize: 17.sp)),
     ]));
   }

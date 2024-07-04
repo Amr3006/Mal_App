@@ -15,6 +15,7 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
 
   static DetailedAnimeCubit get(BuildContext context) => BlocProvider.of(context);
 
+
   // Repo
   late final DetailedAnimeRepo _repo;
 
@@ -35,9 +36,11 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
   // Get Data 
   final List<CharacterModel> characters = [];
   final List<EpisodeModel> episodes = [];
+  bool gotEpisodes = false, gotCharacters = false;
   void setData() {
     characters.addAll(_repo.returnCharacters());
     episodes.addAll(_repo.returnEpisodes());
+    gotCharacters=true;
+    gotEpisodes=true;
   }
-
 }

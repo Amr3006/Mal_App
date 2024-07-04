@@ -133,21 +133,18 @@ class FeedScreen extends StatelessWidget {
           padding: Pads.small_Padding,
           child: Row(
             children: [
-              Hero(
-                tag: "gibberish",
-                child: Container(
-                  width: 100.w,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(width: 2),
-                  ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      image: DecorationImage(
-                          image: NetworkImage(model.image!),
-                          fit: BoxFit.cover)),
+              Container(
+                width: 100.w,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(width: 2),
                 ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    image: DecorationImage(
+                        image: NetworkImage(model.image!),
+                        fit: BoxFit.cover)),
               ),
               Gaps.medium_Gap,
               Expanded(
@@ -212,6 +209,8 @@ class FeedScreen extends StatelessWidget {
         onPress: () {
           if (isAnimeModel) {
             AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
+          } else {
+            AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
           }
         },
         backgroundColor: Colors.white,
@@ -221,16 +220,13 @@ class FeedScreen extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            Hero(
-              tag: "gibberish",
-              child: Container(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                        image: NetworkImage("${model.image}"),
-                        fit: BoxFit.cover)),
-              ),
+            Container(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                      image: NetworkImage("${model.image}"),
+                      fit: BoxFit.cover)),
             ),
             Container(
               height: 50.h,
