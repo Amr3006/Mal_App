@@ -15,7 +15,6 @@ import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
-import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/Seperator.dart';
@@ -84,6 +83,20 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              actions: [
+                Tooltip(
+                  message: "More Info.",
+                  child: IconButton(
+                      onPressed: () {
+                        AppNavigator.push(
+                            AppRoutes.webScreen(model.url), context);
+                      },
+                      icon: Icon(
+                        Icons.info_outline,
+                        color: Colors.white,
+                      )),
+                )
+              ],
               backgroundColor: navigation_bar_color,
               leading: IconButton(
                 onPressed: () {
@@ -361,21 +374,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                                     cubit.episodes[index])),
                                       ],
                                     )),
-                            Gaps.medium_Gap,
-                            AppNeuButton(
-                              onPress: () {
-                                AppNavigator.push(
-                                    AppRoutes.webScreen(model.url), context);
-                              },
-                              width: screen_width - 40,
-                              height: 40.h,
-                              backgroundColor: navigation_bar_color,
-                              child: Text(
-                                "FOR MORE INFORMATION",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 20.sp, color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                            )
+                            Gaps.small_Gap,
                           ],
                         ),
                       )

@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return MaterialApp(
+          return const MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: AppRoutes.firstScreen(),
+            home: AppRoutes.splashScreen,
         ); 
       },
     );
