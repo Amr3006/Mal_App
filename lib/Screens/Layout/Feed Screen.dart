@@ -104,7 +104,7 @@ class FeedScreen extends StatelessWidget {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) =>
-                      seasonAnimeListBuilder(cubit.seasonAnimes[index], context),
+                      verticalAnimeListBuilder(cubit.seasonAnimes[index], context),
                   itemCount: cubit.seasonAnimes.length,
                 ),
                 if (cubit.seasonAnimes.isNotEmpty &&
@@ -119,7 +119,7 @@ class FeedScreen extends StatelessWidget {
     );
   }
 
-  Widget seasonAnimeListBuilder(AnimeModel model, BuildContext context) {
+  Widget verticalAnimeListBuilder(AnimeModel model, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 16.r, right: 16.r, bottom: 16.r),
       child: AppNeuButton(

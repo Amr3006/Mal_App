@@ -17,27 +17,23 @@ part 'feed_state.dart';
 // TODO: Remove the prints
 
 class FeedCubit extends Cubit<FeedState> {
-  FeedCubit() : super(FeedInitial()); 
+  FeedCubit() : super(FeedInitial());
 
   static FeedCubit get(BuildContext context) => BlocProvider.of(context);
 
   var scrollController = ScrollController();
 
-
   // Initialize Scroll Listener
   void scrollListenerInit() {
-    scrollController.addListener(scrollListener);
-  }
-
-  // Scroll Listener
-  void scrollListener() {
-    if (!_seasonAnimeRepo.returnPagination()) {
-      return;
-    }
-    if (scrollController.position.extentAfter.h < 500.h &&
-        state is! LoadingSeasonAnimeState) {
-      getSeasonAnimes();
-    }
+    scrollController.addListener(() {
+      {
+        if (!_seasonAnimeRepo.returnPagination()) return;
+        if (scrollController.position.extentAfter < 500 &&
+            state is! LoadingSeasonAnimeState) {
+          getSeasonAnimes();
+        }
+      }
+    });
   }
 
   // Repositories
@@ -92,5 +88,3 @@ class FeedCubit extends Cubit<FeedState> {
     }
   }
 }
-
-

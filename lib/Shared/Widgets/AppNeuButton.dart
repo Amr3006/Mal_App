@@ -78,6 +78,10 @@ class _AppNeuButtonState extends State<AppNeuButton> {
           height: height,
           width: width,
           margin: margin,
+          foregroundDecoration: BoxDecoration(
+            border: Border.all(width: 3),
+            borderRadius: borderRadius,
+          ),
           decoration: BoxDecoration(
             border: Border.all(width: 3),
             borderRadius: borderRadius,

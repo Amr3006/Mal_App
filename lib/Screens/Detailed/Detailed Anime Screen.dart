@@ -11,10 +11,12 @@ import 'package:mal_app/Logic/Anime%20Details%20Cubit/anime_details_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
+import 'package:mal_app/Screens/Web/Webview%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
+import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/Seperator.dart';
@@ -323,7 +325,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Synopsis", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("", model.synopsis ?? "No Synopsis to display yet",
+                            DetailsText("", model.synopsis ?? "No Synopsis to display ",
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -331,7 +333,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Background", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("Background", model.background ?? "No background to display yet",
+                            DetailsText("Background", model.background ?? "No background to display ",
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -344,20 +346,24 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                         HomeTitle("Characters", fontSize: 20),
                                         HSeperator(),
                                         Gaps.small_Gap,
-                                        SizedBox(
-                                          height: 250.h,
-                                          child: ListView.separated(
-                                            itemBuilder: (context, index) =>
-                                                CharactersListBuilder(
-                                                    cubit.characters[index]),
-                                            separatorBuilder:
-                                                (context, index) =>
-                                                    Gaps.medium_Gap,
-                                            itemCount: cubit.characters.length,
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                          ),
-                                        ),
+                                        if (cubit.characters.isNotEmpty)
+                                          SizedBox(
+                                            height: 250.h,
+                                            child: ListView.separated(
+                                              clipBehavior: Clip.none,
+                                              itemBuilder: (context, index) =>
+                                                  CharactersListBuilder(
+                                                      cubit.characters[index]),
+                                              separatorBuilder:
+                                                  (context, index) =>
+                                                      Gaps.medium_Gap,
+                                              itemCount: cubit.characters.length,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                            ),
+                                          )
+                                        else 
+                                           DetailsText('', "There is no characters to display",leading: false),
                                         Gaps.medium_Gap,
 
                                         // Episodes Section
@@ -372,7 +378,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                                       offset: Offset(-12, 0),
                                                       child: Text("Name")),
                                                   trailing: Text("Score")),
-                                              ListView.builder(
+                                              ListView.separated(
+                                                separatorBuilder: (context, index) => Gaps.medium_Gap,
                                                   shrinkWrap: true,
                                                   physics:
                                                       NeverScrollableScrollPhysics(),
@@ -383,7 +390,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                             ],
                                           )
                                         else 
-                                          DetailsText('', "There is no episodes to display yet",leading: false)
+                                          DetailsText('', "There is no episodes to display",leading: false)
                                       ],
                                     )),
                           ],
@@ -400,66 +407,62 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
     );
   }
 
-  ListTile EpisodesListBuilder(EpisodeModel model) {
-    return ListTile(
-        onTap: () {
-          AppNavigator.push(AppRoutes.webScreen(model.url), context);
-        },
-        title: Transform.translate(
-            offset: Offset(-12, 0),
-            child: Text(
-                "${model.title!} ${model.filler == true ? "(filler)" : ""}")),
-        trailing: Text("${model.score!}/5"));
+  Widget EpisodesListBuilder(EpisodeModel model) {
+    return AppNeuButton(
+      onPress: () {
+        AppNavigator.push(AppRoutes.webScreen(model.url), context);    
+      },
+      child: ListTile(
+          title: Text(
+              "${model.title!} ${model.filler == true ? "(filler)" : ""}"),
+          trailing: Text("${model.score!}/5")),
+    );
   }
 
   Widget CharactersListBuilder(CharacterModel model) {
-    return InkWell(
-      onTap: () {
-        AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
-      },
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            width: 180.w,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            foregroundDecoration: BoxDecoration(
-              border: Border.all(width: 3),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Image.network(
-              model.image!,
-              width: 180.w,
-              fit: BoxFit.cover,
-            ),
+    return AppNeuButton(
+      shadowColor: Colors.black,
+        onPress: () {
+          AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          width: 180.w,
+          height: 250.h,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Expanded(
+                child: Image.network(
+                  width: 180.w,
+                  model.image!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                alignment: AlignmentDirectional.bottomStart,
+                width: 180.w,
+                height: 50.h,
+                padding: EdgeInsetsDirectional.only(start: 8, bottom: 4),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black,
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ])),
+                child: Text(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  "${model.name}",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
           ),
-          Container(
-            alignment: AlignmentDirectional.bottomStart,
-            width: 180.w,
-            height: 50.h,
-            padding: EdgeInsetsDirectional.only(start: 8, bottom: 4),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black,
-                      Colors.black.withOpacity(0.7),
-                      Colors.transparent,
-                    ])),
-            child: Text(
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              "${model.name}",
-              style: TextStyle(color: Colors.white),
-            ),
-          )
-        ],
-      ),
-    );
+        ),
+      );
   }
 }

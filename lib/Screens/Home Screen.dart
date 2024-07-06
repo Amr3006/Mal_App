@@ -9,10 +9,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Logic/Navigation%20Bar%20Cubit/navigation_bar_cubit.dart';
 import 'package:mal_app/Logic/User%20Cubit/user_cubit.dart';
+import 'package:mal_app/Shared/Constants/Dimensions.dart';
+import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
+import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -57,16 +60,20 @@ class HomeScreen extends StatelessWidget {
                   color: navigation_bar_buttons_color),
               centerTitle: true,
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              elevation: 10,
-              backgroundColor: navigation_bar_buttons_color,
-              shape: CircleBorder(),
-              child: Icon(
-                FontAwesomeIcons.magnifyingGlass,
-                color: navigation_bar_color,
-              ),
-            ),
+            floatingActionButton: Builder(builder: (context) {
+              return FloatingActionButton(
+                onPressed: () {
+                  AppNavigator.push(AppRoutes.searchScreen, context);
+                },
+                elevation: 10,
+                backgroundColor: navigation_bar_buttons_color,
+                shape: CircleBorder(),
+                child: Icon(
+                  FontAwesomeIcons.magnifyingGlass,
+                  color: navigation_bar_color,
+                ),
+              );
+            }),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: AnimatedBottomNavigationBar.builder(
