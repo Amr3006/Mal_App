@@ -25,3 +25,10 @@ final class FailedPopularCharactersState extends FeedState {
   final String error;
   FailedPopularCharactersState(this.error);
 }
+
+final class LoadingRecentAnimesState extends FeedState {}
+final class SuccessRecentAnimesState extends FeedState {}
+final class FailedRecentAnimesState extends FeedState {
+  final String error;
+  FailedRecentAnimesState(this.error);
+}

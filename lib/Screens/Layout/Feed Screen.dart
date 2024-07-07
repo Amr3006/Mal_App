@@ -7,7 +7,7 @@ import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
-import 'package:mal_app/Shared/Widgets/HorizontalListBuilder';
+import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/VerticalListBuilder.dart';
 
@@ -94,6 +94,45 @@ class FeedScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (cubit.recentAnimes.isNotEmpty)
+                  Column(
+                    children: [
+                      Gaps.small_Gap,
+                      HomeTitle("Recently Visited"),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        clipBehavior: Clip.none,
+                        child: Row(
+                          children: [
+                            Gaps.large_Gap,
+                            Container(
+                              clipBehavior: Clip.none,
+                              padding: Pads.medium_Padding,
+                              height: 250.h,
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 3),
+                                boxShadow: [BoxShadow(offset: Offset(3, 3))],
+                                color: background_color,
+                                borderRadius: BorderRadiusDirectional.horizontal(
+                                    start: Radius.circular(12)),
+                              ),
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                clipBehavior: Clip.none,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) =>
+                                    horizontalListBuilder(cubit.recentAnimes[index], context),
+                                separatorBuilder: (context, index) => Gaps.medium_Gap,
+                                itemCount: cubit.recentAnimes.length,
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                            Gaps.large_Gap,
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 Gaps.small_Gap,
                 HomeTitle("Season Animes"),
                 ListView.builder(

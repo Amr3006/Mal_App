@@ -12,7 +12,7 @@ class UserModel {
       required this.email,
       required this.phone,
       required this.profilePicture,
-      required this.uId});
+      required this.uId,});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     name = json["name"];

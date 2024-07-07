@@ -1,18 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
-import 'package:mal_app/Logic/Search%20Cubit/search_cubit.dart';
-import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
-import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 
 
 Widget horizontalListBuilder(final model, BuildContext context) {

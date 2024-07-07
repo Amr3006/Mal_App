@@ -1,4 +1,5 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, unused_field, avoid_print
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
@@ -6,6 +7,7 @@ import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Repositories/season_anime_repository.dart';
 import 'package:mal_app/Data/Repositories/top_anime_repository.dart';
 import 'package:mal_app/Data/Repositories/top_character_repository.dart';
+import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'feed_state.dart';
 
@@ -15,6 +17,8 @@ class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedInitial());
 
   static FeedCubit get(BuildContext context) => BlocProvider.of(context);
+
+  final _firestore = FirebaseFirestore.instance;
 
   var scrollController = ScrollController();
 
@@ -79,6 +83,35 @@ class FeedCubit extends Cubit<FeedState> {
       emit(SuccessSeasonAnimeState());
     } catch (e) {
       emit(FailedSeasonAnimeState(e.toString()));
+      print(e.toString());
+    }
+  }
+
+  // Recent
+  final List<AnimeModel> recentAnimes = [];
+  bool gotRecent = false;
+  void getRecent() async {
+    emit(LoadingRecentAnimesState());
+    try{
+    final data = await _firestore
+    .collection("Users")
+    .doc(uId)
+    .collection("Recent")
+    .orderBy("dateTime",descending: true)
+    .get();
+    recentAnimes.clear();
+    final List<int> recentIds = [];
+    for (int i=0;i<data.docs.length;i++) {
+      final model = AnimeModel.fromJson(data.docs[i].data());
+      if (recentIds.contains(model.malId)) continue;
+      recentAnimes.add(model);
+      recentIds.add(model.malId);
+      if (recentAnimes.length >= 10) break;
+    }
+    gotRecent=true;
+    emit(SuccessRecentAnimesState());
+    } catch (e) {
+      emit(FailedRecentAnimesState(e.toString()));
       print(e.toString());
     }
   }

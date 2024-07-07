@@ -98,12 +98,12 @@ class AnimeModel {
       });
     }
   }
-
+  
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['mal_id'] = malId;
     data['url'] = url;
-    data['image'] = image;
+    data["images"] = <String, dynamic>{"jpg" : <String,dynamic>{"image_url" :image}};
     data['approved'] = approved;
     if (titles != null) {
       data['titles'] = titles!.map((v) => v.toJson()).toList();

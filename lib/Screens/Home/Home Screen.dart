@@ -28,7 +28,8 @@ class HomeScreen extends StatelessWidget {
               ..getTopAnimes()
               ..getSeasonAnimes()
               ..getPopularCharacters()
-              ..scrollListenerInit()),
+              ..scrollListenerInit()
+              ..getRecent()),
         BlocProvider(create: (context) => NavigationBarCubit()),
       ],
       child: BlocBuilder<NavigationBarCubit, NavigationBarState>(
@@ -39,6 +40,7 @@ class HomeScreen extends StatelessWidget {
                 final List<bool> conditions = [
                   FeedCubit.get(context).topAnimes.isEmpty,
                   FeedCubit.get(context).seasonAnimes.isEmpty,
+                  !FeedCubit.get(context).gotRecent,
                   FeedCubit.get(context).popularCharcters.isEmpty,
                   ProfileCubit.get(context).user == null
                 ];

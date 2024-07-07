@@ -74,7 +74,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DetailedAnimeCubit()..getData(model.malId),
+      create: (context) => DetailedAnimeCubit()..getData(model.malId)..addToRecentlyOpened(model),
       child: BlocBuilder<DetailedAnimeCubit, DetailedAnimeState>(
         builder: (context, state) {
           DetailedAnimeCubit cubit = DetailedAnimeCubit.get(context);

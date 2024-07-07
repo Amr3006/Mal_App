@@ -12,3 +12,10 @@ final class FailedDataState extends DetailedAnimeState {
 
   FailedDataState(this.error);
 }
+final class LoadingUploadRecentState extends DetailedAnimeState {}
+final class SuccessUploadRecentState extends DetailedAnimeState {}
+final class FailedUploadRecentState extends DetailedAnimeState {
+  final String error;
+
+  FailedUploadRecentState(this.error);
+}
