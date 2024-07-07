@@ -9,6 +9,7 @@ import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/firebase_options.dart';
+import 'package:mal_app/Shared/Design/Theme.dart';
 
 void main() async { 
   ApiHelper.init();
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return const MaterialApp(
+          return MaterialApp(
+            theme: AppTheme.lightTheme,
             debugShowCheckedModeBanner: false,
             home: AppRoutes.splashScreen,
         ); 

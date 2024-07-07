@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 void snackMessage(
         {required BuildContext context,
         required String text,
-        bool showCloseIcon = true}) =>
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-      showCloseIcon: showCloseIcon,
-    ));
+        bool showCloseIcon = true}) {
+          final messenger = ScaffoldMessenger.of(context);
+          messenger.clearSnackBars();
+          messenger.showSnackBar(SnackBar(
+              content: Text(text),
+              showCloseIcon: showCloseIcon,
+            ));
+        }

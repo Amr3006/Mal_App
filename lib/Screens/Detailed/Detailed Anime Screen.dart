@@ -20,6 +20,7 @@ import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/Seperator.dart';
+import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 
 import '../../Shared/Widgets/DetailsText.dart';
 
@@ -78,10 +79,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
       child: BlocBuilder<DetailedAnimeCubit, DetailedAnimeState>(
         builder: (context, state) {
           DetailedAnimeCubit cubit = DetailedAnimeCubit.get(context);
-          List<bool> conditions = [
-            cubit.gotEpisodes,
-            cubit.gotCharacters
-          ];
+          List<bool> conditions = [cubit.gotEpisodes, cubit.gotCharacters];
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -90,8 +88,13 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                   message: "More Info.",
                   child: IconButton(
                       onPressed: () {
-                        AppNavigator.push(
-                            AppRoutes.webScreen(model.url), context);
+                        if (model.url == null) {
+                          snackMessage(
+                              context: context, text: "No data available yet");
+                        } else {
+                          AppNavigator.push(
+                              AppRoutes.webScreen(model.url), context);
+                        }
                       },
                       icon: const Icon(
                         Icons.info_outline,
@@ -140,7 +143,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                         duration: const Duration(milliseconds: 100),
                         decoration: BoxDecoration(
                             color: Colors.white.withOpacity(opacity),
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(edge))),
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(edge))),
                         width: screen_width,
                         padding: Pads.medium_Padding,
                         child: Column(
@@ -294,11 +298,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Alternative Titles", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            if (model.titles!=null && model.titles!.isNotEmpty)
+                            if (model.titles != null &&
+                                model.titles!.isNotEmpty)
                               for (int i = 1; i < model.titles!.length; i++)
                                 DetailsText("${model.titles?[i].type}",
                                     "${model.titles?[i].title}")
-                            else 
+                            else
                               DetailsText("", "None", leading: false),
                             Gaps.medium_Gap,
 
@@ -306,26 +311,32 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Genres", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            Wrap(
-                              children: [
-                                if (model.genres != null && model.genres!.isNotEmpty)
+                            if ((model.genres != null &&
+                                    model.genres!.isNotEmpty) ||
+                                (model.explicitGenres != null &&
+                                    model.explicitGenres!.isNotEmpty))
+                              Wrap(
+                                children: [
                                   for (int i = 0; i < model.genres!.length; i++)
                                     DetailsText("",
                                         "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
+                                        leading: false),
+                                  for (int i = 0; i < model.explicitGenres!.length; i++)
+                                    DetailsText("",
+                                        "${model.explicitGenres![i].name}${i == model.explicitGenres!.length - 1 ? "" : ", "}",
                                         leading: false)
-                                else
-                                  DetailsText("",
-                                      "Unk.",
-                                      leading: false)
-                              ],
-                            ),
+                                ],
+                              )
+                            else
+                              DetailsText("", "Unk.", leading: false),
                             Gaps.medium_Gap,
 
                             // Synopsis Section
                             HomeTitle("Synopsis", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("", model.synopsis ?? "No Synopsis to display ",
+                            DetailsText(
+                                "", model.synopsis ?? "No Synopsis to display ",
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -333,7 +344,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                             HomeTitle("Background", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("Background", model.background ?? "No background to display ",
+                            DetailsText("Background",
+                                model.background ?? "No background to display ",
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -357,13 +369,16 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                               separatorBuilder:
                                                   (context, index) =>
                                                       Gaps.medium_Gap,
-                                              itemCount: cubit.characters.length,
+                                              itemCount:
+                                                  cubit.characters.length,
                                               shrinkWrap: true,
                                               scrollDirection: Axis.horizontal,
                                             ),
                                           )
-                                        else 
-                                           DetailsText('', "There is no characters to display",leading: false),
+                                        else
+                                          DetailsText('',
+                                              "There is no characters to display",
+                                              leading: false),
                                         Gaps.medium_Gap,
 
                                         // Episodes Section
@@ -379,18 +394,24 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                                       child: Text("Name")),
                                                   trailing: Text("Score")),
                                               ListView.separated(
-                                                separatorBuilder: (context, index) => Gaps.medium_Gap,
+                                                  separatorBuilder:
+                                                      (context, index) =>
+                                                          Gaps.medium_Gap,
                                                   shrinkWrap: true,
                                                   physics:
                                                       NeverScrollableScrollPhysics(),
-                                                  itemCount: cubit.episodes.length,
-                                                  itemBuilder: (context, index) =>
-                                                      EpisodesListBuilder(
-                                                          cubit.episodes[index])),
+                                                  itemCount:
+                                                      cubit.episodes.length,
+                                                  itemBuilder: (context,
+                                                          index) =>
+                                                      EpisodesListBuilder(cubit
+                                                          .episodes[index])),
                                             ],
                                           )
-                                        else 
-                                          DetailsText('', "There is no episodes to display",leading: false)
+                                        else
+                                          DetailsText('',
+                                              "There is no episodes to display",
+                                              leading: false)
                                       ],
                                     )),
                           ],
@@ -410,11 +431,15 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
   Widget EpisodesListBuilder(EpisodeModel model) {
     return AppNeuButton(
       onPress: () {
-        AppNavigator.push(AppRoutes.webScreen(model.url), context);    
+        if (model.url == null) {
+          snackMessage(context: context, text: "No data available yet");
+        } else {
+          AppNavigator.push(AppRoutes.webScreen(model.url), context);
+        }
       },
       child: ListTile(
-          title: Text(
-              "${model.title!} ${model.filler == true ? "(filler)" : ""}"),
+          title:
+              Text("${model.title!} ${model.filler == true ? "(filler)" : ""}"),
           trailing: Text("${model.score!}/5")),
     );
   }
@@ -422,47 +447,47 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
   Widget CharactersListBuilder(CharacterModel model) {
     return AppNeuButton(
       shadowColor: Colors.black,
-        onPress: () {
-          AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: SizedBox(
-          width: 180.w,
-          height: 250.h,
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Expanded(
-                child: Image.network(
-                  width: 180.w,
-                  model.image!,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                alignment: AlignmentDirectional.bottomStart,
+      onPress: () {
+        AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        width: 180.w,
+        height: 250.h,
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Expanded(
+              child: Image.network(
                 width: 180.w,
-                height: 50.h,
-                padding: EdgeInsetsDirectional.only(start: 8, bottom: 4),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black,
-                          Colors.black.withOpacity(0.7),
-                          Colors.transparent,
-                        ])),
-                child: Text(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  "${model.name}",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ],
-          ),
+                model.image!,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.bottomStart,
+              width: 180.w,
+              height: 50.h,
+              padding: EdgeInsetsDirectional.only(start: 8, bottom: 4),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                    Colors.black,
+                    Colors.black.withOpacity(0.7),
+                    Colors.transparent,
+                  ])),
+              child: Text(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                "${model.name}",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 }

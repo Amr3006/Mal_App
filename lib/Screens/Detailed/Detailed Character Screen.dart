@@ -18,6 +18,7 @@ import 'package:mal_app/Shared/Widgets/DetailsText.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/Seperator.dart';
+import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 
 class DetailedCharacterScreen extends StatefulWidget {
   const DetailedCharacterScreen(this.model, {super.key});
@@ -89,8 +90,13 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
                   message: "More Info.",
                   child: IconButton(
                       onPressed: () {
-                        AppNavigator.push(
-                            AppRoutes.webScreen(model.url), context);
+                        if (model.url == null) {
+                          snackMessage(
+                              context: context, text: "No data available yet");
+                        } else {
+                          AppNavigator.push(
+                              AppRoutes.webScreen(model.url), context);
+                        }
                       },
                       icon: const Icon(
                         Icons.info_outline,

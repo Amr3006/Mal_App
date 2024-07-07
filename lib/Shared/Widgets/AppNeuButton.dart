@@ -66,7 +66,6 @@ class _AppNeuButtonState extends State<AppNeuButton> {
           margin = const EdgeInsets.only(left: 0, top: 0, right: 6);
           offset = const Offset(6, 6);
         });
-
         onPress();
       },
       child: SizedBox(

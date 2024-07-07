@@ -31,7 +31,7 @@ class SearchCubit extends Cubit<SearchState> {
   final _repo = AnimeSearchRepo();
   final List<AnimeModel> results = [];
 
-  void getData() async {
+  Future<void> getData() async {
     results.clear();
     try {
       emit(LoadingDataState());
@@ -42,6 +42,7 @@ class SearchCubit extends Cubit<SearchState> {
       emit(FailedDataState(e.toString()));
       print(e.toString());
     }
+
   }
 
   int page = 2;

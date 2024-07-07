@@ -7,12 +7,13 @@ import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Screens/Detailed/Detailed%20Anime%20Screen.dart';
 import 'package:mal_app/Screens/Detailed/Detailed%20Character%20Screen.dart';
-import 'package:mal_app/Screens/Home%20Screen.dart';
+import 'package:mal_app/Screens/Home/Home%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Login%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Sign%20Up%20Screen.dart';
 import 'package:mal_app/Screens/Layout/Feed%20Screen.dart';
-import 'package:mal_app/Screens/Search%20Screen.dart';
-import 'package:mal_app/Screens/Splash%20Screen.dart';
+import 'package:mal_app/Screens/Layout/Profile%20Screen.dart';
+import 'package:mal_app/Screens/Other/Search%20Screen.dart';
+import 'package:mal_app/Screens/Other/Splash%20Screen.dart';
 import 'package:mal_app/Screens/Web/Webview%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
@@ -21,6 +22,7 @@ class AppRoutes {
   static const loginScreen = LoginScreen();
   static const signUpScreen = SignUpScreen();
   static const homeScreen = HomeScreen();
+  static const profileScreen = ProfileScreen();
   static const animeScreen = FeedScreen();
   static const searchScreen = SearchScreen();
   static webScreen(url) => WebScreen(url);

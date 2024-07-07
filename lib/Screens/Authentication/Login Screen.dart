@@ -36,12 +36,14 @@ class LoginScreen extends StatelessWidget {
             child: BlocConsumer<LoginCubit, LoginState>(
               listener: (context, state) {
                 if (state is FailedLoginWithEmailAndPasswordState) {
-                  if (state.error == 'user-not-found' || state.error == 'invalid-credential') {
-                    snackMessage(context: context, text: "No user found for that email.");
+                  if (state.error == 'user-not-found') {
+                    snackMessage(context: context, text: "No user found for that email");
                   } else if (state.error == 'wrong-password') {
                     snackMessage(context: context, text: "Wrong Password");
                   } else if (state.error == 'invalid-email') {
                     snackMessage(context: context, text: "Invalid E-mail");
+                  } else if (state.error == 'invalid-credential') {
+                    snackMessage(context: context, text: "Please check your email and password");
                   }
                 } else if (state is SuccessLoginWithEmailAndPasswordState) {
                   AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
