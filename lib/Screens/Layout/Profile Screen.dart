@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -11,7 +13,6 @@ import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
-import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/SnackMessage.dart';
 
 class ProfileScreen extends StatelessWidget {

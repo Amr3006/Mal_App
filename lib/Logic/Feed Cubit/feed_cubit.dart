@@ -1,12 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, unused_field, avoid_print
-
-// ignore: unused_import
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Repositories/season_anime_repository.dart';

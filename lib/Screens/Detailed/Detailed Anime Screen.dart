@@ -11,7 +11,6 @@ import 'package:mal_app/Logic/Anime%20Details%20Cubit/anime_details_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
-import 'package:mal_app/Screens/Web/Webview%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';

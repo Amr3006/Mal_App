@@ -2,18 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
-import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
-import 'package:mal_app/Shared/Core/App%20Navigator.dart';
-import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
-import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
+import 'package:mal_app/Shared/Widgets/HorizontalListBuilder';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
+import 'package:mal_app/Shared/Widgets/VerticalListBuilder.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
@@ -116,141 +112,6 @@ class FeedScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget verticalAnimeListBuilder(AnimeModel model, BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.r, right: 16.r, bottom: 16.r),
-      child: AppNeuButton(
-        onPress: () {
-          AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
-        },
-        height: 140.r,
-        borderRadius: BorderRadius.circular(4),
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: Pads.small_Padding,
-          child: Row(
-            children: [
-              Container(
-                width: 100.w,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                foregroundDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(width: 2),
-                ),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    image: DecorationImage(
-                        image: NetworkImage(model.image!),
-                        fit: BoxFit.cover)),
-              ),
-              Gaps.medium_Gap,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Gaps.tiny_Gap,
-                    Text(
-                      model.titles![0].title!,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.firaSans(
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                    Gaps.tiny_Gap,
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${model.score ?? "Unk."}",
-                          style: TextStyle(
-                              fontSize: 16.sp, fontWeight: FontWeight.bold),
-                        ),
-                        Gaps.tiny_Gap,
-                        RatingBarIndicator(
-                          itemBuilder: (context, index) {
-                            return Icon(
-                              Icons.star,
-                              color: navigation_bar_color,
-                            );
-                          },
-                          itemCount: 5,
-                          itemSize: 18,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 0.5),
-                          rating: (model.score ?? 0) / 2,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "Episodes : ${model.episodes ?? "Unkown"}",
-                      style: TextStyle(fontSize: 14.sp),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget horizontalListBuilder(final model, BuildContext context) {
-    bool isAnimeModel = false;
-    if (model is AnimeModel) {
-      isAnimeModel = true;
-    }
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: AppNeuButton(
-        onPress: () {
-          if (isAnimeModel) {
-            AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
-          } else {
-            AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
-          }
-        },
-        backgroundColor: Colors.white,
-        shadowColor: background_shadow_color,
-        width: 180.w,
-        borderRadius: BorderRadius.circular(10),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Container(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                      image: NetworkImage("${model.image}"),
-                      fit: BoxFit.cover)),
-            ),
-            Container(
-              height: 50.h,
-              width: 180.w,
-              padding: EdgeInsetsDirectional.only(start: 10),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                Colors.black,
-                Colors.black.withOpacity(0.7),
-                Colors.transparent,
-              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-              child: Align(
-                alignment: AlignmentDirectional.bottomStart,
-                child: Text(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  "${isAnimeModel ?  model.titles![0].title : model.name}",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }
