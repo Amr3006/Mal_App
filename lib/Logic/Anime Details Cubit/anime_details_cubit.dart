@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
+import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Data/Repositories/anime_details_repository.dart';
+import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'anime_details_state.dart';
@@ -55,11 +57,57 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
       final Map<String, dynamic> data = {"dateTime": DateTime.now().toString()};
       emit(LoadingUploadRecentState());
       data.addAll(model.toJson());
-      await _firestore.collection("Users").doc(uId).collection("Recent").add(data);
+      await _firestore
+          .collection("Users")
+          .doc(uId)
+          .collection("Recent")
+          .add(data);
       emit(SuccessUploadRecentState());
     } catch (e) {
       emit(FailedUploadRecentState(e.toString()));
       print(e.toString());
     }
+  }
+
+  // Add to favourites
+  void changeFavourites(AnimeModel model) async {
+    try {
+      emit(LoadingFavouriteState());
+      final favourites = publicUser!.favourites;
+      if (favourites.contains(model.malId)) {
+        publicUser!.favourites.remove(model.malId);
+        await Future.wait([
+         _firestore
+            .collection("Users")
+            .doc(uId)
+            .collection("Favourites")
+            .doc(model.malId.toString())
+            .delete(),
+            updateUser()
+        ]);
+      } else {
+        publicUser!.favourites.add(model.malId);
+        await Future.wait([
+          updateUser(),
+          _firestore
+            .collection("Users")
+            .doc(uId)
+            .collection("Favourites")
+            .doc(model.malId.toString())
+            .set(model.toJson())
+        ]);
+      }
+      emit(SuccessFavouriteState());
+    } catch (e) {
+      emit(FailedFavouriteState(e.toString()));
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateUser() {
+    return _firestore
+        .collection("Users")
+        .doc(uId)
+        .update(publicUser!.toJson());
   }
 }

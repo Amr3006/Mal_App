@@ -19,3 +19,10 @@ final class FailedUploadRecentState extends DetailedAnimeState {
 
   FailedUploadRecentState(this.error);
 }
+final class LoadingFavouriteState extends DetailedAnimeState {}
+final class SuccessFavouriteState extends DetailedAnimeState {}
+final class FailedFavouriteState extends DetailedAnimeState {
+  final String error;
+
+  FailedFavouriteState(this.error);
+}

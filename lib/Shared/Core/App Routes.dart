@@ -18,7 +18,7 @@ import 'package:mal_app/Screens/Web/Webview%20Screen.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 class AppRoutes {
-  static const  splashScreen = SplashScreen();
+  static const splashScreen = SplashScreen();
   static const loginScreen = LoginScreen();
   static const signUpScreen = SignUpScreen();
   static const homeScreen = HomeScreen();

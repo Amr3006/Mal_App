@@ -43,6 +43,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     .get();
     user = UserModel.fromJson(unmodeledData.data()!);
     backupUser = user!.clone();
+    publicUser=user;
+    publicBackUpUser = backupUser;
     emit(SuccessGetUserState());
     } catch (e) {
       print(e.toString());

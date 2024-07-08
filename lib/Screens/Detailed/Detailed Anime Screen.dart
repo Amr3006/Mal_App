@@ -7,10 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Logic/Anime%20Details%20Cubit/anime_details_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
+import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
+import 'package:mal_app/Shared/Constants/Data.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
@@ -32,18 +35,59 @@ class DetailedAnimeScreen extends StatefulWidget {
   State<DetailedAnimeScreen> createState() => _DetailedAnimeScreenState();
 }
 
-class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
+class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTickerProviderStateMixin {
   late final AnimeModel model;
+  late final AnimationController _animationController;
   final controller = ScrollController();
+  final buttonKey = GlobalKey<TooltipState>(),moreInfoKey = GlobalKey<TooltipState>();
+  late final Animation _colorAnimation;
+  late final Animation _popAnimation;
+
   double edge = 0;
   double opacity = 1;
   double? imageHeight;
   double? imageWidth = screen_width;
+  bool animationEnabled = false;
+  
+
+
 
   @override
   void initState() {
     model = widget.model;
+
+    // Favourites Button Animation
+    _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
+
+    _colorAnimation = publicUser!.favourites.contains(model.malId) ? ColorTween(begin: Colors.pink, end: navigation_bar_color).animate(_animationController) :
+    ColorTween(begin: navigation_bar_color, end: Colors.pink).animate(_animationController);
+
+    _popAnimation =TweenSequence<double>([
+      TweenSequenceItem(tween: Tween<double>(begin: 26, end: 35), weight: 1),
+      TweenSequenceItem(tween: Tween<double>(begin: 35,end: 26), weight: 1)
+    ]).animate(_animationController);
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationEnabled=true;
+      } else if (status == AnimationStatus.dismissed) {
+        animationEnabled = false;
+      }
+    });
+
+    // Scroll Listener
     controller.addListener(scrollListener);
+
+    // Show Tooltip if Firsttime
+    if (CacheHelper.getData("isFirstTime")==true) return;
+    CacheHelper.saveData("isFirstTime", true);
+    Future.delayed(const Duration(seconds: 1), () {
+      buttonKey.currentState!.ensureTooltipVisible();
+      moreInfoKey.currentState!.ensureTooltipVisible();
+      Future.delayed(const Duration(seconds: 4), () {
+        Tooltip.dismissAllToolTips();
+      });
+    });
     super.initState();
   }
 
@@ -74,17 +118,40 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DetailedAnimeCubit()..getData(model.malId)..addToRecentlyOpened(model),
+      create: (context) => DetailedAnimeCubit()
+        ..getData(model.malId)
+        ..addToRecentlyOpened(model),
       child: BlocBuilder<DetailedAnimeCubit, DetailedAnimeState>(
         builder: (context, state) {
           DetailedAnimeCubit cubit = DetailedAnimeCubit.get(context);
           List<bool> conditions = [cubit.gotEpisodes, cubit.gotCharacters];
           return Scaffold(
+            floatingActionButton: FloatingActionButton.small(
+              backgroundColor: Colors.lightBlue[100],
+            onPressed: () {
+              cubit.changeFavourites(model);
+              if (animationEnabled) {
+                _animationController.reverse();
+              } else {
+                _animationController.forward();
+              }
+            },child: Tooltip(
+              key: buttonKey,
+              message: "Add to Favourites",
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) => Icon(Icons.favorite,
+                size: _popAnimation.value,
+                color: _colorAnimation.value,
+                ),
+              )),),
+            floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
             backgroundColor: Colors.white,
             appBar: AppBar(
               actions: [
                 Tooltip(
                   message: "More Info.",
+                  key: moreInfoKey,
                   child: IconButton(
                       onPressed: () {
                         if (model.url == null) {
@@ -320,7 +387,9 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> {
                                     DetailsText("",
                                         "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
                                         leading: false),
-                                  for (int i = 0; i < model.explicitGenres!.length; i++)
+                                  for (int i = 0;
+                                      i < model.explicitGenres!.length;
+                                      i++)
                                     DetailsText("",
                                         "${model.explicitGenres![i].name}${i == model.explicitGenres!.length - 1 ? "" : ", "}",
                                         leading: false)

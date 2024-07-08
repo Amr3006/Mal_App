@@ -42,7 +42,7 @@ Widget horizontalListBuilder(final model, BuildContext context) {
             Container(
               height: 50.h,
               width: 180.w,
-              padding: EdgeInsetsDirectional.only(start: 10),
+              padding: const EdgeInsetsDirectional.only(start: 10),
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Colors.black,
@@ -55,7 +55,7 @@ Widget horizontalListBuilder(final model, BuildContext context) {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   "${isAnimeModel ?  model.titles![0].title : model.name}",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             )
