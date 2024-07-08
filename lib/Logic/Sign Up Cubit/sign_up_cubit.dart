@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
+import 'package:mal_app/Data/Services/authentication.dart';
 import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
@@ -19,8 +20,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _auth = Authentication();
 
   // Validator
   final formKey = GlobalKey<FormState>();
@@ -43,35 +43,20 @@ class SignUpCubit extends Cubit<SignUpState> {
         phone: phoneController.text, 
         profilePicture: "https://wallpapers-clan.com/wp-content/uploads/2023/01/anime-aesthetic-boy-pfp-1.jpg", 
         uId: user!.uid);
+      await _auth.createUser(user, userModel);
       emit(LoadingCreateUserWithEmailAndPasswordState());
     try {
-      await _firestore
-      .collection("Users")
-      .doc(user.uid)
-      .set(userModel.toJson());
-      bool saved = await saveuId(user);
-      if (!saved) {
-        throw "uId not Saved" ;
-      }
       emit(SuccessCreateUserWithEmailAndPasswordState());
     } catch (e) {
       emit(FailedCreateUserWithEmailAndPasswordState(e.toString()));
     }
   }
-
-  // Save uId
-  Future<bool> saveuId(User user) async {
-    uId = user.uid;
-    return await CacheHelper.saveData("uId", user.uid);
-  }
-
   // Sign Up with email and password
   Future<User?> signUpWithEmailAndPassword() async {
     try {
     emit(LoadingSignUpWithEmailAndPasswordState());
-    final UserCredential userCredentials = await _auth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
     emit(SuccessSignUpWithEmailAndPasswordState());
-    return userCredentials.user;
+    return await _auth.signUpWithEmail(emailController.text, passwordController.text);
     } on FirebaseAuthException catch (e) {
       emit(FailedSignUpWithEmailAndPasswordState(e.code));
     }
