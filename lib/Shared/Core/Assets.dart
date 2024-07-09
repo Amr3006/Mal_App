@@ -12,5 +12,6 @@ class AssetsPaths{
 
   // Images Files
   static const profile_cover_image = "assets/images/profileCoverImage.jpeg";
+  static const google_logo_image = "assets/images/Logo-google-icon-PNG.png";
 
 }

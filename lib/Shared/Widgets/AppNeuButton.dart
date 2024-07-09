@@ -12,7 +12,7 @@ class AppNeuButton extends StatefulWidget {
   final Widget? child;
   final BorderRadiusGeometry? borderRadius;
   final Color shadowColor;
-  final void Function() onPress;
+  final void Function() onPressed;
 
   const AppNeuButton({
     super.key,
@@ -22,7 +22,7 @@ class AppNeuButton extends StatefulWidget {
     this.shadowColor = Colors.black,
     this.child,
     this.borderRadius,
-     required this.onPress
+     required this.onPressed
   });
 
 
@@ -46,7 +46,7 @@ class _AppNeuButtonState extends State<AppNeuButton> {
     height = widget.height;
     shadowColor = widget.shadowColor;
     width = widget.width;
-    onPress = widget.onPress;
+    onPress = widget.onPressed;
     backgroundColor = widget.backgroundColor;
     child=widget.child;
     borderRadius = widget.borderRadius;

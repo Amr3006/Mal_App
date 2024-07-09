@@ -20,10 +20,3 @@ final class FailedLoginWithGoogleState extends LoginState{
   final String error;
   FailedLoginWithGoogleState(this.error);
 }
-
-final class LoadingLoginWithFacebookState extends LoginState{}
-final class SuccessLoginWithFacebookState extends LoginState{}
-final class FailedLoginWithFacebookState extends LoginState{
-  final String error;
-  FailedLoginWithFacebookState(this.error);
-}

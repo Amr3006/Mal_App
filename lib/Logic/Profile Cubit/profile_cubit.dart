@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
+import 'package:mal_app/Data/Services/authentication.dart';
 import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
@@ -29,7 +30,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   final _storage = FirebaseStorage.instance;
   final _firestore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
+  final _auth = AppAuthentication();
 
   var enabled = false;
 
@@ -122,12 +123,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   void logout() async {
     try {
       await _auth.signOut();
-      final answer = await CacheHelper.deleteData('uId');
-    if (answer) {
       emit(SuccessLogoutState());
-    } else {
-      emit(FailedLogoutState());
-    }
     }
     catch (e) {
       emit(FailedLogoutState());

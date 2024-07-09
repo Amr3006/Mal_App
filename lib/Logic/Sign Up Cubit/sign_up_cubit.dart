@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Data/Services/authentication.dart';
-import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
-import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'sign_up_state.dart';
 
@@ -20,7 +17,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
 
-  final _auth = Authentication();
+  final _auth = AppAuthentication();
 
   // Validator
   final formKey = GlobalKey<FormState>();

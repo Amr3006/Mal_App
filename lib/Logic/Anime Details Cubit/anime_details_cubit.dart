@@ -6,9 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
-import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Data/Repositories/anime_details_repository.dart';
-import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'anime_details_state.dart';

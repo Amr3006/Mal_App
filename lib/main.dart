@@ -26,7 +26,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -43,8 +42,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             theme: AppTheme.lightTheme,
             debugShowCheckedModeBanner: false,
-            home: AppRoutes.splashScreen,
-        ); 
+            home: AppRoutes.splashScreen, 
+        );  
       },
     );
   }

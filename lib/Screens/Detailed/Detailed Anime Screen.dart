@@ -12,6 +12,7 @@ import 'package:mal_app/Logic/Anime%20Details%20Cubit/anime_details_cubit.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Models/Episode%20Model.dart';
+// ignore: unused_import
 import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
@@ -35,41 +36,45 @@ class DetailedAnimeScreen extends StatefulWidget {
   State<DetailedAnimeScreen> createState() => _DetailedAnimeScreenState();
 }
 
-class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTickerProviderStateMixin {
+class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
+    with SingleTickerProviderStateMixin {
   late final AnimeModel model;
   late final AnimationController _animationController;
   final controller = ScrollController();
-  final buttonKey = GlobalKey<TooltipState>(),moreInfoKey = GlobalKey<TooltipState>();
+  final buttonKey = GlobalKey<TooltipState>(),
+      moreInfoKey = GlobalKey<TooltipState>();
   late final Animation _colorAnimation;
   late final Animation _popAnimation;
+  bool opened = false;
 
   double edge = 0;
   double opacity = 1;
   double? imageHeight;
   double? imageWidth = screen_width;
   bool animationEnabled = false;
-  
-
-
 
   @override
   void initState() {
     model = widget.model;
 
     // Favourites Button Animation
-    _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
-    _colorAnimation = publicUser!.favourites.contains(model.malId) ? ColorTween(begin: Colors.pink, end: navigation_bar_color).animate(_animationController) :
-    ColorTween(begin: navigation_bar_color, end: Colors.pink).animate(_animationController);
+    _colorAnimation = publicUser!.favourites.contains(model.malId)
+        ? ColorTween(begin: Colors.pink, end: navigation_bar_color)
+            .animate(_animationController)
+        : ColorTween(begin: navigation_bar_color, end: Colors.pink)
+            .animate(_animationController);
 
-    _popAnimation =TweenSequence<double>([
+    _popAnimation = TweenSequence<double>([
       TweenSequenceItem(tween: Tween<double>(begin: 26, end: 35), weight: 1),
-      TweenSequenceItem(tween: Tween<double>(begin: 35,end: 26), weight: 1)
+      TweenSequenceItem(tween: Tween<double>(begin: 35, end: 26), weight: 1)
     ]).animate(_animationController);
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        animationEnabled=true;
+        animationEnabled = true;
       } else if (status == AnimationStatus.dismissed) {
         animationEnabled = false;
       }
@@ -79,13 +84,18 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTi
     controller.addListener(scrollListener);
 
     // Show Tooltip if Firsttime
-    if (CacheHelper.getData("isFirstTime")==true) return;
+    if (CacheHelper.getData("isFirstTime") == true) {
+      opened = true;
+      return;
+    }
     CacheHelper.saveData("isFirstTime", true);
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 50), () {
       buttonKey.currentState!.ensureTooltipVisible();
       moreInfoKey.currentState!.ensureTooltipVisible();
       Future.delayed(const Duration(seconds: 4), () {
         Tooltip.dismissAllToolTips();
+        opened = true;
+        setState(() {});
       });
     });
     super.initState();
@@ -128,28 +138,48 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTi
           return Scaffold(
             floatingActionButton: FloatingActionButton.small(
               backgroundColor: Colors.lightBlue[100],
-            onPressed: () {
-              cubit.changeFavourites(model);
-              if (animationEnabled) {
-                _animationController.reverse();
-              } else {
-                _animationController.forward();
-              }
-            },child: Tooltip(
-              key: buttonKey,
-              message: "Add to Favourites",
-              child: AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) => Icon(Icons.favorite,
-                size: _popAnimation.value,
-                color: _colorAnimation.value,
-                ),
-              )),),
-            floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+              onPressed: () {
+                cubit.changeFavourites(model);
+                if (animationEnabled) {
+                  _animationController.reverse();
+                } else {
+                  _animationController.forward();
+                }
+              },
+              child: Tooltip(
+                  key: buttonKey,
+                  textStyle: opened
+                      ? null
+                      : TextStyle(fontSize: 24.sp, color: Colors.white),
+                  decoration: opened
+                      ? null
+                      : BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.teal),
+                  message: "Add to Favourites",
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) => Icon(
+                      Icons.favorite,
+                      size: _popAnimation.value,
+                      color: _colorAnimation.value,
+                    ),
+                  )),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.miniEndFloat,
             backgroundColor: Colors.white,
             appBar: AppBar(
               actions: [
                 Tooltip(
+                  textStyle: opened
+                      ? null
+                      : TextStyle(fontSize: 24.sp, color: Colors.white),
+                  decoration: opened
+                      ? null
+                      : BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.teal),
                   message: "More Info.",
                   key: moreInfoKey,
                   child: IconButton(
@@ -498,7 +528,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTi
 
   Widget EpisodesListBuilder(EpisodeModel model) {
     return AppNeuButton(
-      onPress: () {
+      onPressed: () {
         if (model.url == null) {
           snackMessage(context: context, text: "No data available yet");
         } else {
@@ -515,7 +545,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen> with SingleTi
   Widget CharactersListBuilder(CharacterModel model) {
     return AppNeuButton(
       shadowColor: Colors.black,
-      onPress: () {
+      onPressed: () {
         AppNavigator.push(AppRoutes.detailedCharacterScreen(model), context);
       },
       borderRadius: BorderRadius.circular(12),

@@ -17,7 +17,7 @@ Widget horizontalListBuilder(final model, BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: AppNeuButton(
-        onPress: () {
+        onPressed: () {
           if (isAnimeModel) {
             AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
           } else {

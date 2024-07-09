@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, unused_import, file_names
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +16,7 @@ import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Core/Assets.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
+import 'package:mal_app/Shared/Widgets/AppNeuButton.dart';
 import 'package:mal_app/Shared/Widgets/AuthenticationFormField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
@@ -47,18 +50,21 @@ class LoginScreen extends StatelessWidget {
                   }
                 } else if (state is SuccessLoginWithEmailAndPasswordState) {
                   AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
+                } else if (state is SuccessLoginWithGoogleState) {
+                  AppNavigator.pushReplacement(AppRoutes.homeScreen, context);
                 }
               },
               builder: (context, state) {
                 var cubit = LoginCubit.get(context);
                 return ConditionalBuilder(
-                  condition: state is! LoadingLoginWithEmailAndPasswordState,
-                  fallback: (context) => AppProgressIndicator(),
-                  builder: (context) => SingleChildScrollView(
+                  condition: state is LoadingLoginWithEmailAndPasswordState || state is LoadingLoginWithGoogleState,
+                  builder: (context) => AppProgressIndicator(),
+                  fallback: (context) => SingleChildScrollView(
                     child: Form(
                       key: cubit.formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Gaps.medium_Gap,
                           NeuText(text: "LOGIN", fontSize: 60, color: font_color),
@@ -107,25 +113,26 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           Gaps.large_Gap,
-                          NeuTextButton(
-                              enableAnimation: true,
-                              buttonColor: Colors.blue,
-                              buttonWidth: 300.w,
-                              child: Text(
-                                "Login with Facebook",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18.sp, color: Colors.white),
-                              )),
-                          Gaps.medium_Gap,
-                          NeuTextButton(
-                              onPressed: () {},
-                              enableAnimation: true,
-                              buttonColor: Colors.white,
-                              buttonWidth: 300.w,
-                              child: Text(
-                                "Login with Google",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18.sp, color: Colors.black),
+                          AppNeuButton(
+                              onPressed: () {
+                                cubit.loginWithGoogle();
+                              },
+                              backgroundColor: Colors.white,
+                              width: 300.w,
+                              child: Padding(
+                                padding: Pads.small_Padding,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(AssetsPaths.google_logo_image, height: 20.r,),
+                                    Gaps.small_Gap,
+                                    Text(
+                                      "Login with Google",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 18.sp, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
                               )),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

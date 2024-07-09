@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Data/Services/authentication.dart';
-import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
-import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'login_state.dart';
 
@@ -14,7 +11,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   static LoginCubit get(BuildContext context) => BlocProvider.of(context);
 
-  final Authentication _auth = Authentication();
+  final AppAuthentication _auth = AppAuthentication();
 
   // Text Controllers
   var emailController = TextEditingController();
@@ -41,33 +38,12 @@ class LoginCubit extends Cubit<LoginState> {
         favourites: [], 
         email: user.email ?? "", 
         phone: user.phoneNumber ?? "", 
-        profilePicture: "https://wallpapers-clan.com/wp-content/uploads/2023/01/anime-aesthetic-boy-pfp-1.jpg", 
-        uId: user.uid);
+        profilePicture: user.photoURL ?? "https://wallpapers-clan.com/wp-content/uploads/2023/01/anime-aesthetic-boy-pfp-1.jpg", 
+        uId: user.uid); 
         await _auth.createUser(user,model);
       emit(SuccessLoginWithGoogleState());
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       emit(FailedLoginWithGoogleState(e.toString()));
-      print(e.toString());
-    }
-  } 
-
-  // Sign in with Facebook
-  void loginWithFacebook() async {
-    try {
-      emit(LoadingLoginWithFacebookState());
-      final user = await _auth.loginWithFacebook();
-      final model = UserModel(
-        name: user!.displayName ?? "", 
-        favourites: [], 
-        email: user.email ?? "", 
-        phone: user.phoneNumber ?? "", 
-        profilePicture: "https://wallpapers-clan.com/wp-content/uploads/2023/01/anime-aesthetic-boy-pfp-1.jpg", 
-        uId: user.uid);
-        await _auth.createUser(user,model);
-      emit(SuccessLoginWithFacebookState());
-    } on FirebaseAuthException catch (e) {
-      emit(FailedLoginWithFacebookState(e.toString()));
-      print(e.toString());
     }
   } 
 

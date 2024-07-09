@@ -16,7 +16,7 @@ Widget verticalAnimeListBuilder(AnimeModel model, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 16.r, right: 16.r, bottom: 16.r),
       child: AppNeuButton(
-        onPress: () {
+        onPressed: () {
           AppNavigator.push(AppRoutes.detailedAnimeScreen(model), context);
         },
         height: 140.r,
