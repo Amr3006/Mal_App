@@ -42,7 +42,7 @@ class FeedCubit extends Cubit<FeedState> {
 
   // Top Animes
   final List<AnimeModel> topAnimes = [];
-  void getTopAnimes() async {
+  Future<void> getTopAnimes() async {
     emit(LoadingTopAnimeState());
     try {
       await _topAnimeRepo.get();
@@ -57,7 +57,7 @@ class FeedCubit extends Cubit<FeedState> {
 
   // Popular Characters
   final List<CharacterModel> popularCharcters = [];
-  void getPopularCharacters() async {
+  Future<void> getPopularCharacters() async {
     emit(LoadingPopularCharactersState());
     try {
       await _topCharacterRepo.get();
@@ -73,7 +73,7 @@ class FeedCubit extends Cubit<FeedState> {
   // Currenct Animes
   int page = 1;
   final List<AnimeModel> seasonAnimes = [];
-  void getSeasonAnimes() async {
+  Future<void> getSeasonAnimes() async {
     emit(LoadingSeasonAnimeState());
     try {
       await _seasonAnimeRepo.get(page);
@@ -90,7 +90,7 @@ class FeedCubit extends Cubit<FeedState> {
   // Recent
   final List<AnimeModel> recentAnimes = [];
   bool gotRecent = false;
-  void getRecent() async {
+  Future<void> getRecent() async {
     emit(LoadingRecentAnimesState());
     try{
     final data = await _firestore
@@ -99,7 +99,6 @@ class FeedCubit extends Cubit<FeedState> {
     .collection("Recent")
     .orderBy("dateTime",descending: true)
     .get();
-    recentAnimes.clear();
     final List<int> recentIds = [];
     for (int i=0;i<data.docs.length;i++) {
       final model = AnimeModel.fromJson(data.docs[i].data());
@@ -114,5 +113,14 @@ class FeedCubit extends Cubit<FeedState> {
       emit(FailedRecentAnimesState(e.toString()));
       print(e.toString());
     }
+  }
+
+  // Clear All lists
+  void clear() {
+    page=1;
+    seasonAnimes.clear();
+    topAnimes.clear();
+    popularCharcters.clear();
+    recentAnimes.clear();
   }
 }

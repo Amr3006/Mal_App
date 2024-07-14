@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ProfileCubit()..getUser()),
+        BlocProvider(create: (context) => ProfileCubit()..getUser()..getFavourites()),
         BlocProvider(
             create: (context) => FeedCubit()
               ..getTopAnimes()
@@ -42,7 +42,8 @@ class HomeScreen extends StatelessWidget {
                   FeedCubit.get(context).seasonAnimes.isEmpty,
                   !FeedCubit.get(context).gotRecent,
                   FeedCubit.get(context).popularCharcters.isEmpty,
-                  ProfileCubit.get(context).user == null
+                  ProfileCubit.get(context).user == null,
+                  !ProfileCubit.get(context).gotFavourites
                 ];
                 return ConditionalBuilder(
                     condition: conditions.contains(true),

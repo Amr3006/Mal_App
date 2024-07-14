@@ -32,3 +32,10 @@ final class FailedChangeNameState extends ProfileState {
   final String error;
   FailedChangeNameState(this.error);
 }
+
+final class LoadingGetFavoritesState extends ProfileState {}
+final class SuccessGetFavoritesState extends ProfileState {}
+final class FailedGetFavoritesState extends ProfileState {
+  final String error;
+  FailedGetFavoritesState(this.error);
+}

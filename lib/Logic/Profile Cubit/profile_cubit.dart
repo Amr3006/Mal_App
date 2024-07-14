@@ -3,14 +3,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/User%20Model.dart';
 import 'package:mal_app/Data/Services/authentication.dart';
-import 'package:mal_app/Data/Shared%20Preferences/Shared%20Preferences.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'profile_state.dart';
@@ -24,7 +23,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   static ProfileCubit get(BuildContext context) => BlocProvider.of(context);
 
-  UserModel? user,backupUser;
+  UserModel? user, backupUser;
 
   final textController = TextEditingController();
 
@@ -38,15 +37,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> getUser() async {
     emit(LoadingGetUserState());
     try {
-    final unmodeledData = await firestore
-    .collection("Users")
-    .doc(uId)
-    .get();
-    user = UserModel.fromJson(unmodeledData.data()!);
-    backupUser = user!.clone();
-    publicUser=user;
-    publicBackUpUser = backupUser;
-    emit(SuccessGetUserState());
+      final unmodeledData = await firestore.collection("Users").doc(uId).get();
+      user = UserModel.fromJson(unmodeledData.data()!);
+      backupUser = user!.clone();
+      publicUser = user;
+      publicBackUpUser = backupUser;
+      emit(SuccessGetUserState());
     } catch (e) {
       print(e.toString());
       emit(FailedGetUserState(e.toString()));
@@ -56,12 +52,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   // Update User
   Future<void> updateUser() async {
     try {
-    await _firestore
-    .collection("Users")
-    .doc(user!.uId)
-    .update(user!.toJson());
-    backupUser = user!.clone();
-    return;
+      await _firestore
+          .collection("Users")
+          .doc(user!.uId)
+          .update(user!.toJson());
+      backupUser = user!.clone();
+      return;
     } catch (e) {
       user = backupUser!.clone();
       throw "Error updating user: ${e.toString()}";
@@ -82,13 +78,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       // Upload to Storage
       final file = await _storage
-      .ref()
-      .child("${user!.uId}/${image.name}")
-      .putFile(File(image.path));
+          .ref()
+          .child("${user!.uId}/${image.name}")
+          .putFile(File(image.path));
 
       // Get Url
       final url = await file.ref.getDownloadURL();
-      user!.profilePicture=url;
+      user!.profilePicture = url;
 
       // Upload to Firestore
       await updateUser();
@@ -106,8 +102,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void changeName() async {
-    if (textController.text == user!.name) {changeEditMode();
-    return;}
+    if (textController.text == user!.name) {
+      changeEditMode();
+      return;
+    }
     emit(LoadingChangeNameState());
     user!.name = textController.text;
     try {
@@ -120,12 +118,35 @@ class ProfileCubit extends Cubit<ProfileState> {
     changeEditMode();
   }
 
+  // Get Favourites
+  final List<AnimeModel> favourites = [];
+  bool gotFavourites = false;
+
+  Future<void> getFavourites() async {
+    emit(LoadingGetFavoritesState());
+    gotFavourites=false;
+    try {
+      favourites.clear();
+      final data = await _firestore
+          .collection("Users")
+          .doc(uId)
+          .collection("Favourites")
+          .get();
+      for (var item in data.docs) {
+        favourites.add(AnimeModel.fromJson(item.data()));
+      }
+      gotFavourites=true;
+      emit(SuccessGetFavoritesState());
+    } catch (e) {
+      emit(FailedGetFavoritesState(e.toString()));
+    }
+  }
+
   void logout() async {
     try {
       await _auth.signOut();
       emit(SuccessLogoutState());
-    }
-    catch (e) {
+    } catch (e) {
       emit(FailedLogoutState());
     }
   }
