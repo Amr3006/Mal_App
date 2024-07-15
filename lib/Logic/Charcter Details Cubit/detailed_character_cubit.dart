@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,8 +6,6 @@ import 'package:mal_app/Data/Models/Detailed%20Character%20Model.dart';
 import 'package:mal_app/Data/Repositories/character_details_repository.dart';
 
 part 'detailed_character_state.dart';
-
-// TODO: Remove Prints
 
 class DetailedCharacterCubit extends Cubit<DetailedCharacterState> {
   DetailedCharacterCubit() : super(DetailedCharacterInitial());
@@ -26,7 +24,6 @@ class DetailedCharacterCubit extends Cubit<DetailedCharacterState> {
       emit(SuccessCharacterDetailsState());
     } catch (e) {
       emit(FailedCharacterDetailsState(e.toString()));
-      print(e.toString());
     }
   }
 }

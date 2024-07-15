@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,6 @@ import 'package:mal_app/Data/Repositories/anime_details_repository.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'anime_details_state.dart';
-
-// TODO: Remove the Prints
 
 class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
   DetailedAnimeCubit() : super(DetailedAnimeInitial());
@@ -34,7 +32,6 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
       emit(SuccessDataState());
     } catch (e) {
       emit(FailedDataState(e.toString()));
-      print(e.toString());
     }
   }
 
@@ -59,11 +56,11 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
           .collection("Users")
           .doc(uId)
           .collection("Recent")
-          .add(data);
+          .doc(model.malId.toString())
+          .set(data);
       emit(SuccessUploadRecentState());
     } catch (e) {
       emit(FailedUploadRecentState(e.toString()));
-      print(e.toString());
     }
   }
 
@@ -98,7 +95,6 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
       emit(SuccessFavouriteState());
     } catch (e) {
       emit(FailedFavouriteState(e.toString()));
-      print(e.toString());
     }
   }
 

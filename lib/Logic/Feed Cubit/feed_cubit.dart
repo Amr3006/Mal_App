@@ -1,8 +1,6 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_field, avoid_print
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Character%20Model.dart';
 import 'package:mal_app/Data/Repositories/season_anime_repository.dart';
@@ -12,7 +10,6 @@ import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'feed_state.dart';
 
-// TODO: Remove the prints
 
 class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedInitial());
@@ -47,12 +44,11 @@ class FeedCubit extends Cubit<FeedState> {
     emit(LoadingTopAnimeState());
     try {
       await _topAnimeRepo.get();
-      final _temp = _topAnimeRepo.returnData();
-      topAnimes.addAll(_temp);
+      final temp = _topAnimeRepo.returnData();
+      topAnimes.addAll(temp);
       emit(SuccessTopAnimeState());
     } catch (e) {
       emit(FailedTopAnimeState(e.toString()));
-      print(e.toString());
     }
   }
 
@@ -62,12 +58,11 @@ class FeedCubit extends Cubit<FeedState> {
     emit(LoadingPopularCharactersState());
     try {
       await _topCharacterRepo.get();
-      final _temp = _topCharacterRepo.returnData();
-      popularCharcters.addAll(_temp);
+      final temp = _topCharacterRepo.returnData();
+      popularCharcters.addAll(temp);
       emit(SuccessPopularCharactersState());
     } catch (e) {
       emit(FailedPopularCharactersState(e.toString()));
-      print(e.toString());
     }
   }
 
@@ -78,13 +73,12 @@ class FeedCubit extends Cubit<FeedState> {
     emit(LoadingSeasonAnimeState());
     try {
       await _seasonAnimeRepo.get(page);
-      var _temp = _seasonAnimeRepo.returnData();
-      seasonAnimes.addAll(_temp);
+      var temp = _seasonAnimeRepo.returnData();
+      seasonAnimes.addAll(temp);
       page++;
       emit(SuccessSeasonAnimeState());
     } catch (e) {
       emit(FailedSeasonAnimeState(e.toString()));
-      print(e.toString());
     }
   }
 
@@ -99,6 +93,7 @@ class FeedCubit extends Cubit<FeedState> {
     .doc(uId)
     .collection("Recent")
     .orderBy("dateTime",descending: true)
+    .limit(30)
     .get();
     final List<int> recentIds = [];
     for (int i=0;i<data.docs.length;i++) {
@@ -112,7 +107,6 @@ class FeedCubit extends Cubit<FeedState> {
     emit(SuccessRecentAnimesState());
     } catch (e) {
       emit(FailedRecentAnimesState(e.toString()));
-      print(e.toString());
     }
   }
 
