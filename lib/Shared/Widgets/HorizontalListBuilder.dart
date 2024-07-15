@@ -41,7 +41,6 @@ Widget horizontalListBuilder(final model, BuildContext context) {
             ),
             Container(
               height: 50.h,
-              width: 180.w,
               padding: const EdgeInsetsDirectional.only(start: 10),
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [

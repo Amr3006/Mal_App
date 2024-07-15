@@ -44,8 +44,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       publicBackUpUser = backupUser;
       emit(SuccessGetUserState());
     } catch (e) {
-      print(e.toString());
       emit(FailedGetUserState(e.toString()));
+      print(e.toString());
     }
   }
 

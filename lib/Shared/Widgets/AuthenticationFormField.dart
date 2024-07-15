@@ -41,7 +41,7 @@ Widget AuthenticationTextFormField(
         Transform.translate(
           offset: Offset(6, 4),
           child: Padding(
-            padding: EdgeInsetsDirectional.only(start: 7.w, end: 12.w),
+            padding: EdgeInsetsDirectional.only(start: 7.w, end: 20.w),
             child: TextFormField(
               obscureText: obscured,
               controller: controller,

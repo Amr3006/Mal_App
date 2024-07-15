@@ -134,6 +134,7 @@ class LoginScreen extends StatelessWidget {
                                   ],
                                 ),
                               )),
+                              Gaps.tiny_Gap,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

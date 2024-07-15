@@ -57,23 +57,35 @@ class SearchScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: state is LoadingDataState ? AppProgressIndicator() : RefreshIndicator(
-                      color: navigation_bar_color,
-                      onRefresh: () async {
-                        await cubit.getData();
-                      },
-                      child: ListView.builder(
-                        controller: cubit.scrollController,
-                          itemBuilder: (context, index) =>
-                              verticalAnimeListBuilder(cubit.results[index], context),
-                              itemCount: cubit.results.length,
+                    child: state is LoadingDataState
+                        ? AppProgressIndicator()
+                        : RefreshIndicator(
+                            color: navigation_bar_color,
+                            onRefresh: () async {
+                              await cubit.getData();
+                            },
+                            child: SingleChildScrollView(
+                              controller: cubit.scrollController,
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) =>
+                                        verticalAnimeListBuilder(
+                                            cubit.results[index], context),
+                                    itemCount: cubit.results.length,
+                                  ),
+                                  if (state is LoadingMoreDataState)
+                                    AppProgressIndicator(size: 40),
+                                  if (state is LoadingMoreDataState)
+                                    Gaps.medium_Gap
+                                ],
+                              ),
                             ),
-                    ),
+                          ),
                   ),
-                  if (state is LoadingMoreDataState)
-                    AppProgressIndicator(size: 40),
-                  if (state is LoadingMoreDataState)
-                    Gaps.huge_Gap
                 ],
               ),
             ),
@@ -82,6 +94,4 @@ class SearchScreen extends StatelessWidget {
       ),
     );
   }
-
-  
 }

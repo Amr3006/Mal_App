@@ -36,37 +36,39 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  SvgPicture.asset(
-                    AssetsPaths.splash_screen_icon,
-                    width: 250.w,
-                    ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LottieBuilder.asset(
-                        AssetsPaths.splash_screen_animation,
-                        width: 250.w
-                        ),
-                        Gap(14.w)
-                    ],
-                  )
-                ],
-              ),
-              Gaps.medium_Gap,
-              Text(
-                "MAL App",
-                style: GoogleFonts.happyMonkey().copyWith(
-                  color: Colors.black,
-                  fontSize: 44.sp
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    SvgPicture.asset(
+                      AssetsPaths.splash_screen_icon,
+                      width: 250.w,
+                      ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        LottieBuilder.asset(
+                          AssetsPaths.splash_screen_animation,
+                          width: 250.w
+                          ),
+                          Gap(14.w)
+                      ],
+                    )
+                  ],
                 ),
-                )
-            ],
+                Gaps.medium_Gap,
+                Text(
+                  "MAL App",
+                  style: GoogleFonts.happyMonkey().copyWith(
+                    color: Colors.black,
+                    fontSize: 44.sp
+                  ),
+                  )
+              ],
+            ),
           ),
         )
       ),
