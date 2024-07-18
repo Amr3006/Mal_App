@@ -48,7 +48,7 @@ class SearchScreen extends StatelessWidget {
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                             fontSize: 16.sp),
-                        cursorColor: navigation_bar_color,
+                        cursorColor: main_color,
                         decoration: const InputDecoration(
                             contentPadding: EdgeInsets.only(top: 12),
                             prefixIcon: Icon(Icons.search),
@@ -60,7 +60,7 @@ class SearchScreen extends StatelessWidget {
                     child: state is LoadingDataState
                         ? AppProgressIndicator()
                         : RefreshIndicator(
-                            color: navigation_bar_color,
+                            color: main_color,
                             onRefresh: () async {
                               await cubit.getData();
                             },

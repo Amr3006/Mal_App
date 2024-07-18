@@ -22,7 +22,7 @@ class FeedScreen extends StatelessWidget {
         return Container(
           width: screen_width,
           child: RefreshIndicator(
-            color: navigation_bar_color,
+            color: main_color,
             onRefresh: () async {
               cubit.clear();
               await Future.wait([

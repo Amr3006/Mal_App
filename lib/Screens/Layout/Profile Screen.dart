@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final outlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: navigation_bar_buttons_color, width: 2));
+        borderSide: BorderSide(color: secondary_color, width: 2));
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is FailedChangeProfilePictureState) {
@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
         return SizedBox(
             width: screen_width,
             child: RefreshIndicator(
-              color: navigation_bar_color,
+              color: main_color,
               onRefresh: () async {
                 await cubit.getFavourites();
               },
@@ -98,14 +98,14 @@ class ProfileScreen extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: CircleAvatar(
-                                      backgroundColor: navigation_bar_buttons_color,
+                                      backgroundColor: secondary_color,
                                       radius: 20.r,
                                       child: IconButton(
                                         onPressed: () {
                                           cubit.changeImage();
                                         },
                                         icon: const Icon(FontAwesomeIcons.image),
-                                        color: navigation_bar_color,
+                                        color: main_color,
                                         iconSize: 20.r,
                                       ),
                                     ),
@@ -121,7 +121,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
-                        cursorColor: navigation_bar_color,
+                        cursorColor: main_color,
                         controller: cubit.textController..text = user.name,
                         style: GoogleFonts.aBeeZee(fontSize: 30.sp, color: Colors.black),
                         textAlign: TextAlign.center,

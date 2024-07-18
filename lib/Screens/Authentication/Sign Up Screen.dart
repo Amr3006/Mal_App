@@ -60,7 +60,7 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           Gaps.medium_Gap,
                           NeuText(
-                              text: "SIGN UP", fontSize: 60, color: button_color),
+                              text: "SIGN UP", fontSize: 60, color: community_color_light),
                           Gaps.medium_Gap,
                           AuthenticationTextFormField(
                               context: context,

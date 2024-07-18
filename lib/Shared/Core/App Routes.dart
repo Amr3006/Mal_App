@@ -10,6 +10,7 @@ import 'package:mal_app/Screens/Detailed/Detailed%20Character%20Screen.dart';
 import 'package:mal_app/Screens/Home/Home%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Login%20Screen.dart';
 import 'package:mal_app/Screens/Authentication/Sign%20Up%20Screen.dart';
+import 'package:mal_app/Screens/Layout/Community%20Screen.dart';
 import 'package:mal_app/Screens/Layout/Feed%20Screen.dart';
 import 'package:mal_app/Screens/Layout/Profile%20Screen.dart';
 import 'package:mal_app/Screens/Other/Search%20Screen.dart';
@@ -25,6 +26,7 @@ class AppRoutes {
   static const profileScreen = ProfileScreen();
   static const animeScreen = FeedScreen();
   static const searchScreen = SearchScreen();
+  static const communityScreen = CommunityScreen();
   static webScreen(url) => WebScreen(url);
   static detailedAnimeScreen(AnimeModel model)=> DetailedAnimeScreen(model: model);
   static detailedCharacterScreen(CharacterModel model) => DetailedCharacterScreen(model);

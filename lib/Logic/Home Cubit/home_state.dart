@@ -7,6 +7,8 @@ final class HomeInitial extends HomeState {}
 
 final class ChangeNavigationBarPageState extends HomeState {}
 
+final class ChangeModeState extends HomeState {}
+
 final class LoadingRandomAnimeState extends HomeState {}
 final class SucceedRandomAnimeState extends HomeState {}
 final class FailedRandomAnimeState extends HomeState {

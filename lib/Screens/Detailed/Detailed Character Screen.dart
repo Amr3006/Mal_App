@@ -79,7 +79,7 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: navigation_bar_color,
+              backgroundColor: main_color,
               title: Text(
                 "${model.name}",
                 style: GoogleFonts.nunito(
@@ -157,7 +157,7 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
                                           const Duration(milliseconds: 100),
                                       height: 70.h,
                                       decoration: BoxDecoration(
-                                          color: navigation_bar_color,
+                                          color: main_color,
                                           borderRadius:
                                               BorderRadius.circular(edge)),
                                       child: Row(
@@ -194,7 +194,7 @@ class _DetailedCharacterScreenState extends State<DetailedCharacterScreen> {
                                                     fontSize: 24.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color:
-                                                        navigation_bar_color),
+                                                        main_color),
                                               ),
                                             ),
                                           )

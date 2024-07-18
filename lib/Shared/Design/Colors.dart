@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, file_names
+// ignore_for_file: constant_identifier_names, file_names, non_constant_identifier_names
 
 
 import 'package:flutter/material.dart';
@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 const font_color = Color.fromRGBO(233, 69, 177, 1);
 const background_color = Color.fromARGB(255, 183, 221, 252);
 const background_shadow_color = Color.fromARGB(255, 0, 81, 147);
-const navigation_bar_color = Color.fromARGB(255, 16, 53, 82);
-const navigation_bar_buttons_color = Color.fromARGB(255, 163, 188, 255);
-const button_color = Colors.teal;
+var main_color = const Color.fromARGB(255, 16, 53, 82);
+var secondary_color = const Color.fromARGB(255, 163, 188, 255);
+const anime_color_dark = Color.fromARGB(255, 16, 53, 82);
+const anime_color_light = Color.fromARGB(255, 163, 188, 255);
+const community_color_dark = Color.fromARGB(255, 0, 56, 47);
+const community_color_light = Color.fromARGB(255, 146, 241, 232);

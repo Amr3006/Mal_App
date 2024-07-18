@@ -62,9 +62,9 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
     _colorAnimation = publicUser!.favourites.contains(model.malId)
-        ? ColorTween(begin: Colors.pink, end: navigation_bar_color)
+        ? ColorTween(begin: Colors.pink, end: main_color)
             .animate(_animationController)
-        : ColorTween(begin: navigation_bar_color, end: Colors.pink)
+        : ColorTween(begin: main_color, end: Colors.pink)
             .animate(_animationController);
 
     _popAnimation = TweenSequence<double>([
@@ -137,7 +137,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
           List<bool> conditions = [cubit.gotEpisodes, cubit.gotCharacters];
           return Scaffold(
             floatingActionButton: FloatingActionButton.small(
-              backgroundColor: Colors.lightBlue[100],
+              backgroundColor: secondary_color,
               onPressed: () {
                 cubit.changeFavourites(model);
                 if (animationEnabled) {
@@ -198,7 +198,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                       )),
                 )
               ],
-              backgroundColor: navigation_bar_color,
+              backgroundColor: main_color,
               leading: IconButton(
                 onPressed: () {
                   AppNavigator.pop(context);
@@ -257,7 +257,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 2, horizontal: 6),
-                                        color: navigation_bar_color,
+                                        color: main_color,
                                         child: Text(
                                           "SCORE",
                                           style: TextStyle(
@@ -288,7 +288,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 2, horizontal: 6),
-                                        color: navigation_bar_color,
+                                        color: main_color,
                                         child: Text(
                                           "RANKED",
                                           style: TextStyle(
@@ -323,7 +323,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 2, horizontal: 6),
-                                        color: navigation_bar_color,
+                                        color: main_color,
                                         child: Text(
                                           "POPULARITY",
                                           style: TextStyle(
@@ -351,7 +351,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 2, horizontal: 6),
-                                        color: navigation_bar_color,
+                                        color: main_color,
                                         child: Text(
                                           "MEMBERS",
                                           style: TextStyle(

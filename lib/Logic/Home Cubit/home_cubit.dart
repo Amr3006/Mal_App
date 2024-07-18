@@ -19,16 +19,28 @@ class HomeCubit extends Cubit<HomeState> {
 
   final _repo = RandomAnimeRepo();
 
-  // Navigation Bar
-  List<IconData> icons = [
-      FontAwesomeIcons.tv,
-      Icons.person_rounded,
-    ];
+  bool isCommunity = false;
   
-  List<Widget> screen = [
+  List<Widget> screens = [
     AppRoutes.animeScreen,
     AppRoutes.profileScreen
   ];
+
+  void changeMode() {
+    isCommunity = !isCommunity;
+    if (!isCommunity) {
+      screens = [
+        AppRoutes.animeScreen, 
+        AppRoutes.profileScreen
+      ];
+    } else {
+      screens = [
+        AppRoutes.communityScreen,
+        AppRoutes.profileScreen
+      ];
+    }
+    emit(ChangeModeState());
+  }
 
   int current_index = 0;
   void changePage(int index) {

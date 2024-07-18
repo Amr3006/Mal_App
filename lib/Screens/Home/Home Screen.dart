@@ -1,8 +1,11 @@
 // ignore_for_file: file_names, prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,16 +20,80 @@ import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
+import 'package:mal_app/main.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  PersistentBottomSheetController? _spreadSheetController;
+  IconData floatingButtonIcon = FontAwesomeIcons.magnifyingGlass;
+  late Animation _darkColorAnimation,
+      _lightColorAnimation,
+      _iconActivatedChangeAnimation,
+      _iconUnactivatedChangeAnimtion,
+      _iconDisappearAnimation,
+      _rotationAnimation;
+  bool animationForward = false;
+  List<IconData> icons = [
+    FontAwesomeIcons.tv,
+    Icons.person_rounded,
+  ];
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+
+    _darkColorAnimation =
+        ColorTween(begin: anime_color_dark, end: community_color_dark)
+            .animate(_animationController);
+
+    _lightColorAnimation =
+        ColorTween(begin: anime_color_light, end: community_color_light)
+            .animate(_animationController);
+
+    _iconActivatedChangeAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 25, end: 0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 0, end: 25), weight: 1),
+    ]).animate(_animationController);
+
+    _iconUnactivatedChangeAnimtion = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 20, end: 0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 0, end: 20), weight: 1),
+    ]).animate(_animationController);
+
+    _rotationAnimation =
+        Tween<double>(begin: 0, end: pi).animate(_animationController);
+
+    _iconDisappearAnimation =
+        Tween<double>(begin: 26, end: 0).animate(_animationController);
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed || status == AnimationStatus.forward) {
+        animationForward = true;
+      } else if (status == AnimationStatus.dismissed || status == AnimationStatus.reverse) {
+        animationForward = false;
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    PersistentBottomSheetController? controller;
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ProfileCubit()..getUser()..getFavourites()),
+        BlocProvider(
+            create: (context) => ProfileCubit()
+              ..getUser()
+              ..getFavourites()),
         BlocProvider(
             create: (context) => FeedCubit()
               ..getTopAnimes()
@@ -52,79 +119,156 @@ class HomeScreen extends StatelessWidget {
                 return ConditionalBuilder(
                     condition: conditions.contains(true),
                     builder: (context) => AppProgressIndicator(),
-                    fallback: (context) => HomeCubit.get(context).screen[HomeCubit.get(context).current_index]);
+                    fallback: (context) => HomeCubit.get(context)
+                        .screens[HomeCubit.get(context).current_index]);
               },
             ),
             backgroundColor: Colors.white,
             appBar: AppBar(
-              actions: [
-                Builder(
-                  builder: (context) {
-                    return IconButton(onPressed: () async {
-                      if (state is LoadingRandomAnimeState) return;
-                      if (controller != null) {
-                        controller!.close();
+              leading: Tooltip(
+                message: animationForward
+                    ? "Change to AnimeList"
+                    : "Change to Community",
+                child: IconButton(
+                  onPressed: () {
+                    if (_spreadSheetController != null) {
+                      _spreadSheetController!.close();
+                    }
+                    if (animationForward) {
+                      _animationController.reverse();
+                      main_color = anime_color_dark;
+                      secondary_color = anime_color_light;
+                    } else {
+                      _animationController.forward();
+                      main_color = community_color_dark;
+                      secondary_color = community_color_light;
+                    }
+                    Future.delayed(const Duration(milliseconds: 200), () {
+                      HomeCubit.get(context).changeMode();
+                      if (animationForward) {
+                        floatingButtonIcon = FontAwesomeIcons.plus;
+                        icons = [
+                          FontAwesomeIcons.house,
+                          Icons.person_rounded,
+                        ];
+                      } else {
+                        floatingButtonIcon = FontAwesomeIcons.magnifyingGlass;
+                        icons = [
+                          FontAwesomeIcons.tv,
+                          Icons.person_rounded,
+                        ];
                       }
-                      await Future.wait([
-                        Future.delayed(const Duration(milliseconds: 250)),
-                        HomeCubit.get(context).getRandomAnime()
-                      ]); 
-                      controller = Scaffold.of(context).showBottomSheet((context) => RandomSheetBuilder(HomeCubit.get(context).randomAnime!, context));
-                    }, icon: Tooltip(
-                      message: "Get A Random Anime Recommendation",
-                      child: state is LoadingRandomAnimeState ? CircularProgressIndicator(color: navigation_bar_color) : Icon(FontAwesomeIcons.dice, color: navigation_bar_color,)),
+                      setState(() {});
+                    });
+                  },
+                  icon: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (contex, child) => Transform.rotate(
+                        angle: _rotationAnimation.value,
+                        child: Icon(
+                          FontAwesomeIcons.arrowsRotate,
+                          color: _darkColorAnimation.value,
+                        )),
+                  ),
+                ),
+              ),
+              actions: [
+                _iconDisappearAnimation.value == 0 ? SizedBox() : AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) => Builder(builder: (context) {
+                    return IconButton(
+                      iconSize: _iconDisappearAnimation.value,
+                      onPressed: () async {
+                        if (state is LoadingRandomAnimeState) return;
+                        if (_spreadSheetController != null) {
+                          _spreadSheetController!.close();
+                        }
+                        await Future.wait([
+                          Future.delayed(const Duration(milliseconds: 250)),
+                          HomeCubit.get(context).getRandomAnime()
+                        ]);
+                        _spreadSheetController = Scaffold.of(context)
+                            .showBottomSheet((context) => RandomSheetBuilder(
+                                HomeCubit.get(context).randomAnime!, context));
+                      },
+                      icon: Tooltip(
+                          message: "Get A Random Anime Recommendation",
+                          child: state is LoadingRandomAnimeState
+                              ? CircularProgressIndicator(
+                                  color: anime_color_dark)
+                              : Icon(
+                                  FontAwesomeIcons.dice,
+                                  color: anime_color_dark,
+                                )),
                     );
-                  }
+                  }),
                 ),
                 Gaps.small_Gap
               ],
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
-              title: NeuText(
-                  text: "MAL",
-                  fontSize: 35,
-                  strokeWidth: 2,
-                  color: navigation_bar_buttons_color),
+              title: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) => NeuText(
+                    text: "MAL",
+                    fontSize: 35,
+                    strokeWidth: 2,
+                    color: _lightColorAnimation.value),
+              ),
               centerTitle: true,
             ),
-            floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  AppNavigator.push(AppRoutes.searchScreen, context);
-                },
-                elevation: 10,
-                backgroundColor: navigation_bar_buttons_color,
-                shape: CircleBorder(),
-                child: Icon(
-                  FontAwesomeIcons.magnifyingGlass,
-                  color: navigation_bar_color,
-                ),
-              ),
+            floatingActionButton: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return FloatingActionButton(
+                  onPressed: () {
+                    AppNavigator.push(AppRoutes.searchScreen, context);
+                  },
+                  elevation: 10,
+                  backgroundColor: _lightColorAnimation.value,
+                  shape: CircleBorder(),
+                  child: Builder(builder: (context) {
+                    return Icon(
+                      floatingButtonIcon,
+                      size: _iconActivatedChangeAnimation.value,
+                      color: _darkColorAnimation.value,
+                    );
+                  }),
+                );
+              },
+            ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-                itemCount: HomeCubit.get(context).icons.length,
-                tabBuilder: (index, isActive) {
-                  return Icon(
-                    HomeCubit.get(context).icons[index],
-                    size: isActive ? 25.w : 20.w,
-                    color: isActive
-                        ? navigation_bar_buttons_color
-                        : Colors.grey[300],
-                  );
-                },
-                activeIndex: HomeCubit.get(context).current_index,
-                gapLocation: GapLocation.center,
-                notchSmoothness: NotchSmoothness.defaultEdge,
-                backgroundColor: navigation_bar_color,
-                leftCornerRadius: 12,
-                rightCornerRadius: 12,
-                shadow: Shadow(
-                    offset: Offset(0, -0.1),
-                    blurRadius: 20,
-                    color: Colors.black.withOpacity(0.3)),
-                onTap: (index) {
-                  HomeCubit.get(context).changePage(index);
-                }),
+            bottomNavigationBar: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) => AnimatedBottomNavigationBar.builder(
+                  itemCount: icons.length,
+                  tabBuilder: (index, isActive) {
+                    return AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context,child) => Icon(
+                        icons[index],
+                        size: isActive ? _iconActivatedChangeAnimation.value : _iconUnactivatedChangeAnimtion.value,
+                        color: isActive
+                            ? _lightColorAnimation.value
+                            : Colors.grey[300],
+                      ),
+                    );
+                  },
+                  activeIndex: HomeCubit.get(context).current_index,
+                  gapLocation: GapLocation.center,
+                  notchSmoothness: NotchSmoothness.defaultEdge,
+                  backgroundColor: _darkColorAnimation.value,
+                  leftCornerRadius: 12,
+                  rightCornerRadius: 12,
+                  shadow: Shadow(
+                      offset: Offset(0, -0.1),
+                      blurRadius: 20,
+                      color: Colors.black.withOpacity(0.3)),
+                  onTap: (index) {
+                    HomeCubit.get(context).changePage(index);
+                  }),
+            ),
           );
         },
       ),
@@ -133,13 +277,13 @@ class HomeScreen extends StatelessWidget {
 
   Widget RandomSheetBuilder(AnimeModel model, BuildContext context) {
     return SizedBox(
-    width: screen_width,
-    child: Center(
-      child: SizedBox(
-        height: screen_height*2/3,
-        width: screen_width*8/9,
-        child: horizontalListBuilder(model, context)),
-    ),
-  );
+      width: screen_width,
+      child: Center(
+        child: SizedBox(
+            height: screen_height * 2 / 3,
+            width: screen_width * 8 / 9,
+            child: horizontalListBuilder(model, context)),
+      ),
+    );
   }
 }

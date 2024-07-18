@@ -64,9 +64,9 @@ Widget verticalAnimeListBuilder(AnimeModel model, BuildContext context) {
                         Gaps.tiny_Gap,
                         RatingBarIndicator(
                           itemBuilder: (context, index) {
-                            return const Icon(
+                            return Icon(
                               Icons.star,
-                              color: navigation_bar_color,
+                              color: main_color,
                             );
                           },
                           itemCount: 5,

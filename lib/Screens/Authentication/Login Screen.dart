@@ -165,7 +165,7 @@ class LoginScreen extends StatelessWidget {
                             buttonWidth: 200.w,
                             buttonHeight: 60.sp,
                             enableAnimation: true,
-                            buttonColor: button_color,
+                            buttonColor: community_color_light,
                             child: Text(
                               "LOGIN",
                               style: GoogleFonts.kavoon(
