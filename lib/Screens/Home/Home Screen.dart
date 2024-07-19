@@ -5,9 +5,9 @@ import 'dart:math';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+// ignore: unnecessary_import
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
@@ -20,7 +20,6 @@ import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
 import 'package:mal_app/Shared/Widgets/NeuText.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
-import 'package:mal_app/main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,19 +30,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+
+  // Animation 
   late AnimationController _animationController;
-  PersistentBottomSheetController? _spreadSheetController;
-  IconData floatingButtonIcon = FontAwesomeIcons.magnifyingGlass;
   late Animation _darkColorAnimation,
       _lightColorAnimation,
       _iconActivatedChangeAnimation,
       _iconUnactivatedChangeAnimtion,
       _iconDisappearAnimation,
       _rotationAnimation;
+
+  IconData floatingButtonIcon = FontAwesomeIcons.magnifyingGlass;
+  // Spread Sheet Controller
+  PersistentBottomSheetController? _spreadSheetController;
   bool animationForward = false;
   List<IconData> icons = [
     FontAwesomeIcons.tv,
-    Icons.person_rounded,
+    FontAwesomeIcons.userLarge,
   ];
 
   @override
@@ -149,13 +152,13 @@ class _HomeScreenState extends State<HomeScreen>
                         floatingButtonIcon = FontAwesomeIcons.plus;
                         icons = [
                           FontAwesomeIcons.house,
-                          Icons.person_rounded,
+                          FontAwesomeIcons.userLarge,
                         ];
                       } else {
                         floatingButtonIcon = FontAwesomeIcons.magnifyingGlass;
                         icons = [
                           FontAwesomeIcons.tv,
-                          Icons.person_rounded,
+                          FontAwesomeIcons.userLarge,
                         ];
                       }
                       setState(() {});

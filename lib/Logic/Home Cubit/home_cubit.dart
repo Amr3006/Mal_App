@@ -1,10 +1,7 @@
-// ignore_for_file
-
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Repositories/random_anime_repository.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
