@@ -19,7 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
   bool isCommunity = false;
   
   List<Widget> screens = [
-    AppRoutes.animeScreen,
+    AppRoutes.feedScreen,
     AppRoutes.profileScreen
   ];
 
@@ -27,7 +27,7 @@ class HomeCubit extends Cubit<HomeState> {
     isCommunity = !isCommunity;
     if (!isCommunity) {
       screens = [
-        AppRoutes.animeScreen, 
+        AppRoutes.feedScreen, 
         AppRoutes.profileScreen
       ];
     } else {

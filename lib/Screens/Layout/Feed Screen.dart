@@ -50,7 +50,7 @@ class FeedScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border.all(width: 3),
                             boxShadow: [BoxShadow(offset: Offset(3, 3))],
-                            color: background_color,
+                            color: secondary_color,
                             borderRadius: BorderRadiusDirectional.horizontal(
                                 start: Radius.circular(12)),
                           ),
@@ -85,7 +85,7 @@ class FeedScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border.all(width: 3),
                               boxShadow: [BoxShadow(offset: Offset(3, 3))],
-                              color: background_color,
+                              color: secondary_color,
                               borderRadius: BorderRadiusDirectional.horizontal(
                                   start: Radius.circular(12)),
                             ),
@@ -123,7 +123,7 @@ class FeedScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   border: Border.all(width: 3),
                                   boxShadow: [BoxShadow(offset: Offset(3, 3))],
-                                  color: background_color,
+                                  color: secondary_color,
                                   borderRadius: BorderRadiusDirectional.horizontal(
                                       start: Radius.circular(12)),
                                 ),

@@ -225,7 +225,9 @@ class _HomeScreenState extends State<HomeScreen>
               builder: (context, child) {
                 return FloatingActionButton(
                   onPressed: () {
-                    AppNavigator.push(AppRoutes.searchScreen, context);
+                    Widget destination = AppRoutes.searchScreen;
+                    if (HomeCubit.get(context).isCommunity) destination = AppRoutes.newPostScreen;
+                    AppNavigator.push(destination, context);
                   },
                   elevation: 10,
                   backgroundColor: _lightColorAnimation.value,
