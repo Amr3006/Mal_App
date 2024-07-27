@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
+import 'package:mal_app/Shared/Core/App%20Navigator.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
@@ -59,8 +61,10 @@ class FeedScreen extends StatelessWidget {
                             clipBehavior: Clip.none,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) =>
-                                horizontalListBuilder(cubit.topAnimes[index], context),
-                            separatorBuilder: (context, index) => Gaps.medium_Gap,
+                                horizontalListBuilder(
+                                    cubit.topAnimes[index], context),
+                            separatorBuilder: (context, index) =>
+                                Gaps.medium_Gap,
                             itemCount: cubit.topAnimes.length,
                             scrollDirection: Axis.horizontal,
                           ),
@@ -93,7 +97,8 @@ class FeedScreen extends StatelessWidget {
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) =>
-                                  horizontalListBuilder(cubit.popularCharcters[index], context),
+                                  horizontalListBuilder(
+                                      cubit.popularCharcters[index], context),
                               separatorBuilder: (context, index) =>
                                   Gaps.medium_Gap,
                               itemCount: cubit.popularCharcters.length,
@@ -124,16 +129,19 @@ class FeedScreen extends StatelessWidget {
                                   border: Border.all(width: 3),
                                   boxShadow: [BoxShadow(offset: Offset(3, 3))],
                                   color: secondary_color,
-                                  borderRadius: BorderRadiusDirectional.horizontal(
-                                      start: Radius.circular(12)),
+                                  borderRadius:
+                                      BorderRadiusDirectional.horizontal(
+                                          start: Radius.circular(12)),
                                 ),
                                 child: ListView.separated(
                                   shrinkWrap: true,
                                   clipBehavior: Clip.none,
                                   physics: NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) =>
-                                      horizontalListBuilder(cubit.recentAnimes[index], context),
-                                  separatorBuilder: (context, index) => Gaps.medium_Gap,
+                                      horizontalListBuilder(
+                                          cubit.recentAnimes[index], context),
+                                  separatorBuilder: (context, index) =>
+                                      Gaps.medium_Gap,
                                   itemCount: cubit.recentAnimes.length,
                                   scrollDirection: Axis.horizontal,
                                 ),
@@ -149,8 +157,11 @@ class FeedScreen extends StatelessWidget {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                        verticalAnimeListBuilder(cubit.seasonAnimes[index], context),
+                    itemBuilder: (context, index) => verticalAnimeListBuilder(
+                      cubit.seasonAnimes[index],
+                      context,
+                      onPressed: () {},
+                    ),
                     itemCount: cubit.seasonAnimes.length,
                   ),
                   if (cubit.seasonAnimes.isNotEmpty &&

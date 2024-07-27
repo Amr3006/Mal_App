@@ -57,8 +57,8 @@ class ProfileScreen extends StatelessWidget {
                       child: Container(
                         height: screen_width,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        decoration:
-                            BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16)),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -104,7 +104,8 @@ class ProfileScreen extends StatelessWidget {
                                         onPressed: () {
                                           cubit.changeImage();
                                         },
-                                        icon: const Icon(FontAwesomeIcons.image),
+                                        icon:
+                                            const Icon(FontAwesomeIcons.image),
                                         color: main_color,
                                         iconSize: 20.r,
                                       ),
@@ -123,7 +124,8 @@ class ProfileScreen extends StatelessWidget {
                         textInputAction: TextInputAction.done,
                         cursorColor: main_color,
                         controller: cubit.textController..text = user.name,
-                        style: GoogleFonts.aBeeZee(fontSize: 30.sp, color: Colors.black),
+                        style: GoogleFonts.aBeeZee(
+                            fontSize: 30.sp, color: Colors.black),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         minLines: 1,
@@ -139,8 +141,10 @@ class ProfileScreen extends StatelessWidget {
                     Gaps.small_Gap,
                     if (state is LoadingChangeNameState)
                       const Padding(
-                        padding: EdgeInsets.symmetric( horizontal: 20),
-                        child:  LinearProgressIndicator(color: Colors.blueGrey,),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: LinearProgressIndicator(
+                          color: Colors.blueGrey,
+                        ),
                       ),
                     Gaps.tiny_Gap,
                     Padding(
@@ -171,8 +175,8 @@ class ProfileScreen extends StatelessWidget {
                                       width: screen_width,
                                     ),
                                     BackdropFilter(
-                                      filter:
-                                          ImageFilter.blur(sigmaX: 20, sigmaY: 10),
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 20, sigmaY: 10),
                                       child: const SizedBox(),
                                     ),
                                     Text(
@@ -214,8 +218,8 @@ class ProfileScreen extends StatelessWidget {
                                       width: screen_width,
                                     ),
                                     BackdropFilter(
-                                      filter:
-                                          ImageFilter.blur(sigmaX: 20, sigmaY: 10),
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 20, sigmaY: 10),
                                       child: const SizedBox(),
                                     ),
                                     Text(
@@ -241,15 +245,25 @@ class ProfileScreen extends StatelessWidget {
                     if (cubit.favourites.isEmpty && cubit.gotFavourites)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text("Animes you add your to favourites will be shown here", style: GoogleFonts.aBeeZee(fontSize: 18.sp,color: Colors.black.withOpacity(0.65)),),
+                        child: Text(
+                          "Animes you add your to favourites will be shown here",
+                          style: GoogleFonts.aBeeZee(
+                              fontSize: 18.sp,
+                              color: Colors.black.withOpacity(0.65)),
+                        ),
                       )
-                    else 
+                    else
                       ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => verticalAnimeListBuilder(cubit.favourites[index], context), 
-                        separatorBuilder: (context, index) => Gaps.small_Gap, 
-                        itemCount: cubit.favourites.length),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) =>
+                              verticalAnimeListBuilder(
+                                cubit.favourites[index],
+                                context,
+                                onPressed: () {},
+                              ),
+                          separatorBuilder: (context, index) => Gaps.small_Gap,
+                          itemCount: cubit.favourites.length),
                     Gaps.large_Gap
                   ],
                 ),

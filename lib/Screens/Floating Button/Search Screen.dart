@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Logic/Search%20Cubit/search_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
+import 'package:mal_app/Shared/Core/App%20Navigator.dart';
+import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/VerticalListBuilder.dart';
@@ -68,13 +70,18 @@ class SearchScreen extends StatelessWidget {
                               controller: cubit.scrollController,
                               child: Column(
                                 children: [
+                                  if (cubit.gotSearch && cubit.results.isEmpty)
+                                    const Text("There is no results to show"),
                                   ListView.builder(
                                     shrinkWrap: true,
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) =>
                                         verticalAnimeListBuilder(
-                                            cubit.results[index], context),
+                                      cubit.results[index],
+                                      context,
+                                      onPressed: () {},
+                                    ),
                                     itemCount: cubit.results.length,
                                   ),
                                   if (state is LoadingMoreDataState)

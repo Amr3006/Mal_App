@@ -79,7 +79,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       // Upload to Storage
       final file = await _storage
           .ref()
-          .child("${user!.uId}/${image.name}")
+          .child("Users/${user!.uId}/${image.name}")
           .putFile(File(image.path));
 
       // Get Url

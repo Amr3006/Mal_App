@@ -79,11 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
         Tween<double>(begin: 26, end: 0).animate(_animationController);
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed || status == AnimationStatus.forward) {
-        animationForward = true;
-      } else if (status == AnimationStatus.dismissed || status == AnimationStatus.reverse) {
-        animationForward = false;
-      }
+      animationForward = status == AnimationStatus.completed || status == AnimationStatus.forward;
     });
 
     super.initState();

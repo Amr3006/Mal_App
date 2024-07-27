@@ -51,7 +51,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
   double opacity = 1;
   double? imageHeight;
   double? imageWidth = screen_width;
-  bool animationEnabled = false;
+  bool animationForward = false;
 
   @override
   void initState() {
@@ -73,11 +73,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
     ]).animate(_animationController);
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        animationEnabled = true;
-      } else if (status == AnimationStatus.dismissed) {
-        animationEnabled = false;
-      }
+      animationForward = status == AnimationStatus.completed || status == AnimationStatus.forward;
     });
 
     // Scroll Listener
@@ -140,7 +136,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
               backgroundColor: secondary_color,
               onPressed: () {
                 cubit.changeFavourites(model);
-                if (animationEnabled) {
+                if (animationForward) {
                   _animationController.reverse();
                 } else {
                   _animationController.forward();

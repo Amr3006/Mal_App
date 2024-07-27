@@ -27,13 +27,16 @@ class SearchCubit extends Cubit<SearchState> {
 
   final _repo = AnimeSearchRepo();
   final List<AnimeModel> results = [];
+  bool gotSearch = false;
 
   Future<void> getData() async {
+    gotSearch=false;
     results.clear();
     try {
       emit(LoadingDataState());
       await _repo.getData(searchController.text);
       results.addAll(_repo.returnData());
+      gotSearch=true;
       emit(SuccessDataState());
     } catch (e) {
       emit(FailedDataState(e.toString()));
