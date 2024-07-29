@@ -1,20 +1,18 @@
 // ignore_for_file: file_names
 
 class PostModel {
-  String? userName;
-  String? userProfilePic;
-  String? postText;
-  String? dateTime;
-  List<String>? images;
-  List<String>? animes;
+  late String userName;
+  late String userProfilePic;
+  late String postText;
+  late String dateTime;
+  late List<String> images;
 
   PostModel(
-      {this.userName,
-      this.userProfilePic,
-      this.postText,
-      this.dateTime,
-      this.images,
-      this.animes});
+      {required this.userName,
+      required this.userProfilePic,
+      required this.postText,
+      required this.dateTime,
+      required this.images,});
 
   PostModel.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
@@ -22,7 +20,6 @@ class PostModel {
     postText = json['postText'];
     dateTime = json['dateTime'];
     images = json['images'].cast<String>();
-    animes = json['animes'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -32,7 +29,6 @@ class PostModel {
     data['postText'] = postText;
     data['dateTime'] = dateTime;
     data['images'] = images;
-    data['animes'] = animes;
     return data;
   }
 }

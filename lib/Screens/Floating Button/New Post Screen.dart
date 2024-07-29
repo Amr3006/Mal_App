@@ -10,11 +10,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Logic/New%20Post%20Cubit/new_post_cubit.dart';
 import 'package:mal_app/Logic/Search%20Cubit/search_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
+import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/VerticalListBuilder.dart';
 
@@ -29,6 +31,8 @@ class _NewPostScreenState extends State<NewPostScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool animationForward = false;
+  late FocusNode _node;
+  late TextEditingController _textEditingController;
 
   @override
   void initState() {
@@ -39,23 +43,43 @@ class _NewPostScreenState extends State<NewPostScreen>
       animationForward = status == AnimationStatus.completed ||
           status == AnimationStatus.forward;
     });
+    _node = FocusNode();
+    _textEditingController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _node.dispose();
+    _animationController.dispose();
+    _textEditingController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NewPostCubit(),
-      child: BlocBuilder<NewPostCubit, NewPostState>(
+      child: BlocConsumer<NewPostCubit, NewPostState>(
+        listener: (context, state) {
+          if (state is SuccessUploadPostState) {
+            AppNavigator.pop(context);
+          }
+        },
         builder: (context, state) {
           final cubit = NewPostCubit.get(context);
           return Scaffold(
             body: Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
               child: SingleChildScrollView(
+                clipBehavior: Clip.none,
                 child: Column(
                   children: [
+                    if (cubit.uploadingPost)
+                      const LinearProgressIndicator(color: community_color_dark,backgroundColor: community_color_light,),
                     TextFormField(
+                      controller: _textEditingController,
+                      focusNode: _node,
                       cursorColor: community_color_dark,
                       maxLines: 5,
                       minLines: 1,
@@ -71,10 +95,20 @@ class _NewPostScreenState extends State<NewPostScreen>
                               mainAxisSpacing: 8),
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) =>
-                          gridBuilder(cubit.pickedImages[index], context),
+                          gridBuilder(cubit.pickedImages[index], cubit),
                       shrinkWrap: true,
                       itemCount: cubit.pickedImages.length,
-                    )
+                    ),
+                    Gaps.medium_Gap,
+                    ListView.separated(
+                      shrinkWrap: true,
+                      clipBehavior: Clip.none,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => Gaps.small_Gap,
+                      itemBuilder: (context, index) => animeListBuilder(cubit.pickedAnimes[index],cubit),
+                      itemCount: cubit.pickedAnimes.length,
+                    ),
+                    Gaps.medium_Gap
                   ],
                 ),
               ),
@@ -83,7 +117,9 @@ class _NewPostScreenState extends State<NewPostScreen>
               actions: [
                 MaterialButton(
                     onPressed: () {
-                      print(cubit.pickedAnimes.first.titles!.first.title);
+                      if (!cubit.uploadingPost) {
+                        cubit.post(_textEditingController.text);
+                      }
                     },
                     splashColor: community_color_light.withOpacity(0.4),
                     shape: RoundedRectangleBorder(
@@ -108,6 +144,7 @@ class _NewPostScreenState extends State<NewPostScreen>
                       child: FloatingActionButton.small(
                         onPressed: () {
                           cubit.pickImage();
+                          _animationController.reverse();
                         },
                         shape: const CircleBorder(),
                         backgroundColor: secondary_color,
@@ -128,6 +165,7 @@ class _NewPostScreenState extends State<NewPostScreen>
                                 builder: (context) => bottomSheetBuilder(cubit),
                                 scrollControlDisabledMaxHeightRatio: 1,
                                 useSafeArea: true);
+                              _animationController.reverse();
                           },
                           shape: const CircleBorder(),
                           backgroundColor: secondary_color,
@@ -146,6 +184,7 @@ class _NewPostScreenState extends State<NewPostScreen>
                         } else {
                           _animationController.forward();
                         }
+                        _node.unfocus();
                       },
                       shape: const CircleBorder(),
                       backgroundColor: secondary_color,
@@ -167,7 +206,63 @@ class _NewPostScreenState extends State<NewPostScreen>
     );
   }
 
-  Widget bottomSheetBuilder(NewPostCubit new_post_cubit) => BlocProvider(
+  Widget animeListBuilder(AnimeModel model, NewPostCubit newPostCubit) => Container(
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: const [
+        BoxShadow(
+          offset: Offset(4, 4)
+        )
+      ]
+    ),
+    foregroundDecoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(width: 3)
+    ),
+    child: Stack(
+      clipBehavior: Clip.none,
+      fit: StackFit.passthrough,
+      alignment: Alignment.bottomCenter,
+      children: [
+        Image.network(model.image!, fit: BoxFit.cover,),
+        Positioned(
+                  right: 8,
+                  top: 8,
+                  child: InkWell(
+                    onTap: () {
+                      newPostCubit.removeAnime(model);
+                    },
+                    child: CircleAvatar(
+                        radius: 16.r,
+                        backgroundColor: community_color_light,
+                        child: const Icon(Icons.close)),
+                  ),
+                ),
+        Container(
+              height: 50.h,
+              padding: const EdgeInsetsDirectional.only(start: 20, bottom: 5),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.black,
+                Colors.black.withOpacity(0.7),
+                Colors.transparent,
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+              child: Align(
+                alignment: AlignmentDirectional.bottomStart,
+                child: Text(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  model.titles!.first.title!,
+                  style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                ),
+              ),
+            )
+      ],
+    ),
+  );
+
+  Widget bottomSheetBuilder(NewPostCubit newPostCubit) => BlocProvider(
         create: (context) => SearchCubit(),
         child: BlocBuilder<SearchCubit, SearchState>(
           builder: (context, state) {
@@ -234,7 +329,8 @@ class _NewPostScreenState extends State<NewPostScreen>
                                       context,
                                       browse: false,
                                       onPressed: () {
-                                        new_post_cubit.addAnime(cubit.results[index]);
+                                        newPostCubit
+                                            .addAnime(cubit.results[index]);
                                         AppNavigator.pop(context);
                                       },
                                     ),
@@ -256,9 +352,20 @@ class _NewPostScreenState extends State<NewPostScreen>
         ),
       );
 
-  Widget gridBuilder(XFile file, BuildContext context) => Container(
+  Widget gridBuilder(XFile file, NewPostCubit newPostCubit) => Container(
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+         decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: const [
+        BoxShadow(
+          offset: Offset(2, 2)
+        )
+      ]
+    ),
+    foregroundDecoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(width: 2)
+    ),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -274,7 +381,7 @@ class _NewPostScreenState extends State<NewPostScreen>
                   top: 4,
                   child: InkWell(
                     onTap: () {
-                      NewPostCubit.get(context).removeImage(file);
+                      newPostCubit.removeImage(file);
                     },
                     child: CircleAvatar(
                         radius: 16.r,

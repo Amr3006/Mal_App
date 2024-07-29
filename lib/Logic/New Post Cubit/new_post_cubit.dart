@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
+import 'package:mal_app/Data/Models/Post%20Model.dart';
 import 'package:mal_app/Shared/Constants/Data.dart';
 
 part 'new_post_state.dart';
@@ -18,7 +19,10 @@ class NewPostCubit extends Cubit<NewPostState> {
   final _storage = FirebaseStorage.instance;
   final _firestore = FirebaseFirestore.instance;
 
-  // Picking Image
+  final List<String> imageNames = [];
+  final List<XFile> pickedImages = [];
+
+  // Picking an Image
   Future<void> pickImage() async {
     final picker = ImagePicker();
     final list = await picker.pickMultiImage();
@@ -37,16 +41,11 @@ class NewPostCubit extends Cubit<NewPostState> {
     emit(RemovedImageState());
   }
 
-  final List<String> imageNames = [];
-  final List<XFile> pickedImages = [];
-  final List<String> pickedImagesUrls = [];
-  final List<AnimeModel> pickedAnimes= [];
-
   // Upload Picked Images
-  Future<void> uploadImages() async {
+  Future<List<String>> uploadImages() async {
+    if (pickedImages.isEmpty) return [];
     emit(LoadingUploadImagesState());
-    try 
-    {if (pickedImages.isEmpty) return;
+    try {
     final futureUploads = pickedImages.map((image) {
       return _storage.ref().child("Posts/$uId/${image.name}").putFile(File(image.path));
     }).toList();
@@ -55,23 +54,64 @@ class NewPostCubit extends Cubit<NewPostState> {
       return image.ref.getDownloadURL();
     }).toList();
     final urls = await Future.wait(futureUrls);
-    pickedImagesUrls.addAll(urls);
     emit(SuccessUploadImagesState());
+    return urls;
     }
     catch (e) {
       emit(FailedUploadImagesState(e.toString()));
     }
+    return [];
   }
+
+  final List<AnimeModel> pickedAnimes= [];
 
   // Add Anime
   void addAnime(AnimeModel model) {
     pickedAnimes.add(model);
-    emit(PickedAnimeState());
+    emit(AddedAnimeState());
   }
 
   // Remove Anime
   void removeAnime(AnimeModel model) {
     pickedAnimes.remove(model);
     emit(RemovedAnimeState());
+  }
+
+  //Upload Animes
+  Future<void> uploadAnimes(String docId) async {
+    if (pickedAnimes.isEmpty) return;
+    emit(LoadingUploadAnimesState());
+    try {
+      final futureUploads = pickedAnimes.map((anime) {
+        return _firestore.collection("Posts").doc(docId).collection("Animes").add(anime.toJson());
+      }).toList();
+      await Future.wait(futureUploads);
+      emit(SuccessUploadAnimesState());
+    } catch (e) {
+      emit(FailedUploadAnimesState(e.toString()));
+    }
+  }
+
+  bool uploadingPost = false;
+
+  // Post
+  void post(String text) async {
+    uploadingPost = true; 
+    emit(LoadingUploadPostState());   
+    try {final urls = await uploadImages();
+    final data = PostModel(
+      userName: publicUser!.name, 
+      userProfilePic: publicUser!.profilePicture, 
+      postText: text, 
+      dateTime: DateTime.now().toString(), 
+      images: urls);
+    final document = await _firestore.collection("Posts").add(data.toJson());
+    final query = await document.get();
+    await uploadAnimes(query.id);
+    emit(SuccessUploadPostState());    
+    } catch (e) {
+      emit(FailedUploadPostState(e.toString()));    
+    }
+    uploadingPost = false;
   }
 }

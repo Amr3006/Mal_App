@@ -50,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen>
   ];
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 400));

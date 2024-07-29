@@ -43,8 +43,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
   final controller = ScrollController();
   final buttonKey = GlobalKey<TooltipState>(),
       moreInfoKey = GlobalKey<TooltipState>();
-  late final Animation _colorAnimation;
-  late final Animation _popAnimation;
+  late final Animation _colorAnimation, _popAnimation;
   bool opened = false;
 
   double edge = 0;
@@ -52,6 +51,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
   double? imageHeight;
   double? imageWidth = screen_width;
   bool animationForward = false;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
