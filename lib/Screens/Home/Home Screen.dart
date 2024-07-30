@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
+import 'package:mal_app/Logic/Community%20Cubit/community_cubit.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Logic/Home%20Cubit/home_cubit.dart';
 import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
@@ -30,8 +31,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-
-  // Animation 
+  // Animation
   late AnimationController _animationController;
   late Animation _darkColorAnimation,
       _lightColorAnimation,
@@ -85,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen>
         Tween<double>(begin: 26, end: 0).animate(_animationController);
 
     _animationController.addStatusListener((status) {
-      animationForward = status == AnimationStatus.completed || status == AnimationStatus.forward;
+      animationForward = status == AnimationStatus.completed ||
+          status == AnimationStatus.forward;
     });
 
     super.initState();
@@ -95,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => CommunityCubit()..getPosts()),
         BlocProvider(
             create: (context) => ProfileCubit()
               ..getUser()
@@ -119,7 +121,8 @@ class _HomeScreenState extends State<HomeScreen>
                   !FeedCubit.get(context).gotRecent,
                   FeedCubit.get(context).popularCharcters.isEmpty,
                   ProfileCubit.get(context).user == null,
-                  !ProfileCubit.get(context).gotFavourites
+                  !ProfileCubit.get(context).gotFavourites,
+                  CommunityCubit.get(context).postIDs.isEmpty
                 ];
                 return ConditionalBuilder(
                     condition: conditions.contains(true),
@@ -136,6 +139,9 @@ class _HomeScreenState extends State<HomeScreen>
                     : "Change to Community",
                 child: IconButton(
                   onPressed: () {
+                    print(CommunityCubit.get(context).postIDs.length);
+                    print(CommunityCubit.get(context).postIDs.first);
+                    print(CommunityCubit.get(context).posts[CommunityCubit.get(context).postIDs.first]!.postText);
                     if (_spreadSheetController != null) {
                       _spreadSheetController!.close();
                     }
@@ -178,36 +184,42 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
               actions: [
-                _iconDisappearAnimation.value == 0 ? SizedBox() : AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) => Builder(builder: (context) {
-                    return IconButton(
-                      iconSize: _iconDisappearAnimation.value,
-                      onPressed: () async {
-                        if (state is LoadingRandomAnimeState) return;
-                        if (_spreadSheetController != null) {
-                          _spreadSheetController!.close();
-                        }
-                        await Future.wait([
-                          Future.delayed(const Duration(milliseconds: 250)),
-                          HomeCubit.get(context).getRandomAnime()
-                        ]);
-                        _spreadSheetController = Scaffold.of(context)
-                            .showBottomSheet((context) => RandomSheetBuilder(
-                                HomeCubit.get(context).randomAnime!, context));
-                      },
-                      icon: Tooltip(
-                          message: "Get A Random Anime Recommendation",
-                          child: state is LoadingRandomAnimeState
-                              ? CircularProgressIndicator(
-                                  color: anime_color_dark)
-                              : Icon(
-                                  FontAwesomeIcons.dice,
-                                  color: anime_color_dark,
-                                )),
-                    );
-                  }),
-                ),
+                _iconDisappearAnimation.value == 0
+                    ? SizedBox()
+                    : AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) =>
+                            Builder(builder: (context) {
+                          return IconButton(
+                            iconSize: _iconDisappearAnimation.value,
+                            onPressed: () async {
+                              if (state is LoadingRandomAnimeState) return;
+                              if (_spreadSheetController != null) {
+                                _spreadSheetController!.close();
+                              }
+                              await Future.wait([
+                                Future.delayed(
+                                    const Duration(milliseconds: 250)),
+                                HomeCubit.get(context).getRandomAnime()
+                              ]);
+                              _spreadSheetController = Scaffold.of(context)
+                                  .showBottomSheet((context) =>
+                                      RandomSheetBuilder(
+                                          HomeCubit.get(context).randomAnime!,
+                                          context));
+                            },
+                            icon: Tooltip(
+                                message: "Get A Random Anime Recommendation",
+                                child: state is LoadingRandomAnimeState
+                                    ? CircularProgressIndicator(
+                                        color: anime_color_dark)
+                                    : Icon(
+                                        FontAwesomeIcons.dice,
+                                        color: anime_color_dark,
+                                      )),
+                          );
+                        }),
+                      ),
                 Gaps.small_Gap
               ],
               surfaceTintColor: Colors.white,
@@ -228,7 +240,8 @@ class _HomeScreenState extends State<HomeScreen>
                 return FloatingActionButton(
                   onPressed: () {
                     Widget destination = AppRoutes.searchScreen;
-                    if (HomeCubit.get(context).isCommunity) destination = AppRoutes.newPostScreen;
+                    if (HomeCubit.get(context).isCommunity)
+                      destination = AppRoutes.newPostScreen;
                     AppNavigator.push(destination, context);
                   },
                   elevation: 10,
@@ -253,9 +266,11 @@ class _HomeScreenState extends State<HomeScreen>
                   tabBuilder: (index, isActive) {
                     return AnimatedBuilder(
                       animation: _animationController,
-                      builder: (context,child) => Icon(
+                      builder: (context, child) => Icon(
                         icons[index],
-                        size: isActive ? _iconActivatedChangeAnimation.value : _iconUnactivatedChangeAnimtion.value,
+                        size: isActive
+                            ? _iconActivatedChangeAnimation.value
+                            : _iconUnactivatedChangeAnimtion.value,
                         color: isActive
                             ? _lightColorAnimation.value
                             : Colors.grey[300],

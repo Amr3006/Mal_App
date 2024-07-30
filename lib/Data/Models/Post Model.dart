@@ -1,11 +1,14 @@
 // ignore_for_file: file_names
 
+import 'package:mal_app/Data/Models/Anime%20Model.dart';
+
 class PostModel {
   late String userName;
   late String userProfilePic;
   late String postText;
   late String dateTime;
   late List<String> images;
+  late List<AnimeModel> animes;
 
   PostModel(
       {required this.userName,
