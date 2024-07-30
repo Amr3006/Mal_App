@@ -435,7 +435,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                             HSeperator(),
                             Gaps.small_Gap,
                             DetailsText(
-                                "", model.synopsis ?? "No Synopsis to display ",
+                                "", 
+                                model.synopsis==null || model.synopsis!.isEmpty ? "No synopsis to display " : model.synopsis!,
                                 leading: false),
                             Gaps.medium_Gap,
 
@@ -443,8 +444,8 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                             HomeTitle("Background", fontSize: 20),
                             HSeperator(),
                             Gaps.small_Gap,
-                            DetailsText("Background",
-                                model.background ?? "No background to display ",
+                            DetailsText("",
+                                model.background==null || model.background!.isEmpty ? "No background to display " : model.background!,
                                 leading: false),
                             Gaps.medium_Gap,
 
