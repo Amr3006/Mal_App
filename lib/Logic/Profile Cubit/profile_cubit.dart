@@ -71,6 +71,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     return await imagePicker.pickImage(source: ImageSource.gallery);
   }
 
+  // Change Image
   void changeImage() async {
     final image = await pickImage();
     if (image == null) return;
@@ -86,8 +87,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       final url = await file.ref.getDownloadURL();
       user!.profilePicture = url;
 
-      // Upload to Firestore
-      await updateUser();
+      final futureUpdates = user!.postIDs.map((e) {
+        return updateUserPosts(docId: e.toString(), imageURL: url);
+      }).toList();
+
+      // Update Firestore
+      futureUpdates.add(updateUser());
+      await Future.wait(futureUpdates);
       emit(SuccessChangeProfilePictureState());
     } catch (e) {
       emit(FailedChangeProfilePictureState(e.toString()));
@@ -109,7 +115,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(LoadingChangeNameState());
     user!.name = textController.text;
     try {
-      await updateUser();
+      final futureUpdates = user!.postIDs.map((e) {
+        return updateUserPosts(docId: e.toString(), name: textController.text);
+      }).toList();
+
+      // Update Firestore
+      futureUpdates.add(updateUser());
+      await Future.wait(futureUpdates);
       emit(SuccessChangeNameState());
     } catch (e) {
       emit(FailedChangeNameState(e.toString()));
@@ -148,6 +160,29 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(SuccessLogoutState());
     } catch (e) {
       emit(FailedLogoutState());
+    }
+  }
+
+  //Update User's Posts
+  Future<void> updateUserPosts({
+    String? name,
+    required String docId,
+    String? imageURL
+  }) async {
+    Map<String,dynamic> map;
+    if (name != null) {
+      map = {"userName" : name};
+    } else {
+      map = {"userProfilePic": imageURL};
+    }
+    print(docId);
+    try {
+    await _firestore
+    .collection("Posts")
+    .doc(docId)
+    .update(map);
+    } catch (e) {
+      throw "Error updating posts: ${e.toString()}";
     }
   }
 }

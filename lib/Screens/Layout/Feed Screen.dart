@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal_app/Logic/Feed%20Cubit/feed_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
-import 'package:mal_app/Shared/Core/App%20Navigator.dart';
-import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/HomeTitle.dart';
 import 'package:mal_app/Shared/Widgets/HorizontalListBuilder.dart';
