@@ -119,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen>
                   FeedCubit.get(context).topAnimes.isEmpty,
                   FeedCubit.get(context).seasonAnimes.isEmpty,
                   !FeedCubit.get(context).gotRecent,
+                  ProfileCubit.get(context).dontHaveUser,
                   FeedCubit.get(context).popularCharcters.isEmpty,
-                  ProfileCubit.get(context).user == null,
                   !ProfileCubit.get(context).gotFavourites,
                   CommunityCubit.get(context).postIDs.isEmpty
                 ];
@@ -139,9 +139,6 @@ class _HomeScreenState extends State<HomeScreen>
                     : "Change to Community",
                 child: IconButton(
                   onPressed: () {
-                    print(CommunityCubit.get(context).postIDs.length);
-                    print(CommunityCubit.get(context).postIDs.first);
-                    print(CommunityCubit.get(context).posts[CommunityCubit.get(context).postIDs.first]!.postText);
                     if (_spreadSheetController != null) {
                       _spreadSheetController!.close();
                     }
@@ -240,8 +237,9 @@ class _HomeScreenState extends State<HomeScreen>
                 return FloatingActionButton(
                   onPressed: () {
                     Widget destination = AppRoutes.searchScreen;
-                    if (HomeCubit.get(context).isCommunity)
+                    if (HomeCubit.get(context).isCommunity) {
                       destination = AppRoutes.newPostScreen;
+                    }
                     AppNavigator.push(destination, context);
                   },
                   elevation: 10,

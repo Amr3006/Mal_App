@@ -34,6 +34,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   Future<void> createUser() async {
       final user = await signUpWithEmailAndPassword();
       final userModel = UserModel(
+        postIDs: [],
         favourites: [],
         name: nameController.text, 
         email: emailController.text, 

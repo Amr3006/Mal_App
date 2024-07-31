@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Logic/Profile%20Cubit/profile_cubit.dart';
+import 'package:mal_app/Shared/Constants/Data.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
 import 'package:mal_app/Shared/Core/App%20Navigator.dart';
 import 'package:mal_app/Shared/Core/App%20Routes.dart';
@@ -41,7 +42,6 @@ class ProfileScreen extends StatelessWidget {
       },
       builder: (context, state) {
         final cubit = ProfileCubit.get(context);
-        final user = cubit.user;
         return SizedBox(
             width: screen_width,
             child: RefreshIndicator(
@@ -123,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
                         cursorColor: main_color,
-                        controller: cubit.textController..text = user.name,
+                        controller: cubit.textController..text = user!.name,
                         style: GoogleFonts.aBeeZee(
                             fontSize: 30.sp, color: Colors.black),
                         textAlign: TextAlign.center,

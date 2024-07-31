@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mal_app/Logic/Search%20Cubit/search_cubit.dart';
 import 'package:mal_app/Shared/Constants/Dimensions.dart';
-import 'package:mal_app/Shared/Core/App%20Navigator.dart';
-import 'package:mal_app/Shared/Core/App%20Routes.dart';
 import 'package:mal_app/Shared/Design/Colors.dart';
 import 'package:mal_app/Shared/Widgets/ProgressIndicator.dart';
 import 'package:mal_app/Shared/Widgets/VerticalListBuilder.dart';

@@ -34,6 +34,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoadingLoginWithGoogleState());
       final user = await _auth.loginWithGoogle();
       final model = UserModel(
+        postIDs: [],
         name: user!.displayName ?? "", 
         favourites: [], 
         email: user.email ?? "", 

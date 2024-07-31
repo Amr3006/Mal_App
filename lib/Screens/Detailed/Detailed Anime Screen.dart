@@ -66,7 +66,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
-    _colorAnimation = publicUser!.favourites.contains(model.malId)
+    _colorAnimation = user!.favourites.contains(model.malId)
         ? ColorTween(begin: Colors.pink, end: main_color)
             .animate(_animationController)
         : ColorTween(begin: main_color, end: Colors.pink)

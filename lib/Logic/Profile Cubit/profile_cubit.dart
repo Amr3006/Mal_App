@@ -23,7 +23,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   static ProfileCubit get(BuildContext context) => BlocProvider.of(context);
 
-  UserModel? user, backupUser;
 
   final textController = TextEditingController();
 
@@ -33,6 +32,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   var enabled = false;
 
+  bool dontHaveUser = true;
+
   // Get User Data
   Future<void> getUser() async {
     emit(LoadingGetUserState());
@@ -40,8 +41,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       final unmodeledData = await firestore.collection("Users").doc(uId).get();
       user = UserModel.fromJson(unmodeledData.data()!);
       backupUser = user!.clone();
-      publicUser = user;
-      publicBackUpUser = backupUser;
+      dontHaveUser = false;
       emit(SuccessGetUserState());
     } catch (e) {
       emit(FailedGetUserState(e.toString()));

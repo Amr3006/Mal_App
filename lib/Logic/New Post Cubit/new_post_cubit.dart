@@ -22,6 +22,21 @@ class NewPostCubit extends Cubit<NewPostState> {
   final List<String> imageNames = [];
   final List<XFile> pickedImages = [];
 
+   // Update User
+  Future<void> updateUser() async {
+    try {
+      await _firestore
+          .collection("Users")
+          .doc(user!.uId)
+          .update(user!.toJson());
+      backupUser = user!.clone();
+      return;
+    } catch (e) {
+      user = backupUser!.clone();
+      throw "Error updating user: ${e.toString()}";
+    }
+  }
+
   // Picking an Image
   Future<void> pickImage() async {
     final picker = ImagePicker();
@@ -100,14 +115,18 @@ class NewPostCubit extends Cubit<NewPostState> {
     emit(LoadingUploadPostState());   
     try {final urls = await uploadImages();
     final data = PostModel(
-      userName: publicUser!.name, 
-      userProfilePic: publicUser!.profilePicture, 
+      userName: user!.name, 
+      userProfilePic: user!.profilePicture, 
       postText: text, 
       dateTime: DateTime.now().toString(), 
       images: urls);
     final document = await _firestore.collection("Posts").add(data.toJson());
     final query = await document.get();
-    await uploadAnimes(query.id);
+    user!.postIDs.add(query.id);
+    await Future.wait([
+      uploadAnimes(query.id),
+      updateUser()
+    ]);
     emit(SuccessUploadPostState());    
     } catch (e) {
       emit(FailedUploadPostState(e.toString()));    

@@ -7,5 +7,5 @@ late String uId;
 
 const String baseUrl = "https://api.jikan.moe/v4/";
 
-UserModel? publicUser, publicBackUpUser;
+UserModel? user, backupUser;
 

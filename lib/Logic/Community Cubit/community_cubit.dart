@@ -1,10 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal_app/Data/Models/Anime%20Model.dart';
 import 'package:mal_app/Data/Models/Post%20Model.dart';
-import 'package:meta/meta.dart';
 
 part 'community_state.dart';
 
@@ -24,6 +22,7 @@ class CommunityCubit extends Cubit<CommunityState> {
     final queries = await _firestore.collection("Posts").get();
     final docs = queries.docs;
     final futures = docs.map((doc) {
+      postIDs.add(doc.id);
       return getPostAnimes(doc);
     }).toList();
     await Future.wait(futures);
@@ -43,6 +42,5 @@ class CommunityCubit extends Cubit<CommunityState> {
     }
     post.animes = temp.toList();
     posts[doc.id] = post;
-    postIDs.add(doc.id);
   }
 }

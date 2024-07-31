@@ -68,9 +68,9 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
   void changeFavourites(AnimeModel model) async {
     try {
       emit(LoadingFavouriteState());
-      final favourites = publicUser!.favourites;
+      final favourites = user!.favourites;
       if (favourites.contains(model.malId)) {
-        publicUser!.favourites.remove(model.malId);
+        user!.favourites.remove(model.malId);
         await Future.wait([
          _firestore
             .collection("Users")
@@ -81,7 +81,7 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
             updateUser()
         ]);
       } else {
-        publicUser!.favourites.add(model.malId);
+        user!.favourites.add(model.malId);
         await Future.wait([
           updateUser(),
           _firestore
@@ -102,6 +102,6 @@ class DetailedAnimeCubit extends Cubit<DetailedAnimeState> {
     return _firestore
         .collection("Users")
         .doc(uId)
-        .update(publicUser!.toJson());
+        .update(user!.toJson());
   }
 }
