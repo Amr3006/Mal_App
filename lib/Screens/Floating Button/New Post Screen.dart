@@ -112,6 +112,7 @@ class _NewPostScreenState extends State<NewPostScreen>
               ),
             ),
             appBar: AppBar(
+              surfaceTintColor: community_color_light,
               actions: [
                 MaterialButton(
                     onPressed: () {

@@ -19,7 +19,7 @@ class CommunityScreen extends StatelessWidget {
     return BlocBuilder<CommunityCubit, CommunityState>(
       builder: (context, state) {
         final cubit = CommunityCubit.get(context);
-        return RefreshIndicator(
+        return RefreshIndicator.adaptive(
           color: community_color_dark,
           backgroundColor: Colors.white,
           onRefresh: () async {
