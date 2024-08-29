@@ -41,7 +41,8 @@ class DetailedAnimeScreen extends StatefulWidget {
 class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
     with TickerProviderStateMixin {
   late final AnimeModel model;
-  late final AnimationController _favAnimationController, _scrollAnimationController;
+  late final AnimationController _favAnimationController,
+      _scrollAnimationController;
   final controller = ScrollController();
   final buttonKey = GlobalKey<TooltipState>(),
       moreInfoKey = GlobalKey<TooltipState>();
@@ -61,12 +62,12 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
     model = widget.model;
 
     // Scroll Animation Controller
-    _scrollAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 120));
+    _scrollAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 120));
 
     // Favourites Button Animation
     _favAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-
 
     _colorAnimation = user!.favourites.contains(model.malId)
         ? ColorTween(begin: Colors.pink, end: main_color)
@@ -80,11 +81,13 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
     ]).animate(_favAnimationController);
 
     _favAnimationController.addStatusListener((status) {
-      favAnimationForward = status == AnimationStatus.completed || status == AnimationStatus.forward;
+      favAnimationForward = status == AnimationStatus.completed ||
+          status == AnimationStatus.forward;
     });
 
     _scrollAnimationController.addStatusListener((status) {
-      scrollAnimationForward = status == AnimationStatus.completed || status == AnimationStatus.forward;
+      scrollAnimationForward = status == AnimationStatus.completed ||
+          status == AnimationStatus.forward;
     });
 
     // Scroll Listener
@@ -109,14 +112,14 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
   }
 
   void scrollListener() async {
-    if (controller.position.extentBefore > (screen_height*2/5)-20) {
+    if (controller.position.extentBefore > (screen_height * 2 / 5) - 20) {
       if (scrollAnimationForward) return;
       _scrollAnimationController.forward();
     } else {
       if (!scrollAnimationForward) return;
       _scrollAnimationController.reverse();
     }
-        setState(() {});
+    setState(() {});
   }
 
   @override
@@ -169,68 +172,77 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
               slivers: [
                 AnimatedBuilder(
                   animation: _scrollAnimationController,
-                  builder: (context,_) => SliverAppBar(
-                      actions: [
-                  Tooltip(
-                    textStyle: opened
-                        ? null
-                        : TextStyle(fontSize: 24.sp, color: Colors.white),
-                    decoration: opened
-                        ? null
-                        : BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: anime_color_dark),
-                    message: "More Info.",
-                    key: moreInfoKey,
-                    child: IconButton(
-                        onPressed: () {
-                          if (model.url == null) {
-                            snackMessage(
-                                context: context, text: "No data available yet");
-                          } else {
-                            AppNavigator.push(
-                                AppRoutes.webScreen(model.url), context);
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.info_outline,
-                          color: Colors.white,
+                  builder: (context, _) => SliverAppBar(
+                    actions: [
+                      Tooltip(
+                        textStyle: opened
+                            ? null
+                            : TextStyle(fontSize: 24.sp, color: Colors.white),
+                        decoration: opened
+                            ? null
+                            : BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: anime_color_dark),
+                        message: "More Info.",
+                        key: moreInfoKey,
+                        child: IconButton(
+                            onPressed: () {
+                              if (model.url == null) {
+                                snackMessage(
+                                    context: context,
+                                    text: "No data available yet");
+                              } else {
+                                AppNavigator.push(
+                                    AppRoutes.webScreen(model.url), context);
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.info_outline,
+                              color: Colors.white,
+                            )),
+                      )
+                    ],
+                    bottom: PreferredSize(
+                        preferredSize: Size.fromHeight(
+                            32 - _scrollAnimationController.value * 32),
+                        child: Container(
+                          height: 32 - _scrollAnimationController.value * 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(32 -
+                                      _scrollAnimationController.value * 32))),
+                          child: Container(
+                            width: 50,
+                            height: 6,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(50)),
+                          ),
                         )),
-                  )
-                                ],
-                    bottom: PreferredSize(preferredSize: Size.fromHeight(32 - _scrollAnimationController.value*32), 
-                    child: Container(
-                      height: 32 - _scrollAnimationController.value*32,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(32 - _scrollAnimationController.value*32))
-                      ),
-                      child: Container(
-                        width: 50,
-                        height: 6,
+                    leading: IconButton(
+                      onPressed: () {
+                        AppNavigator.pop(context);
+                      },
+                      icon: Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(50)
+                          color: anime_color_dark.withOpacity(0.6),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                              child: Icon(Icons.arrow_back)),
                         ),
                       ),
-                    )),
-                    leading: IconButton(onPressed: () {AppNavigator.pop(context);}, icon: Container(
-                      decoration: BoxDecoration(
-                      color: anime_color_dark.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(50),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                          child: Icon(Icons.arrow_back)),
-                      ),
-                    ), color: Colors.white,),
+                      color: Colors.white,
+                    ),
                     backgroundColor: anime_color_dark,
-                    expandedHeight: screen_height*3/5,
+                    expandedHeight: screen_height * 3 / 5,
                     pinned: true,
                     elevation: 0,
                     stretch: true,
@@ -239,298 +251,338 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
                         StretchMode.fadeTitle,
                         StretchMode.zoomBackground
                       ],
-                      titlePadding: EdgeInsets.only(bottom: 35 - _scrollAnimationController.value*35+10),
+                      titlePadding: EdgeInsets.only(
+                          bottom:
+                              35 - _scrollAnimationController.value * 35 + 10),
                       centerTitle: true,
-                      title: Text(model.titles!.first.title!, style: TextStyle(color: Colors.white),),
-                      background: Image.network(model.image!, fit: BoxFit.cover,),
+                      title: Text(
+                        model.titles!.first.title!,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      background: Image.network(
+                        model.image!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
                 SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Padding(
-                        padding: Pads.medium_Padding,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              textBaseline: TextBaseline.alphabetic,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                    delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: Pads.medium_Padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            textBaseline: TextBaseline.alphabetic,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 6),
+                                      color: main_color,
+                                      child: Text(
+                                        "SCORE",
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${model.score ?? "Unk."}",
+                                      style: TextStyle(
+                                          fontSize: 28.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      model.scoredBy != null
+                                          ? "${NumberFormat('#,##0').format(model.scoredBy)} users"
+                                          : "",
+                                      style: TextStyle(fontSize: 10.sp),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              VSeperator(),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 6),
+                                      color: main_color,
+                                      child: Text(
+                                        "RANKED",
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Text(
+                                      model.rank != null
+                                          ? "#${NumberFormat('#,##0').format(model.rank)}"
+                                          : "Unk.",
+                                      style: TextStyle(
+                                          fontSize: 28.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gaps.medium_Gap,
+                          HSeperator(leftMargin: 0),
+                          Gaps.medium_Gap,
+                          Row(
+                            textBaseline: TextBaseline.alphabetic,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 6),
+                                      color: main_color,
+                                      child: Text(
+                                        "POPULARITY",
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Text(
+                                      model.popularity != null
+                                          ? NumberFormat('#,##0')
+                                              .format(model.popularity)
+                                          : "Unk.",
+                                      style: TextStyle(
+                                          fontSize: 28.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              VSeperator(),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 6),
+                                      color: main_color,
+                                      child: Text(
+                                        "MEMBERS",
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Text(
+                                      model.members != null
+                                          ? "#${NumberFormat('#,##0').format(model.members)}"
+                                          : "Unk.",
+                                      style: TextStyle(
+                                          fontSize: 28.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gaps.medium_Gap,
+
+                          // Information Section
+                          HomeTitle("Information", fontSize: 20),
+                          HSeperator(),
+                          Gaps.small_Gap,
+                          DetailsText(
+                              "Episodes", "${model.episodes ?? "Unk."}"),
+                          DetailsText(
+                              "Duration", "${model.duration ?? "Unk."}"),
+                          DetailsText("Status", "${model.status ?? "Unk."}"),
+                          DetailsText("Type", "${model.type ?? "Unk."}"),
+                          DetailsText("Year", "${model.year ?? "Unk."}"),
+                          DetailsText("Season", "${model.season ?? "Unk."}"),
+                          DetailsText("Rating", "${model.rating ?? "Unk."}"),
+                          Gaps.medium_Gap,
+
+                          // Alternative Titles Section
+                          HomeTitle("Alternative Titles", fontSize: 20),
+                          HSeperator(),
+                          Gaps.small_Gap,
+                          if (model.titles != null && model.titles!.isNotEmpty)
+                            for (int i = 1; i < model.titles!.length; i++)
+                              DetailsText("${model.titles?[i].type}",
+                                  "${model.titles?[i].title}")
+                          else
+                            DetailsText("", "None", leading: false),
+                          Gaps.medium_Gap,
+
+                          // Genres Section
+                          HomeTitle("Genres", fontSize: 20),
+                          HSeperator(),
+                          Gaps.small_Gap,
+                          if ((model.genres != null &&
+                                  model.genres!.isNotEmpty) ||
+                              (model.explicitGenres != null &&
+                                  model.explicitGenres!.isNotEmpty))
+                            Wrap(
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 6),
-                                        color: main_color,
-                                        child: Text(
-                                          "SCORE",
-                                          style: TextStyle(
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Text(
-                                        "${model.score ?? "Unk."}",
-                                        style: TextStyle(
-                                            fontSize: 28.sp,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        model.scoredBy != null
-                                            ? "${NumberFormat('#,##0').format(model.scoredBy)} users"
-                                            : "",
-                                        style: TextStyle(fontSize: 10.sp),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                VSeperator(),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 6),
-                                        color: main_color,
-                                        child: Text(
-                                          "RANKED",
-                                          style: TextStyle(
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Text(
-                                        model.rank != null
-                                            ? "#${NumberFormat('#,##0').format(model.rank)}"
-                                            : "Unk.",
-                                        style: TextStyle(
-                                            fontSize: 28.sp,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                for (int i = 0; i < model.genres!.length; i++)
+                                  DetailsText("",
+                                      "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
+                                      leading: false),
+                                for (int i = 0;
+                                    i < model.explicitGenres!.length;
+                                    i++)
+                                  DetailsText("",
+                                      "${model.explicitGenres![i].name}${i == model.explicitGenres!.length - 1 ? "" : ", "}",
+                                      leading: false)
                               ],
-                            ),
-                            Gaps.medium_Gap,
-                            HSeperator(leftMargin: 0),
-                            Gaps.medium_Gap,
-                            Row(
-                              textBaseline: TextBaseline.alphabetic,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              children: [
-                                Expanded(
-                                  child: Column(
+                            )
+                          else
+                            DetailsText("", "Unk.", leading: false),
+                          Gaps.medium_Gap,
+
+                          // Synopsis Section
+                          HomeTitle("Synopsis", fontSize: 20),
+                          HSeperator(),
+                          Gaps.small_Gap,
+                          DetailsText(
+                              "",
+                              model.synopsis == null || model.synopsis!.isEmpty
+                                  ? "No synopsis to display "
+                                  : model.synopsis!,
+                              leading: false),
+                          Gaps.medium_Gap,
+
+                          // Background Section
+                          HomeTitle("Background", fontSize: 20),
+                          HSeperator(),
+                          Gaps.small_Gap,
+                          DetailsText(
+                              "",
+                              model.background == null ||
+                                      model.background!.isEmpty
+                                  ? "No background to display "
+                                  : model.background!,
+                              leading: false),
+                          Gaps.medium_Gap,
+
+                          ConditionalBuilder(
+                              condition: conditions.contains(false),
+                              builder: (context) => AppProgressIndicator(),
+                              fallback: (context) => Column(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 6),
-                                        color: main_color,
-                                        child: Text(
-                                          "POPULARITY",
-                                          style: TextStyle(
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Text(
-                                        model.popularity != null
-                                            ? NumberFormat('#,##0')
-                                                .format(model.popularity)
-                                            : "Unk.",
-                                        style: TextStyle(
-                                            fontSize: 28.sp,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      // Characters Section
+                                      HomeTitle("Characters", fontSize: 20),
+                                      HSeperator(),
+                                      Gaps.small_Gap,
+                                      if (cubit.characters.isNotEmpty)
+                                        SizedBox(
+                                          height: 250.h,
+                                          child: ListView.separated(
+                                            clipBehavior: Clip.none,
+                                            itemBuilder: (context, index) =>
+                                                CharactersListBuilder(
+                                                    cubit.characters[index]),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    Gaps.medium_Gap,
+                                            itemCount: cubit.characters.length,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                          ),
+                                        )
+                                      else
+                                        DetailsText('',
+                                            "There is no characters to display",
+                                            leading: false),
+                                      Gaps.medium_Gap,
+
+                                      // Episodes Section
+                                      HomeTitle("Episodes", fontSize: 20),
+                                      HSeperator(),
+                                      Gaps.small_Gap,
+                                      if (cubit.episodes.isNotEmpty)
+                                        Column(
+                                          children: [
+                                            ListTile(
+                                                title: Transform.translate(
+                                                    offset: Offset(-12, 0),
+                                                    child: Text("Name")),
+                                                trailing: Text("Score")),
+                                            ListView.separated(
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        Gaps.medium_Gap,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    cubit.episodes.length,
+                                                itemBuilder: (context, index) =>
+                                                    EpisodesListBuilder(
+                                                        cubit.episodes[index])),
+                                          ],
+                                        )
+                                      else
+                                        DetailsText('',
+                                            "There is no episodes to display",
+                                            leading: false)
                                     ],
-                                  ),
-                                ),
-                                VSeperator(),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 6),
-                                        color: main_color,
-                                        child: Text(
-                                          "MEMBERS",
-                                          style: TextStyle(
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Text(
-                                        model.members != null
-                                            ? "#${NumberFormat('#,##0').format(model.members)}"
-                                            : "Unk.",
-                                        style: TextStyle(
-                                            fontSize: 28.sp,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Gaps.medium_Gap,
-
-                            // Information Section
-                            HomeTitle("Information", fontSize: 20),
-                            HSeperator(),
-                            Gaps.small_Gap,
-                            DetailsText(
-                                "Episodes", "${model.episodes ?? "Unk."}"),
-                            DetailsText(
-                                "Duration", "${model.duration ?? "Unk."}"),
-                            DetailsText("Status", "${model.status ?? "Unk."}"),
-                            DetailsText("Type", "${model.type ?? "Unk."}"),
-                            DetailsText("Year", "${model.year ?? "Unk."}"),
-                            DetailsText("Season", "${model.season ?? "Unk."}"),
-                            DetailsText("Rating", "${model.rating ?? "Unk."}"),
-                            Gaps.medium_Gap,
-
-                            // Alternative Titles Section
-                            HomeTitle("Alternative Titles", fontSize: 20),
-                            HSeperator(),
-                            Gaps.small_Gap,
-                            if (model.titles != null &&
-                                model.titles!.isNotEmpty)
-                              for (int i = 1; i < model.titles!.length; i++)
-                                DetailsText("${model.titles?[i].type}",
-                                    "${model.titles?[i].title}")
-                            else
-                              DetailsText("", "None", leading: false),
-                            Gaps.medium_Gap,
-
-                            // Genres Section
-                            HomeTitle("Genres", fontSize: 20),
-                            HSeperator(),
-                            Gaps.small_Gap,
-                            if ((model.genres != null &&
-                                    model.genres!.isNotEmpty) ||
-                                (model.explicitGenres != null &&
-                                    model.explicitGenres!.isNotEmpty))
-                              Wrap(
-                                children: [
-                                  for (int i = 0; i < model.genres!.length; i++)
-                                    DetailsText("",
-                                        "${model.genres![i].name}${i == model.genres!.length - 1 ? "" : ", "}",
-                                        leading: false),
-                                  for (int i = 0;
-                                      i < model.explicitGenres!.length;
-                                      i++)
-                                    DetailsText("",
-                                        "${model.explicitGenres![i].name}${i == model.explicitGenres!.length - 1 ? "" : ", "}",
-                                        leading: false)
-                                ],
-                              )
-                            else
-                              DetailsText("", "Unk.", leading: false),
-                            Gaps.medium_Gap,
-
-                            // Synopsis Section
-                            HomeTitle("Synopsis", fontSize: 20),
-                            HSeperator(),
-                            Gaps.small_Gap,
-                            DetailsText(
-                                "", 
-                                model.synopsis==null || model.synopsis!.isEmpty ? "No synopsis to display " : model.synopsis!,
-                                leading: false),
-                            Gaps.medium_Gap,
-
-                            // Background Section
-                            HomeTitle("Background", fontSize: 20),
-                            HSeperator(),
-                            Gaps.small_Gap,
-                            DetailsText("",
-                                model.background==null || model.background!.isEmpty ? "No background to display " : model.background!,
-                                leading: false),
-                            Gaps.medium_Gap,
-
-                            ConditionalBuilder(
-                                condition: conditions.contains(false),
-                                builder: (context) => AppProgressIndicator(),
-                                fallback: (context) => Column(
-                                      children: [
-                                        // Characters Section
-                                        HomeTitle("Characters", fontSize: 20),
-                                        HSeperator(),
-                                        Gaps.small_Gap,
-                                        if (cubit.characters.isNotEmpty)
-                                          SizedBox(
-                                            height: 250.h,
-                                            child: ListView.separated(
-                                              clipBehavior: Clip.none,
-                                              itemBuilder: (context, index) =>
-                                                  CharactersListBuilder(
-                                                      cubit.characters[index]),
-                                              separatorBuilder:
-                                                  (context, index) =>
-                                                      Gaps.medium_Gap,
-                                              itemCount:
-                                                  cubit.characters.length,
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.horizontal,
-                                            ),
-                                          )
-                                        else
-                                          DetailsText('',
-                                              "There is no characters to display",
-                                              leading: false),
-                                        Gaps.medium_Gap,
-
-                                        // Episodes Section
-                                        HomeTitle("Episodes", fontSize: 20),
-                                        HSeperator(),
-                                        Gaps.small_Gap,
-                                        if (cubit.episodes.isNotEmpty)
-                                          Column(
-                                            children: [
-                                              ListTile(
-                                                  title: Transform.translate(
-                                                      offset: Offset(-12, 0),
-                                                      child: Text("Name")),
-                                                  trailing: Text("Score")),
-                                              ListView.separated(
-                                                  separatorBuilder:
-                                                      (context, index) =>
-                                                          Gaps.medium_Gap,
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      cubit.episodes.length,
-                                                  itemBuilder: (context,
-                                                          index) =>
-                                                      EpisodesListBuilder(cubit
-                                                          .episodes[index])),
-                                            ],
-                                          )
-                                        else
-                                          DetailsText('',
-                                              "There is no episodes to display",
-                                              leading: false)
-                                      ],
-                                    )),
-                          ],
-                        ),
-                      )
-                    ],)
-                  )
+                                  )),
+                        ],
+                      ),
+                    )
+                  ],
+                ))
               ],
             ),
-
             
+            // TODO: Remove the old design
+
             // appBar: AppBar(
             //   backgroundColor: main_color,
+            // actions: [
+            //       Tooltip(
+            //         textStyle: opened
+            //             ? null
+            //             : TextStyle(fontSize: 24.sp, color: Colors.white),
+            //         decoration: opened
+            //             ? null
+            //             : BoxDecoration(
+            //                 borderRadius: BorderRadius.circular(12),
+            //                 color: anime_color_dark),
+            //         message: "More Info.",
+            //         key: moreInfoKey,
+            //         child: IconButton(
+            //             onPressed: () {
+            //               if (model.url == null) {
+            //                 snackMessage(
+            //                     context: context, text: "No data available yet");
+            //               } else {
+            //                 AppNavigator.push(
+            //                     AppRoutes.webScreen(model.url), context);
+            //               }
+            //             },
+            //             icon: const Icon(
+            //               Icons.info_outline,
+            //               color: Colors.white,
+            //             )),
+            //       )
+            //                     ],
             //   leading: IconButton(
             //     onPressed: () {
             //       AppNavigator.pop(context);
@@ -766,7 +818,7 @@ class _DetailedAnimeScreenState extends State<DetailedAnimeScreen>
             //                 HSeperator(),
             //                 Gaps.small_Gap,
             //                 DetailsText(
-            //                     "", 
+            //                     "",
             //                     model.synopsis==null || model.synopsis!.isEmpty ? "No synopsis to display " : model.synopsis!,
             //                     leading: false),
             //                 Gaps.medium_Gap,
